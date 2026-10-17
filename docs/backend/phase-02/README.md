@@ -1,6 +1,6 @@
 # Phase 02 Implementation Package
 
-**Status:** Complete for local implementation and verification  
+**Status:** Complete
 **Evidence date:** 2026-10-17  
 **Scope boundary:** Backend foundation and local infrastructure only. No authentication, complaint persistence, evidence pipeline, AI/notification provider, or frontend API migration is included.
 
@@ -28,4 +28,4 @@
 
 ## Completion note
 
-All locally executable Phase 02 gates passed on the evidence date, including a clean tracked-snapshot replay, migrations, integration tests, healthy readiness, non-root image builds, image scans, graceful shutdown and volume-preserving recovery. Git metadata and the local CI-equivalent execution are recorded in `VERIFICATION.md`. The remaining external phase gate is a successful GitHub-hosted run after the owner supplies a repository URL and authorizes the first push.
+All Phase 02 gates passed on the evidence date, including a clean tracked-snapshot replay, migrations, integration tests, healthy readiness, non-root image builds, image scans, graceful shutdown, volume-preserving recovery, and the GitHub-hosted workflow on the published `main` branch. The full evidence is recorded in `VERIFICATION.md`; Phase 03 may begin.

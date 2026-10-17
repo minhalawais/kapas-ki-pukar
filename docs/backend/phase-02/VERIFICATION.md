@@ -1,7 +1,7 @@
 # Phase 02 Verification Evidence
 
 **Evidence date:** 2026-10-17  
-**Overall status:** Complete for local implementation and verification
+**Overall status:** Complete
 
 ## Environment
 
@@ -53,7 +53,7 @@ The repository was initialized locally on the evidence date. The commands repres
 
 A clean tracked snapshot was also produced from `git archive`, installed with `pnpm install --frozen-lockfile`, and replayed independently of the main working tree's generated files. That replay exposed and corrected an overly broad `storage` ignore rule which had omitted `packages/mock-services/src/storage/KeyValueStore.ts`; the corrected snapshot then passed the complete application command set.
 
-The GitHub-hosted workflow cannot be dispatched until the project owner selects a GitHub repository and pushes the initialized history. This is an external publication step, not an implementation failure. The workflow is configured to run automatically on a push to `main`/`master` or on a pull request.
+The initialized `main` branch was pushed to `https://github.com/minhalawais/kapas-ki-pukar`. GitHub Actions run [#2](https://github.com/minhalawais/kapas-ki-pukar/actions/runs/39032805131) verified commit `909da24fa82b384d23ad8a4dd4947a678b5ce650` successfully in 4m 55s. The hosted run passed secret scanning, frozen dependency installation, Prisma generation, formatting, migration application and replay, typecheck, lint, unit and integration tests, OpenAPI drift detection, all application builds, both non-root container builds, and both fixed CRITICAL/HIGH image vulnerability scans.
 
 ## Accepted and unrelated observations
 
@@ -74,6 +74,6 @@ The GitHub-hosted workflow cannot be dispatched until the project owner selects 
 - [x] No sensitive runtime configuration is logged or included in the images.
 - [x] The two no-patch high advisories have a scoped, expiring security-owner decision.
 - [x] Local Git metadata is initialized and the workflow command set passes locally.
-- [ ] GitHub-hosted execution: automatically pending the owner's repository selection and first push.
+- [x] GitHub-hosted execution passed on the published `main` branch.
 
-Under the project's stated phase gate, Phase 03 should wait until the initialized `main` branch is pushed to the selected GitHub repository and the hosted workflow completes successfully. All locally executable Phase 02 gates are green. Production deployment also remains subject to the named-owner, policy, and voice-asset release gates documented elsewhere.
+All Phase 02 implementation and verification gates are green, so Phase 03 may begin. Production deployment remains subject to the named-owner, policy, and voice-asset release gates documented elsewhere.
