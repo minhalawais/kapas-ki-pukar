@@ -23,4 +23,4 @@ apps/mobile/ios
 apps/mobile/android
 packages/database/src/generated
 deploy/compose/.env.local
-storage
+/storage/
