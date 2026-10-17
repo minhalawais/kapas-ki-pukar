@@ -51,6 +51,8 @@ readiness HTTP 200: postgres=up, redis=up
 
 The repository was initialized locally on the evidence date. The commands represented by `.github/workflows/ci.yml` were executed against the local PostgreSQL/Redis services: frozen dependency state, Prisma generation, formatting, migrations and clean replay, typecheck, lint, unit and integration tests, OpenAPI drift, application/portal/mobile builds, both image builds, and both Trivy image scans.
 
+A clean tracked snapshot was also produced from `git archive`, installed with `pnpm install --frozen-lockfile`, and replayed independently of the main working tree's generated files. That replay exposed and corrected an overly broad `storage` ignore rule which had omitted `packages/mock-services/src/storage/KeyValueStore.ts`; the corrected snapshot then passed the complete application command set.
+
 The GitHub-hosted workflow cannot be dispatched until the project owner selects a GitHub repository and pushes the initialized history. This is an external publication step, not an implementation failure. The workflow is configured to run automatically on a push to `main`/`master` or on a pull request.
 
 ## Accepted and unrelated observations
@@ -74,4 +76,4 @@ The GitHub-hosted workflow cannot be dispatched until the project owner selects 
 - [x] Local Git metadata is initialized and the workflow command set passes locally.
 - [ ] GitHub-hosted execution: automatically pending the owner's repository selection and first push.
 
-Phase 03 may begin from the verified local Phase 02 foundation. Production deployment remains subject to the named-owner, policy, voice-asset, and remote CI release gates documented elsewhere.
+Under the project's stated phase gate, Phase 03 should wait until the initialized `main` branch is pushed to the selected GitHub repository and the hosted workflow completes successfully. All locally executable Phase 02 gates are green. Production deployment also remains subject to the named-owner, policy, and voice-asset release gates documented elsewhere.

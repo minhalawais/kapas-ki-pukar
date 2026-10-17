@@ -28,4 +28,4 @@
 
 ## Completion note
 
-All locally executable Phase 02 gates passed on the evidence date, including migrations, integration tests, healthy readiness, non-root image builds, image scans, graceful shutdown and volume-preserving recovery. Git metadata and the local CI-equivalent execution are recorded in `VERIFICATION.md`. A remote GitHub-hosted run will begin only after the owner selects and pushes to a GitHub repository; publishing this project was outside the local implementation scope.
+All locally executable Phase 02 gates passed on the evidence date, including a clean tracked-snapshot replay, migrations, integration tests, healthy readiness, non-root image builds, image scans, graceful shutdown and volume-preserving recovery. Git metadata and the local CI-equivalent execution are recorded in `VERIFICATION.md`. The remaining external phase gate is a successful GitHub-hosted run after the owner supplies a repository URL and authorizes the first push.
