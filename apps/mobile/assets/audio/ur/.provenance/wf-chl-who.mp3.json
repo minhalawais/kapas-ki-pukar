@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-chl-who",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یہ کس کے بارے میں ہے؟ جواب کے لیے میں خود، میرا بچہ، گھر کا بچہ، کوئی اور، یا بتانا محفوظ نہیں میں سے انتخاب کریں۔",
+  "scriptSha256": "40fe954f9fdca64c141bdeed6ea625f80d760da1332da1c95885f421227fdf71",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "d83487d1d2c69990b905f31f55e2a1c55f5b3eef707f851f4c46c4b2afadf661",
+  "generatedAt": "2026-08-27T18:14:40.734Z",
+  "attempt": 2,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 12.436,
+    "integratedLufs": -18.87,
+    "truePeakDb": -4.95
+  }
+}

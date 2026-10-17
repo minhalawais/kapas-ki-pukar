@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-women-maternity-action",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "اب آپ کیا کر سکتے ہیں۔ کیمیائی اثر سے بچیں اور حمل کی علامت یا زہر لگنے پر طبی مشورہ لیں۔ امتیازی سلوک رپورٹ کریں اور اپنے صوبے کی زچگی رہنمائی مانگیں۔",
+  "scriptSha256": "290ea7a93ade9e9a4bc5b1095dbed603543fa06fdb754c92fd21dd50574c0bd0",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "c860c5bce6e51f91ce3bd65c917941fe5c7aad8fff2660340990c3e1d4c522da",
+  "generatedAt": "2026-08-24T07:33:28.938Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 14.333,
+    "integratedLufs": -18.51,
+    "truePeakDb": -3.64
+  },
+  "remasteredAt": "2026-08-24T07:48:44.593Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

@@ -1,0 +1,64 @@
+{
+  "datePacific": "2026-08-27",
+  "keys": {
+    "df4bc91941e6": {
+      "alias": "GEMINI_API_KEY_1",
+      "successes": 4,
+      "failures": 2,
+      "exhausted": true,
+      "exhaustedReason": "quota-429"
+    },
+    "29a45afa5d34": {
+      "alias": "GEMINI_API_KEY_2",
+      "successes": 10,
+      "failures": 0,
+      "exhausted": true,
+      "exhaustedReason": "daily-limit"
+    },
+    "4567a53d5abd": {
+      "alias": "GEMINI_API_KEY_3",
+      "successes": 10,
+      "failures": 0,
+      "exhausted": true,
+      "exhaustedReason": "daily-limit"
+    },
+    "dc50e111fc1a": {
+      "alias": "GEMINI_API_KEY_4",
+      "successes": 0,
+      "failures": 1,
+      "exhausted": true,
+      "exhaustedReason": "invalid-400"
+    },
+    "bac29341a466": {
+      "alias": "GEMINI_API_KEY_6",
+      "successes": 10,
+      "failures": 0,
+      "exhausted": true,
+      "exhaustedReason": "daily-limit"
+    },
+    "9203c7e1127f": {
+      "alias": "GEMINI_API_KEY_8",
+      "successes": 0,
+      "failures": 1,
+      "exhausted": true,
+      "exhaustedReason": "denied-403"
+    },
+    "0e557b93c694": {
+      "alias": "GEMINI_API_KEY_9",
+      "successes": 0,
+      "failures": 1,
+      "exhausted": true,
+      "exhaustedReason": "denied-403"
+    },
+    "32368fe7e398": {
+      "alias": "GOOGLE_API_KEY",
+      "successes": 0,
+      "failures": 1,
+      "exhausted": true,
+      "exhaustedReason": "quota-429"
+    }
+  },
+  "currentIndex": 1,
+  "sessionGenerated": 44,
+  "updatedAt": "2026-08-27T19:00:01.230Z"
+}

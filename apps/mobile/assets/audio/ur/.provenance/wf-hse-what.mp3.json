@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-hse-what",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "حفاظت کا کیا مسئلہ ہے؟ جواب کے لیے چوٹ، غیر محفوظ سامان، گرمی، آمدورفت، پانی یا آرام نہ ملنا، طِبّی امداد نہ ملنا، یا کوئی اور چنیں۔",
+  "scriptSha256": "fa717a8297e6ee3fa3de045c8436b799f53b5857eb73eb42a6c164e2ab7588d7",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "14df5f5f7a1af929b8d419de601d9885d3e277643e4d975c9d560b291d8d4cf1",
+  "generatedAt": "2026-08-27T18:32:58.686Z",
+  "attempt": 4,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 14.208,
+    "integratedLufs": -18.49,
+    "truePeakDb": -3.09
+  }
+}

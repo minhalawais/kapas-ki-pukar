@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-hrs-water",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "کیا پانی، سایہ اور آرام کا وقت ملتا ہے؟ جواب کے لیے ہاں، نہیں، کبھی کبھی میں سے انتخاب کریں۔",
+  "scriptSha256": "c8af2739ad6eef55e7a2afb4d75c55bfdf234b64e7e3a9dd453b822bd3e5985c",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "50667625ff7dc0475ff13ab6d86375cf6dd842f39bab2a47564d9312dd3f5895",
+  "generatedAt": "2026-08-27T17:46:03.307Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 10.47,
+    "integratedLufs": -18.46,
+    "truePeakDb": -2.08
+  }
+}

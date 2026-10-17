@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-compensation-action",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "اب آپ کیا کر سکتے ہیں۔ پہلے علاج لیں اور طبی عملے کو بتائیں کہ اثر یا چوٹ کب اور کہاں ہوئی۔ محفوظ طبی کاغذ رکھیں اور معاوضے کی جانچ کے لیے چوٹ رپورٹ کریں۔",
+  "scriptSha256": "d36876226e831b5712c69e2e1ca828a82393df9bc245b2d5e22cd0a8d9199fa1",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "bd3688d4cbda0dc72af8e2bcea25e81e30b993e43688cb17fe60da9dafc7fa8b",
+  "generatedAt": "2026-08-24T07:37:47.127Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 15.495,
+    "integratedLufs": -18.54,
+    "truePeakDb": -2.48
+  },
+  "remasteredAt": "2026-08-24T07:48:51.083Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

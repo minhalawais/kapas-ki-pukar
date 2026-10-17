@@ -1,0 +1,13 @@
+node_modules
+.pnpm-store
+.turbo
+dist
+.next
+out
+.expo
+coverage
+playwright-report
+test-results
+*.tsbuildinfo
+packages/database/src/generated
+apps/api/openapi/openapi.json

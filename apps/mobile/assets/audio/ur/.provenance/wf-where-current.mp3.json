@@ -1,0 +1,28 @@
+{
+  "promptId": "WF-where-current",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یہ واقعہ کہاں ہوا؟ اگر آپ ابھی اسی جگہ کے قریب ہیں تو موجودہ مقام استعمال کر سکتے ہیں۔ ورنہ جگہ خود لکھیں۔ مقام صرف آپ کی اجازت کے بعد لیا جائے گا۔",
+  "scriptSha256": "9857445e9c2bac9cec9e6da01856d4fd67d0f55fffc996a1546f5bcfdc1e3c6c",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "d15a05d8755e4fe83bd6a21bea3ff44ce52a397b3606eda65bf56a9ae54b05c3",
+  "generatedAt": "2026-08-22T08:37:35.631Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 14.24,
+    "integratedLufs": -18.56,
+    "truePeakDb": -2.17
+  },
+  "remasteredAt": "2026-08-24T07:47:41.195Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

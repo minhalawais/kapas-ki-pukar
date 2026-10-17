@@ -1,0 +1,42 @@
+{
+  "name": "@kapas/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsup",
+    "start": "node dist/main.js",
+    "openapi:generate": "tsx scripts/generate-openapi.ts write",
+    "openapi:check": "tsx scripts/generate-openapi.ts check",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src scripts --max-warnings 0",
+    "test": "vitest run",
+    "test:integration": "vitest run src/app.integration.test.ts"
+  },
+  "dependencies": {
+    "@fastify/helmet": "^13.2.0",
+    "@fastify/rate-limit": "^11.2.1",
+    "@kapas/api-contracts": "workspace:*",
+    "@kapas/config": "workspace:*",
+    "@kapas/database": "workspace:*",
+    "@kapas/observability": "workspace:*",
+    "@nestjs/common": "12.1.3",
+    "@nestjs/core": "12.1.3",
+    "@nestjs/platform-fastify": "12.1.3",
+    "@nestjs/swagger": "12.0.2",
+    "fastify": "^5.12.7",
+    "ioredis": "^6.0.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "12.1.3",
+    "@types/node": "^26.6.5",
+    "eslint": "^9.23.0",
+    "tsup": "^9.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.8.2",
+    "vitest": "^5.0.5"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "promptId": "SC-offline",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "آپ کی رپورٹ اس فون میں محفوظ ہے، لیکن ابھی بھیجی نہیں گئی۔ انٹرنیٹ ملنے پر دوبارہ کوشش کی جائے گی۔ رپورٹ کو حذف نہ کریں۔",
+  "scriptSha256": "0092aaf6692cb36d8d92c5c538f58aaecd88ea22e8f480cd5ee9cb44125a9b23",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "e42b048758b832726a0870d052ba0332e6279fdfbef3641097785edc16bd3589",
+  "generatedAt": "2026-08-22T08:30:48.159Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 9.653,
+    "integratedLufs": -18.38,
+    "truePeakDb": -5.27
+  },
+  "remasteredAt": "2026-08-24T07:47:31.703Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

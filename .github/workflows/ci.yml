@@ -1,0 +1,121 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:18.0-bookworm
+        env:
+          POSTGRES_DB: kapas_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ci-postgres-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d kapas_test"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+      redis:
+        image: redis:8.2.2-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      APP_MODE: production
+      ENABLE_DEMO_CONTROLS: "false"
+      NEXT_PUBLIC_ENABLE_DEMO_CREDENTIALS: "false"
+      EXPO_PUBLIC_APP_MODE: production
+      EXPO_PUBLIC_ENABLE_DEMO_CONTROLS: "false"
+      NODE_ENV: test
+      APP_VERSION: 0.1.0-ci
+      API_HOST: 127.0.0.1
+      API_PORT: "4000"
+      PUBLIC_API_URL: http://127.0.0.1:4000
+      PORTAL_ORIGIN: http://127.0.0.1:3000
+      DATABASE_URL: postgresql://postgres:ci-postgres-password@127.0.0.1:5432/kapas_test?schema=public
+      MIGRATION_DATABASE_URL: postgresql://postgres:ci-postgres-password@127.0.0.1:5432/kapas_test?schema=public
+      TEST_DATABASE_URL: postgresql://postgres:ci-postgres-password@127.0.0.1:5432/kapas_test?schema=public
+      REDIS_URL: redis://127.0.0.1:6379/15
+      LOG_LEVEL: silent
+      TRUST_PROXY_COUNT: "0"
+      EVIDENCE_ROOT: ./storage/evidence
+      QUARANTINE_ROOT: ./storage/quarantine
+      ENCRYPTION_KEY_ID: ci-only-key
+      SESSION_SECRET: ci-only-session-secret-with-at-least-32-characters
+      INTERNAL_METRICS_TOKEN: ci-only-internal-metrics-token
+      OPENAPI_ENABLED: "false"
+      QUEUE_PREFIX: kapas-ci
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Generate Prisma client
+        run: pnpm db:generate
+      - name: Formatting
+        run: pnpm format:check
+      - name: Migrate empty database
+        run: pnpm db:migrate:deploy
+      - name: Verify migration replay is clean
+        run: pnpm db:migrate:deploy
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint
+        run: pnpm lint
+      - name: Unit tests
+        run: pnpm test
+      - name: PostgreSQL and Redis integration tests
+        run: pnpm test:integration
+      - name: OpenAPI drift
+        run: pnpm openapi:check
+      - name: Dependency vulnerability report (unfixed advisories reported separately)
+        continue-on-error: true
+        run: pnpm audit --audit-level high
+      - name: Build API and worker
+        run: pnpm --filter @kapas/api build && pnpm --filter @kapas/worker build
+      - name: Build portal
+        run: pnpm --filter @kapas/puwf-portal build
+      - name: Export Expo production bundles
+        run: pnpm --filter @kapas/mobile exec expo export --output-dir dist-ci
+      - name: Build API image
+        run: docker build -f apps/api/Dockerfile -t kapas-api:ci .
+      - name: Build worker image
+        run: docker build -f apps/worker/Dockerfile -t kapas-worker:ci .
+      - name: Scan API image
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: kapas-api:ci
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+      - name: Scan worker image
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: kapas-worker:ci
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true

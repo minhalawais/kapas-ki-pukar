@@ -1,0 +1,28 @@
+{
+  "promptId": "WF-hse-injured",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "کیا کسی کو چوٹ لگی؟ جواب کے لیے ہاں، نہیں میں سے انتخاب کریں۔",
+  "scriptSha256": "7e28d5612d0dc2ea1d844a51288883521e97a41c9820c0ad38550c49f0b0a3ac",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "584373dc523ed3858519cfccc6612aab6e72e0008bd48ac7b1547eff311db6d8",
+  "generatedAt": "2026-08-22T08:52:52.178Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 5.199,
+    "integratedLufs": -17.21,
+    "truePeakDb": -2.47
+  },
+  "remasteredAt": "2026-08-24T07:47:55.775Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

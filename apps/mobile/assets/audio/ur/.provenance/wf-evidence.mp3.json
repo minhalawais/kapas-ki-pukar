@@ -1,0 +1,28 @@
+{
+  "promptId": "WF-evidence",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "اگر محفوظ ہو تو تصویر یا دستاویز شامل کر سکتے ہیں۔ یہ لازمی نہیں، اور آپ اسے چھوڑ سکتے ہیں۔",
+  "scriptSha256": "48794dfbef6e640806d13e7ab77f6e476c5d0ce24c3dd82d563b1be6e2cc3f4c",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "62d8bf9e34b7a9ce18df4b99ff9d9a4d7e2e1a656d5a396b053db3fb1fa2db8f",
+  "generatedAt": "2026-08-22T08:43:40.475Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 7.748,
+    "integratedLufs": -17.93,
+    "truePeakDb": -4.52
+  },
+  "remasteredAt": "2026-08-24T07:47:46.394Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

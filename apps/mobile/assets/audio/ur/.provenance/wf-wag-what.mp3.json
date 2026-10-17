@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-wag-what",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "اجرت کا کیا مسئلہ ہوا؟ جواب کے لیے پیسے نہیں ملے، کم ملے، دیر سے ملے، پیسے کاٹے گئے، وزن یا حساب غلط لگایا گیا، برابر کام پر کم اجرت ملی میں سے انتخاب کریں۔",
+  "scriptSha256": "850b47273ff87cd8561973fd4a477887a6047b66ebdcbffb63be8f224606d9a5",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "ab4b31996d25f734cd4127ad421b9f8ec307357e81e4c23fcdad75999273e844",
+  "generatedAt": "2026-08-27T17:41:58.253Z",
+  "attempt": 2,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 17.252,
+    "integratedLufs": -18.68,
+    "truePeakDb": -4.5
+  }
+}

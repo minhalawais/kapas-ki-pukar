@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-child-labour-action",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "اب آپ کیا کر سکتے ہیں۔ بچے کو فوری کیمیائی، مشین یا تشدد کے خطرے سے دور کریں اور ضرورت پر علاج لیں۔ شناخت سے خطرہ بڑھے تو بچے کا نام دیے بغیر رپورٹ کریں۔",
+  "scriptSha256": "a6cee424e055ede6f61c8df73e4ee63afa0e70702fcf1ef68a85a0db049a339d",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "3c5790d148671be7b97208dae24ec3e6143799dd151a6297a7c9c35b95af7fb0",
+  "generatedAt": "2026-08-23T09:38:04.918Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 14.573,
+    "integratedLufs": -17.92,
+    "truePeakDb": -3.31
+  },
+  "remasteredAt": "2026-08-24T07:48:30.368Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-worker-voice-warning",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "خبردار کرنے والی نشانیاں۔ گروپ میں شامل ہونے یا مشترکہ مسئلہ اٹھانے پر دھمکی، برطرفی یا کام روکنا۔ مالک خود مزدور نمائندہ چنے یا مزدوروں کی پرامن ملاقات روکے۔",
+  "scriptSha256": "dca71c4b01979e9bd8a65c2bb7ff67b7d6c226a266df763705bd0804a9894070",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "ec206aa153262173a5321887f51840a7cef3e23bc4370f621fb8b65523dc7f87",
+  "generatedAt": "2026-08-24T07:35:06.302Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 17.669,
+    "integratedLufs": -18.32,
+    "truePeakDb": -2.9
+  },
+  "remasteredAt": "2026-08-24T07:48:47.081Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

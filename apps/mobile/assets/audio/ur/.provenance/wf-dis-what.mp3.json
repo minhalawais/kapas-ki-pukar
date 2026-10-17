@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-dis-what",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "ناانصافی کس قسم کی ہے؟ جواب کے لیے جنس، برادری، مہاجر ہونا، عمر، معذوری، حمل، شکایت کرنا، یا کوئی اور وجہ چنیں۔",
+  "scriptSha256": "353f003f85e6d51656cede168cb690949f039eef544e08ffedf898f2eefbace6",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "9db1b7277b5e36f76016e62afeb5e941a033b2fe188def86e3d2ff1688646bd7",
+  "generatedAt": "2026-08-27T18:23:03.058Z",
+  "attempt": 3,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 15.142,
+    "integratedLufs": -18.54,
+    "truePeakDb": -2.5
+  }
+}

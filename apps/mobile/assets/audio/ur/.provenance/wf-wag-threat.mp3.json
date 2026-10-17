@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-wag-threat",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "کیا اجرت مانگنے پر دھمکی یا بدسلوکی ہوئی؟ جواب کے لیے ہاں، نہیں، بتانا محفوظ نہیں میں سے انتخاب کریں۔",
+  "scriptSha256": "caf18236e84fa29da1558397fa81a0d497cf3f6f8434edf05b4341d9dcc3c921",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "34736bfa7cf37ad777346a33b1f53ef8a9dd940f17359b4999ff8235f94edcce",
+  "generatedAt": "2026-08-27T17:44:05.659Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 11.566,
+    "integratedLufs": -18.84,
+    "truePeakDb": -3.35
+  }
+}

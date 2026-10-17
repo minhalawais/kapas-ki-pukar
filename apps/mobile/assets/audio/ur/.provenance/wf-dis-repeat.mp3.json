@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-dis-repeat",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یہ ایک بار ہوا یا بار بار؟ جواب کے لیے ایک بار، بار بار، ابھی بھی جاری ہے میں سے انتخاب کریں۔",
+  "scriptSha256": "4deebb421eb8f42dfbbfe47f20473f4c8240746b53ed5be3f0e7e099795bf943",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "e32126487c91dc3372f49c996934b3396b6bf19156e9641a000baaa26586c82e",
+  "generatedAt": "2026-08-27T17:35:43.697Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 11.26,
+    "integratedLufs": -18.57,
+    "truePeakDb": -3.38
+  }
+}

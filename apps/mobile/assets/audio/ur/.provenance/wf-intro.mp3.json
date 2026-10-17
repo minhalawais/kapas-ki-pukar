@@ -1,0 +1,28 @@
+{
+  "promptId": "WF-intro",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یہاں آپ کام سے متعلق مسئلہ محفوظ طریقے سے بتا سکتے ہیں۔ ایک وقت میں ایک سوال پوچھا جائے گا، اور آپ اپنی شناخت چھپا سکتے ہیں۔",
+  "scriptSha256": "397ca341928464376ab3a7be4f0c47a4a8972cf88d947631027f5a0aa9fde7c5",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "ae199f0124208dbca34c8b931c7b889e7581601defcc614c61658d8604fa63e4",
+  "generatedAt": "2026-08-22T08:34:51.184Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T12:56:00.592Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 10.139,
+    "integratedLufs": -18.79,
+    "truePeakDb": -2.45
+  },
+  "remasteredAt": "2026-08-24T07:47:37.548Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

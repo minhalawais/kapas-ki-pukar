@@ -1,0 +1,28 @@
+{
+  "promptId": "SC-permission",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "اپنی بات ریکارڈ کرنے کے لیے مائیک کی اجازت دیں۔ ریکارڈنگ صرف آپ کے دبانے پر شروع ہوگی، اور آپ بغیر ریکارڈنگ کے بھی آگے بڑھ سکتے ہیں۔",
+  "scriptSha256": "9cb74f09a85882c8c657ae2f09ee5dc84cac506b3dd2e7e6489076093199cf5b",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "66c994a2a3971dd1aae7e688c66069c64b646886c2a1a7998c09f265abe3894e",
+  "generatedAt": "2026-08-22T08:29:17.589Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 10.004,
+    "integratedLufs": -18.29,
+    "truePeakDb": -1.69
+  },
+  "remasteredAt": "2026-08-24T07:47:30.520Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

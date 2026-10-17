@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-compensation-overview",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "علاج اور معاوضہ۔ کام کی چوٹ یا بیماری درج ہونی چاہیے اور علاج و معاوضے کے لیے دیکھی جانی چاہیے۔",
+  "scriptSha256": "d8e9b2856f9bd2c0ecb1c4d8c7b6ba09de810a647fb37682a514d087aafc2a58",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "871f201c3dadd22fa0353e7f6c4aefc0dfa18a52f55ad15bbc4ab70d7c416e7d",
+  "generatedAt": "2026-08-24T07:36:06.950Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 10.716,
+    "integratedLufs": -18.91,
+    "truePeakDb": -3.34
+  },
+  "remasteredAt": "2026-08-24T07:48:48.365Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

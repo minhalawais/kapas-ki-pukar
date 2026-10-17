@@ -1,0 +1,23 @@
+import { defineConfig, devices } from "@playwright/test";
+
+export default defineConfig({
+  testDir: "./e2e",
+  fullyParallel: true,
+  use: {
+    baseURL: "http://127.0.0.1:3000",
+    trace: "on-first-retry",
+  },
+  webServer: {
+    command: "pnpm dev",
+    env: {
+      ...process.env,
+      APP_MODE: "demo",
+      ENABLE_DEMO_CONTROLS: "true",
+      NEXT_PUBLIC_ENABLE_DEMO_CREDENTIALS: "true",
+    },
+    url: "http://127.0.0.1:3000/dashboard",
+    reuseExistingServer: true,
+    timeout: 120_000,
+  },
+  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+});

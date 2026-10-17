@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-contractor-terms-warning",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "خبردار کرنے والی نشانیاں۔ ٹھیکیدار نرخ بدلے، فیس لگائے، اجرت لے کر غائب ہو یا کٹوتی نہ سمجھائے۔ خالی کاغذ پر دستخط، قرض کا حساب نہ ہونا یا یہ کہنا کہ ادائیگی کا کوئی ذمہ دار نہیں۔",
+  "scriptSha256": "d41cd78ed468613c6173ed843884e7539ebf7ed4c9d2481096fda5b01e25e020",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "8cafe37b90195fa887c9318c0def355d3ca3b11ce420fa075b813b3e3425814f",
+  "generatedAt": "2026-08-24T07:30:46.707Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 17.04,
+    "integratedLufs": -18.63,
+    "truePeakDb": -3.99
+  },
+  "remasteredAt": "2026-08-24T07:48:40.366Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

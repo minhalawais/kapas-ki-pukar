@@ -1,0 +1,28 @@
+{
+  "promptId": "WF-review",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "اپنی رپورٹ جمع کرانے سے پہلے معلومات دیکھ لیں۔ ضرورت ہو تو کسی حصے کو بدلیں، پھر جمع کرائیں۔",
+  "scriptSha256": "c296cc644ad5809fc82211e232b24605d1911f7bb08e72883d4289b75b670ca2",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "9058887a4b14dbb8ba67baa0216cc6b918d6c92ea16482629fb51645fb69d121",
+  "generatedAt": "2026-08-22T08:45:36.747Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 8.002,
+    "integratedLufs": -18.43,
+    "truePeakDb": -4.94
+  },
+  "remasteredAt": "2026-08-24T07:47:48.727Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

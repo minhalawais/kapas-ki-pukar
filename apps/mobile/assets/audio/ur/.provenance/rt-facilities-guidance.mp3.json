@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-facilities-guidance",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یاد رکھنے کی باتیں۔ سہولت حقیقت میں استعمال کے قابل ہو اور خواتین یا دوسرے مزدوروں کو ہراسانی یا بے پردگی کے خطرے میں نہ ڈالے۔ گرد، زہر کے باقی اثر یا کیمیائی چھونے کے بعد دھونے کا پانی خاص طور پر ضروری ہے۔",
+  "scriptSha256": "04f1390e70ed85f3d5f4eab63131325514be697cdbe2fc0b3c4f24c4dcde177b",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "ea7dce55da9bfe268f87cdba340d7ee9fb323d06084e4a67b95eca37e8cb5e8e",
+  "generatedAt": "2026-08-24T07:27:55.647Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 21.509,
+    "integratedLufs": -18.55,
+    "truePeakDb": -3.5
+  },
+  "remasteredAt": "2026-08-24T07:48:35.958Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-con-what",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "ٹھیکیدار کا کیا مسئلہ ہے؟ جواب کے لیے ادائیگی، دھمکی، بھرتی فیس یا قرض، جھوٹا وعدہ، کام کی حالت، کاغذات رکھنا، آمدورفت روکنا، یا کوئی اور چنیں۔",
+  "scriptSha256": "7809a1a69a22083c0d9d6b93f0b7b29709b89f6fc409e8911a1afd364cb060c6",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "070eadf7f98b059c7d1bef83d91f12eaf0f149b5c99405ea2a22c8087d91578c",
+  "generatedAt": "2026-08-27T18:22:29.902Z",
+  "attempt": 3,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 19.344,
+    "integratedLufs": -18.01,
+    "truePeakDb": -1.65
+  }
+}

@@ -1,0 +1,104 @@
+Requirement ID,Requirement Summary,Priority,Source Document,Screen ID,Phase,Epic,Developer,QA Test ID,Status,Notes
+MOB-001,Launch branded splash,M,02_FRS_v1.1,M-001,04,MOBILE-FOUNDATION,RN,QA-MOB-001,Baseline,
+MOB-002,Choose Urdu as primary language,M,02_FRS_v1.1,M-002,04,MOBILE-FOUNDATION,RN,QA-MOB-002,Baseline,
+MOB-004,Urdu screens render RTL,M,02_FRS_v1.1,M-002|M-004,04,MOBILE-FOUNDATION,RN,QA-MOB-004,Baseline,Applies to all worker screens
+MOB-005,Persist selected language locally,M,02_FRS_v1.1,M-002,04,MOBILE-FOUNDATION,RN,QA-MOB-005,Baseline,
+MOB-006,Home prioritises Report a Problem,M,02_FRS_v1.1,M-004,04,MOBILE-FOUNDATION,RN,QA-MOB-006,Baseline,
+MOB-007,Home exposes Track My Complaint,M,02_FRS_v1.1,M-004|M-027,04,MOBILE-FOUNDATION,RN,QA-MOB-007,Baseline,List completed in Phase 07
+MOB-009,Major worker screens provide Listen Again,M,02_FRS_v1.1,M-003|M-004,04,MOBILE-FOUNDATION,RN,QA-MOB-009,Baseline,Extends through Phases 05-07
+MOB-010,Back navigation does not discard draft,M,02_FRS_v1.1,M-032,05,MOBILE-GRIEVANCE,RN,QA-MOB-010,Baseline,Persistence completed in Phase 08
+GRV-001,Start complaint without registration,M,02_FRS_v1.1,M-005,05,MOBILE-GRIEVANCE,RN,QA-GRV-001,Baseline,
+GRV-002,One-question-at-a-time intake,M,02_FRS_v1.1,M-006,05,MOBILE-GRIEVANCE,RN,QA-GRV-002,Baseline,
+GRV-003,Select category via illustrated cards,M,02_FRS_v1.1,M-006,05,MOBILE-GRIEVANCE,RN,QA-GRV-003,Baseline,
+GRV-004,Branch questions by category,M,02_FRS_v1.1,M-007|M-013|M-037|M-038|M-039|M-040,05,MOBILE-GRIEVANCE,RN,QA-GRV-004,Baseline,All 11 taxonomy codes; DEC-014
+GRV-005,Other Issue path,M,02_FRS_v1.1,M-013,05,MOBILE-GRIEVANCE,RN,QA-GRV-005,Baseline,
+GRV-006,Incident timing shortcuts,M,02_FRS_v1.1,M-015,05,MOBILE-GRIEVANCE,RN,QA-GRV-006,Baseline,
+GRV-007,Simple location choices,M,02_FRS_v1.1,M-016,05,MOBILE-GRIEVANCE,RN,QA-GRV-007,Baseline,No GIS unless CR
+GRV-008,Others affected,M,02_FRS_v1.1,M-017,05,MOBILE-GRIEVANCE,RN,QA-GRV-008,Baseline,
+GRV-010,Immediate danger question,M,02_FRS_v1.1,M-018,05,MOBILE-GRIEVANCE,RN,QA-GRV-010,Baseline,
+GRV-011,Critical category priority floor,M,02_FRS_v1.1,M-011|M-012,05,MOBILE-GRIEVANCE,Shared,QA-GRV-011,Baseline,priorityRules service
+GRV-012,Anonymous Confidential Identified,M,02_FRS_v1.1,M-019,07,MOBILE-TRACKING,RN,QA-GRV-012,Baseline,Workflow node in Phase 05; UI in 07
+GRV-013,Privacy options have voice explanation,M,02_FRS_v1.1,M-019,07,MOBILE-VOICE,RN,QA-GRV-013,Baseline,
+GRV-017,Evidence attachment optional,M,02_FRS_v1.1,M-021,07,MOBILE-TRACKING,RN,QA-GRV-017,Baseline,
+GRV-018,Preserve grievance draft locally,M,02_FRS_v1.1,M-032,05,MOBILE-GRIEVANCE,RN,QA-GRV-018,Baseline,Completed with Phase 08
+VOC-001,Request microphone permission,M,02_FRS_v1.1,M-033,06,MOBILE-VOICE,RN,QA-VOC-001,Baseline,
+VOC-002,Start recording,M,02_FRS_v1.1,M-014,06,MOBILE-VOICE,RN,QA-VOC-002,Baseline,
+VOC-003,Stop recording,M,02_FRS_v1.1,M-014,06,MOBILE-VOICE,RN,QA-VOC-003,Baseline,
+VOC-004,Replay recording,M,02_FRS_v1.1,M-014,06,MOBILE-VOICE,RN,QA-VOC-004,Baseline,
+VOC-005,Delete and re-record,M,02_FRS_v1.1,M-014,06,MOBILE-VOICE,RN,QA-VOC-005,Baseline,
+VOC-006,Clear recording-state feedback,M,02_FRS_v1.1,M-014,06,MOBILE-VOICE,RN,QA-VOC-006,Baseline,
+VOC-007,Play bundled Urdu prompts,M,02_FRS_v1.1,M-003,06,MOBILE-VOICE,RN,QA-VOC-007,Baseline,Offline
+VOC-008,Audio prompt not mandatory to complete screen,M,02_FRS_v1.1,M-003,06,MOBILE-VOICE,RN,QA-VOC-008,Baseline,
+VOC-009,Microphone-denied recovery,M,02_FRS_v1.1,M-033,06,MOBILE-VOICE,RN,QA-VOC-009,Baseline,
+VOC-010,Transcription does not replace original audio,M,02_FRS_v1.1,M-014|W-002,06,MOBILE-AI,Shared,QA-VOC-010,Baseline,
+AI-001,Simulate transcription after voice,M,02_FRS_v1.1,M-022,06,MOBILE-AI,Shared,QA-AI-001,Baseline,
+AI-003,Simulate category suggestion,M,02_FRS_v1.1,M-023,06,MOBILE-AI,Shared,QA-AI-003,Baseline,
+AI-004,Simulate subcategory extraction,M,02_FRS_v1.1,M-023,06,MOBILE-AI,Shared,QA-AI-004,Baseline,
+AI-005,Simulate complaint summary,M,02_FRS_v1.1,M-023,06,MOBILE-AI,Shared,QA-AI-005,Baseline,
+AI-006,Simulate key-fact extraction,M,02_FRS_v1.1,M-023|W-002,06,MOBILE-AI,Shared,QA-AI-006,Baseline,
+AI-007,Simulate priority recommendation without overriding safety floor,M,02_FRS_v1.1,M-023,06,MOBILE-AI,Shared,QA-AI-007,Baseline,
+AI-008,AI outputs labelled as suggestions,M,02_FRS_v1.1,M-023|W-002,06,MOBILE-AI,Shared,QA-AI-008,Baseline,
+AI-012,Worker reviews understanding before submit,M,02_FRS_v1.1,M-023|M-024,06,MOBILE-AI,RN,QA-AI-012,Baseline,
+SUB-001,Validate required steps before submit,M,02_FRS_v1.1,M-024,07,MOBILE-TRACKING,RN,QA-SUB-001,Baseline,
+SUB-002,Generate local complaint reference KP-26-######,M,02_FRS_v1.1,M-026,07,MOBILE-TRACKING,RN,QA-SUB-002,Baseline,DEC-006
+SUB-003,Show submission processing state,M,02_FRS_v1.1,M-025,07,MOBILE-TRACKING,RN,QA-SUB-003,Baseline,
+SUB-004,Persist successful complaint locally,M,02_FRS_v1.1,M-027,07,MOBILE-TRACKING,RN,QA-SUB-004,Baseline,
+SUB-005,Show reference on success,M,02_FRS_v1.1,M-026,07,MOBILE-TRACKING,RN,QA-SUB-005,Baseline,
+SUB-006,Worker complaint list,M,02_FRS_v1.1,M-027,07,MOBILE-TRACKING,RN,QA-SUB-006,Baseline,
+SUB-007,Worker complaint detail,M,02_FRS_v1.1,M-028,07,MOBILE-TRACKING,RN,QA-SUB-007,Baseline,
+SUB-008,Plain-language worker status labels,M,02_FRS_v1.1,M-027|M-028,07,MOBILE-TRACKING,RN,QA-SUB-008,Baseline,
+RGT-003,Rights content uses simple worker language,M,02_FRS_v1.1,M-030|M-031,07,MOBILE-RIGHTS,RN,QA-RGT-003,Baseline,
+WEB-001,One Phase 1 operational role,M,02_FRS_v1.1,W-001,09,WEB-DASHBOARD,Next,QA-WEB-001,Baseline,
+WEB-002,Desktop-first responsive layout,M,02_FRS_v1.1,W-001|W-002|W-003,09,WEB-DASHBOARD,Next,QA-WEB-002,Baseline,
+WEB-003,Nav: Dashboard/Complaints and Analytics only as primary,M,02_FRS_v1.1,W-001|W-003,09,WEB-DASHBOARD,Next,QA-WEB-003,Baseline,W-002 is drill-in
+WEB-004,Persist mock case changes locally,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-WEB-004,Baseline,
+WEB-005,Reset Demo Data,M,02_FRS_v1.1,W-004,12,DEMO-ORCHESTRATION,Shared,QA-WEB-005,Baseline,
+DSH-001,KPIs Total New Critical In Progress Overdue Resolved,M,02_FRS_v1.1,W-001,09,WEB-DASHBOARD,Next,QA-DSH-001,Baseline,DEC-007; repository-derived
+DSH-002,Category distribution chart,M,02_FRS_v1.1,W-001,09,WEB-DASHBOARD,Next,QA-DSH-002,Baseline,
+DSH-003,Complaint trend over time,M,02_FRS_v1.1,W-001,09,WEB-DASHBOARD,Next,QA-DSH-003,Baseline,
+DSH-006,Complaint list search,M,02_FRS_v1.1,W-001,09,WEB-DASHBOARD,Next,QA-DSH-006,Baseline,
+DSH-007,Status filter,M,02_FRS_v1.1,W-001,09,WEB-DASHBOARD,Next,QA-DSH-007,Baseline,
+DSH-008,Priority filter,M,02_FRS_v1.1,W-001,09,WEB-DASHBOARD,Next,QA-DSH-008,Baseline,
+DSH-009,Category filter,M,02_FRS_v1.1,W-001,09,WEB-DASHBOARD,Next,QA-DSH-009,Baseline,
+DSH-011,Sorting,M,02_FRS_v1.1,W-001,09,WEB-DASHBOARD,Next,QA-DSH-011,Baseline,
+DSH-012,Pagination or virtualised browsing,M,02_FRS_v1.1,W-001,09,WEB-DASHBOARD,Next,QA-DSH-012,Baseline,200 seed rows
+DSH-013,Open case workspace from row,M,02_FRS_v1.1,W-001|W-002,09,WEB-DASHBOARD,Next,QA-DSH-013,Baseline,
+CASE-001,Case identity and priority header,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-001,Baseline,
+CASE-002,Show privacy mode,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-002,Baseline,
+CASE-003,Original worker audio,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-003,Baseline,
+CASE-004,Urdu transcript,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-004,Baseline,
+CASE-006,AI summary assistive card,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-006,Baseline,
+CASE-007,AI-extracted facts,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-007,Baseline,
+CASE-009,Chronological timeline,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-009,Baseline,
+CASE-010,Start review,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-010,Baseline,
+CASE-011,Change priority,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-011,Baseline,
+CASE-012,Add internal note,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-012,Baseline,
+CASE-013,Record contact attempt,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-013,Baseline,
+CASE-015,Record investigation finding,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-015,Baseline,
+CASE-016,Record action taken,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-016,Baseline,
+CASE-017,Escalate case,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-017,Baseline,
+CASE-018,Propose resolution,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-018,Baseline,
+CASE-019,Mark resolved,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-019,Baseline,
+CASE-020,Close case with reason,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-020,Baseline,
+CASE-022,Confirmation modal for consequential actions,M,02_FRS_v1.1,W-002,10,WEB-CASE,Next,QA-CASE-022,Baseline,
+ANL-001,Analytics from dataset not hard-coded totals,M,02_FRS_v1.1,W-003,11,WEB-ANALYTICS,Next,QA-ANL-001,Baseline,
+ANL-002,Category trends,M,02_FRS_v1.1,W-003,11,WEB-ANALYTICS,Next,QA-ANL-002,Baseline,
+ANL-004,Priority distribution,M,02_FRS_v1.1,W-003,11,WEB-ANALYTICS,Next,QA-ANL-004,Baseline,
+DEM-001,Hidden Demo Control Panel,M,02_FRS_v1.1,W-004|M-036,12,DEMO-ORCHESTRATION,Shared,QA-DEM-001,Baseline,
+DEM-002,Demo reset data,M,02_FRS_v1.1,W-004,12,DEMO-ORCHESTRATION,Shared,QA-DEM-002,Baseline,
+DEM-003,Load golden scenario,M,02_FRS_v1.1,W-004,12,DEMO-ORCHESTRATION,Shared,QA-DEM-003,Baseline,
+DEM-006,Inject matching complaint into portal,M,02_FRS_v1.1,W-004,12,DEMO-ORCHESTRATION,Shared,QA-DEM-006,Baseline,Not live sync; DEC-016
+GLB-001,Loading empty error states on primary screens,M,02_FRS_v1.1,All primary,13,QA-ACCESSIBILITY,Shared,QA-GLB-001,Baseline,Implemented per screen from Phase 04 onward
+GLB-002,Status not colour-only,M,02_FRS_v1.1,All primary,01,DESIGN-SYSTEM,Shared,QA-GLB-002,Baseline,
+GLB-003,Red reserved for danger/destructive,M,02_FRS_v1.1,All primary,01,DESIGN-SYSTEM,Shared,QA-GLB-003,Baseline,
+GLB-004,Shared design tokens,M,02_FRS_v1.1,All primary,01,DESIGN-SYSTEM,Shared,QA-GLB-004,Baseline,Code in Phase 02
+GLB-005,Components consume services not raw dummy files,M,02_FRS_v1.1,All primary,03,DOMAIN-DATA,Shared,QA-GLB-005,Baseline,
+GLB-006,TypeScript strict mode,M,02_FRS_v1.1,n/a,02,FOUNDATION,Shared,QA-GLB-006,Baseline,
+GLB-007,Major web actions keyboard accessible,M,02_FRS_v1.1,W-001|W-002|W-003,09,QA-ACCESSIBILITY,Next,QA-GLB-007,Baseline,Verified Phase 13
+GLB-008,Mobile large touch targets,M,02_FRS_v1.1,All mobile,04,MOBILE-FOUNDATION,RN,QA-GLB-008,Baseline,Rules in doc 06
+GLB-009,Neutral/cream/white dominate content areas,M,02_FRS_v1.1,All primary,01,DESIGN-SYSTEM,Shared,QA-GLB-009,Baseline,doc 06 v1.1
+GLB-010,PUWF green is institutional anchor not default mobile bg,M,02_FRS_v1.1,All mobile,01,DESIGN-SYSTEM,Shared,QA-GLB-010,Baseline,
+GLB-011,Voice/AI uses FOS Teal,M,02_FRS_v1.1,M-014|M-022|W-002,01,DESIGN-SYSTEM,Shared,QA-GLB-011,Baseline,
+GLB-012,KPI cards remain white/neutral,M,02_FRS_v1.1,W-001,01,DESIGN-SYSTEM,Shared,QA-GLB-012,Baseline,
+GLB-013,Charts use mixed palette not green-only,M,02_FRS_v1.1,W-001|W-003,01,DESIGN-SYSTEM,Shared,QA-GLB-013,Baseline,
+GLB-014,Gold/orange are secondary accents not primary CTA,M,02_FRS_v1.1,All primary,01,DESIGN-SYSTEM,Shared,QA-GLB-014,Baseline,

@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-worker-voice-guidance",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یاد رکھنے کی باتیں۔ تنظیم کی آزادی میں مزدور تنظیم بنانا، شامل ہونا اور اپنا نمائندہ چننا شامل ہے۔ مشترکہ آواز اجرت، حفاظت، سہولت، بال مزدوری اور امتیاز کے مسائل اٹھا سکتی ہے۔",
+  "scriptSha256": "c1d3029a6e703731872aafeb5eb0ef830e5e90eff03c7f26df2beb7357e019bd",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "091f0a1376bca7956cca05aa8fbd9413f8bb9079ba34f0a6a956b5ee9423e0ad",
+  "generatedAt": "2026-08-24T07:34:32.631Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 18.788,
+    "integratedLufs": -18.52,
+    "truePeakDb": -2.63
+  },
+  "remasteredAt": "2026-08-24T07:48:46.183Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

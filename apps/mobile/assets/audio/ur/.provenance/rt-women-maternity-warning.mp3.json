@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-women-maternity-warning",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "خبردار کرنے والی نشانیاں۔ حاملہ مزدور کو تازہ سپرے والے کھیت میں بھیجنا یا ضروری آرام اور علاج روکنا۔ صرف حمل یا زچگی کی وجہ سے عورت کو نکالنا، کم اجرت، دھمکی یا کام سے محروم کرنا۔",
+  "scriptSha256": "6eb3a24615293e78d767e626b1b1137a96a60e973ab09fc605e3e85dc17a937c",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "4f90e8eb6ff40364ddb20136cc193207048823e6f39acb84e3452af1e32516a8",
+  "generatedAt": "2026-08-24T07:32:57.531Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 17.063,
+    "integratedLufs": -19.08,
+    "truePeakDb": -4.31
+  },
+  "remasteredAt": "2026-08-24T07:48:43.840Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-category",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "آپ کس مسئلے کے بارے میں رپورٹ کرنا چاہتے ہیں؟ اجرت، سپرے، چوٹ، ہراسانی، بال مزدوری، یا زبردستی کام میں سے مناسب تصویر چنیں۔ مزید اقسام یا دیگر مسئلے کے لیے نیچے والے بٹن دیکھیں۔",
+  "scriptSha256": "a36314d47f64ed468596ec70ce54e989952ffd6aeb8bcbcb35f1b7de1547e4ce",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "974cdd758d531054011ffcf4e259f09623b336ecaca8adfc3901fd64b6d89753",
+  "generatedAt": "2026-08-27T18:15:17.838Z",
+  "attempt": 2,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 18.016,
+    "integratedLufs": -17.97,
+    "truePeakDb": -3.32
+  }
+}

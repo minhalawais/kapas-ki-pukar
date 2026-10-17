@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-contractor-terms-overview",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "ٹھیکیدار اور تحریری شرائط۔ کام دلانے والا نرخ، کٹوتی، قرض یا ادائیگی کی ذمہ داری نہیں چھپا سکتا۔",
+  "scriptSha256": "791907ca2e5a47f4d0179b3c4eed78d4278f782d14c866316ba00ad3598bdc71",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "ede57725fc9b9ca10c028ea00eba7c3f320da0bd895ebdfc8e724ef89a3a83b6",
+  "generatedAt": "2026-08-24T07:29:35.373Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 11.625,
+    "integratedLufs": -18.71,
+    "truePeakDb": -4.63
+  },
+  "remasteredAt": "2026-08-24T07:48:38.479Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-wages-warning",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "خبردار کرنے والی نشانیاں۔ ادائیگی دیر سے ہو، کچھ رقم روک لی جائے، طے شدہ سے کم اجرت ملے یا درمیان والا رقم رکھ لے۔ لکھا ہوا وزن بدل جائے، اضافی وقت کی اجرت نہ ملے یا کٹوتی کی وجہ نہ بتائی جائے۔",
+  "scriptSha256": "debc5ec9ace24456e1ce2da1cb21995166ae091e0e36fe02bb2f8eba7fbeb181",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "546d65c4f2af1a6b61e64981c818b81b71063400234ef8bf9c37fe2ff833c3ee",
+  "generatedAt": "2026-08-23T09:20:35.300Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 16.254,
+    "integratedLufs": -19.17,
+    "truePeakDb": -3.61
+  },
+  "remasteredAt": "2026-08-24T07:48:09.730Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

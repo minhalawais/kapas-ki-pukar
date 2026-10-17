@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-hse-still",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "کیا غیر محفوظ حالت اب بھی ہے؟ جواب کے لیے ہاں، نہیں، میں اس جگہ سے نکل آیا/آئی ہوں میں سے انتخاب کریں۔",
+  "scriptSha256": "0ccfa8c49cf13277dc274915d5cb10e13ac20b24b0f18050937a1db6f5b00041",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "d77b2f714bedf0c7e370a5aa3b65bd60ff20ace31f0d5547c5534761e4df4c73",
+  "generatedAt": "2026-08-27T17:37:12.338Z",
+  "attempt": 2,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 12.526,
+    "integratedLufs": -18.6,
+    "truePeakDb": -2.55
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-injury-safety-warning",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "خبردار کرنے والی نشانیاں۔ خون بہنا، کیڑے کا کاٹنا، بجلی کا خطرہ، بغیر حفاظتی ڈھال مشین یا غیر محفوظ سفر۔ چوٹ چھپائی جائے، علاج روکا جائے یا غیر محفوظ کام جاری رکھنے کا دباؤ دیا جائے۔",
+  "scriptSha256": "ff3d2edb8d41d898e54c898f1cb69e7dafb57287023992721bc3cd796955324a",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "47970acce982f3dd9b4365892212033ec7626842ae65802ddc1ae701b0fc80c7",
+  "generatedAt": "2026-08-23T09:31:21.884Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 19.75,
+    "integratedLufs": -18.54,
+    "truePeakDb": -1.71
+  },
+  "remasteredAt": "2026-08-24T07:48:21.413Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

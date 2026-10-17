@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-forced-labour-warning",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "خبردار کرنے والی نشانیاں۔ مزدور قرض یا دھمکی کی وجہ سے جا نہ سکے، اضافی کام سے انکار نہ کر سکے، کام بدل یا گھر واپس نہ جا سکے۔ کاغذات یا اجرت روکنا، قرض بڑھاتے رہنا، ہتھیار سے دھمکی یا قرض بچوں کو منتقل کرنا۔",
+  "scriptSha256": "1127ba1a94e2a71de8931b2feceb5b37890bd4ee6e112832c62f465a6af52366",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "927d4284980bfb16059b997ef1bd9847becafc74f53268cf31f7803bcf9eb7b0",
+  "generatedAt": "2026-08-24T07:25:57.749Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 22.111,
+    "integratedLufs": -18.95,
+    "truePeakDb": -2.28
+  },
+  "remasteredAt": "2026-08-24T07:48:32.981Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

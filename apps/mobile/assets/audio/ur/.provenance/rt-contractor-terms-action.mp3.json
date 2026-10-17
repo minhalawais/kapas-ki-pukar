@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-contractor-terms-action",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "اب آپ کیا کر سکتے ہیں۔ تحریری یا آواز میں شرط مانگیں اور محفوظ رسید، پیغام یا گواہ کی بات سنبھالیں۔ ٹھیکیدار کے ساتھ اس کھیت یا شخص کو بھی رپورٹ کریں جس کے لیے کام کیا گیا۔",
+  "scriptSha256": "860a1e84a867b281cd19825df91a2dd00549effd144656eb68c57e7d9d86c6d7",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "b7fece7aee7cd8ee8797f95930304cf1621d0aba7053d38f144eb9b1bdbd7827",
+  "generatedAt": "2026-08-24T07:31:21.056Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 16.628,
+    "integratedLufs": -18.05,
+    "truePeakDb": -2.28
+  },
+  "remasteredAt": "2026-08-24T07:48:41.307Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

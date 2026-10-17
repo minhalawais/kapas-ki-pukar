@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-migrant-tenant-guidance",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یاد رکھنے کی باتیں۔ مہاجر مزدور کو برابر سلوک، آزاد نقل و حرکت اور اجرت و رپورٹ تک محفوظ رسائی چاہیے۔ مزارع یا فصل کی شراکت کا جھگڑا مزدوری کے ساتھ زمین یا مال کے قانون سے بھی متعلق ہو سکتا ہے۔",
+  "scriptSha256": "6e3af9e913f54a94dc0c111f14352d9ec2cfe9d0b4d26aae3b7423adbe162a8f",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "9b2e119a84e55882530e8561e666d5c8845943b87557e2c30af6571adde0e680",
+  "generatedAt": "2026-08-24T07:38:57.133Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 19.203,
+    "integratedLufs": -18.82,
+    "truePeakDb": -4.28
+  },
+  "remasteredAt": "2026-08-24T07:48:52.799Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

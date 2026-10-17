@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-oth-kind",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یہ مسئلہ کس قسم سے زیادہ ملتا ہے؟ جواب کے لیے اجرت یا ادائیگی، حفاظت یا چوٹ، سپرے یا کیمیکل، ہراسانی یا بدسلوکی، ٹھیکیدار، کوئی اور مسئلہ میں سے انتخاب کریں۔",
+  "scriptSha256": "fa7a3df1e238c7bb7cd913cfd0a5a98cb9096cac96bebef7185655e7c770b0e2",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "1b4236220db15390260e58b9fa63d462e7c01d7ecde57d42d5f52b377015c925",
+  "generatedAt": "2026-08-27T17:37:46.799Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 18.148,
+    "integratedLufs": -18.59,
+    "truePeakDb": -3
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-forced-labour-overview",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "جبری یا قرض کی مزدوری۔ کوئی قرض، پیشگی رقم، دھمکی یا رسم کسی کو کام پر مجبور یا جانے سے نہیں روک سکتی۔",
+  "scriptSha256": "ee73e5850135604b9eec6ffd3dd2f7e9659595e178e6f7d5d7560d62ae264a49",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "045ead5ae009f12ef39acc2944a70f1466719b8e899d893b84f2bb2f5236a944",
+  "generatedAt": "2026-08-23T09:38:37.305Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 12.233,
+    "integratedLufs": -18.6,
+    "truePeakDb": -4.9
+  },
+  "remasteredAt": "2026-08-24T07:48:31.069Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

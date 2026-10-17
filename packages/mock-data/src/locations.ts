@@ -1,0 +1,16 @@
+export const DEMO_LOCATIONS = [
+  { province: "Punjab", district: "Bahawalpur", tehsil: "Yazman", villageLabel: "Chak 12/BC" },
+  { province: "Punjab", district: "Rahim Yar Khan", tehsil: "Sadiqabad", villageLabel: "Basti Noor" },
+  { province: "Punjab", district: "Multan", tehsil: "Shujabad", villageLabel: "Kikar Wala" },
+  { province: "Punjab", district: "Khanewal", tehsil: "Kabirwala", villageLabel: "Cotton Camp A" },
+  { province: "Punjab", district: "Vehari", tehsil: "Burewala", villageLabel: "Field Block 4" },
+  { province: "Punjab", district: "Sahiwal", tehsil: "Chichawatni", villageLabel: "Jholan Wala" },
+  { province: "Punjab", district: "Lodhran", tehsil: "Dunyapur", villageLabel: "Canal Side" },
+  { province: "Punjab", district: "Muzaffargarh", tehsil: "Kot Addu", villageLabel: "Belt Farm" },
+  { province: "Sindh", district: "Sanghar", tehsil: "Tando Adam", villageLabel: "Pickers Camp 2" },
+  { province: "Sindh", district: "Khairpur", tehsil: "Kingri", villageLabel: "Pir Jo Goth Road" },
+  { province: "Sindh", district: "Ghotki", tehsil: "Mirpur Mathelo", villageLabel: "Kacha Track" },
+  { province: "Sindh", district: "Shaheed Benazirabad", tehsil: "Sakrand", villageLabel: "Water Point B" },
+  { province: "Sindh", district: "Mirpurkhas", tehsil: "Digri", villageLabel: "Colony Edge" },
+  { province: "Sindh", district: "Umerkot", tehsil: "Kunri", villageLabel: "Chili-Cotton Mix" },
+] as const;

@@ -1,0 +1,225 @@
+{
+  "components": {
+    "schemas": {}
+  },
+  "info": {
+    "contact": {},
+    "description": "Production backend foundation API",
+    "title": "Kapas ki Pukaar API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health/live": {
+      "get": {
+        "operationId": "FoundationController_live",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "http://json-schema.org/draft-07/schema#",
+                  "additionalProperties": false,
+                  "properties": {
+                    "service": {
+                      "const": "api",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "ok",
+                      "type": "string"
+                    },
+                    "time": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    },
+                    "version": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "service",
+                    "version",
+                    "time"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Process liveness",
+        "tags": [
+          "foundation"
+        ]
+      }
+    },
+    "/api/v1/health/ready": {
+      "get": {
+        "operationId": "FoundationController_ready",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "http://json-schema.org/draft-07/schema#",
+                  "additionalProperties": false,
+                  "properties": {
+                    "dependencies": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "postgres": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "latencyMs": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "status": {
+                              "enum": [
+                                "up",
+                                "down"
+                              ],
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "status",
+                            "latencyMs"
+                          ],
+                          "type": "object"
+                        },
+                        "redis": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "latencyMs": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "status": {
+                              "enum": [
+                                "up",
+                                "down"
+                              ],
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "status",
+                            "latencyMs"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "postgres",
+                        "redis"
+                      ],
+                      "type": "object"
+                    },
+                    "service": {
+                      "const": "api",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "ready",
+                        "not_ready"
+                      ],
+                      "type": "string"
+                    },
+                    "time": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    },
+                    "version": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "service",
+                    "version",
+                    "time",
+                    "dependencies"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "503": {
+            "description": "One or more dependencies are unavailable"
+          }
+        },
+        "summary": "PostgreSQL and Redis readiness",
+        "tags": [
+          "foundation"
+        ]
+      }
+    },
+    "/api/v1/meta": {
+      "get": {
+        "operationId": "FoundationController_meta",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "http://json-schema.org/draft-07/schema#",
+                  "additionalProperties": false,
+                  "properties": {
+                    "apiVersion": {
+                      "const": "v1",
+                      "type": "string"
+                    },
+                    "environment": {
+                      "enum": [
+                        "development",
+                        "test",
+                        "production"
+                      ],
+                      "type": "string"
+                    },
+                    "service": {
+                      "const": "api",
+                      "type": "string"
+                    },
+                    "version": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "service",
+                    "version",
+                    "environment",
+                    "apiVersion"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Safe build metadata",
+        "tags": [
+          "foundation"
+        ]
+      }
+    }
+  },
+  "servers": [],
+  "tags": []
+}

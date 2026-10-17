@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-child-labour-warning",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "خبردار کرنے والی نشانیاں۔ بچہ زہر، بھاری بوجھ، خطرناک اوزار یا مشین سنبھالے یا بہت دیر کام کرے۔ بچہ سکول چھوڑے، قرض یا دھمکی میں کام کرے، یا کھیت کے کام سے بیمار یا زخمی ہو۔",
+  "scriptSha256": "90453f78cd4da616f3023e596dc6020c6a411916704d7ab9c23cc8332d936d0b",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "e68be7c10a943ee7e8d6a8c6415743969caba56e39b4caa1f1556401ddc11b94",
+  "generatedAt": "2026-08-23T09:37:32.780Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 17.258,
+    "integratedLufs": -18.59,
+    "truePeakDb": -3.33
+  },
+  "remasteredAt": "2026-08-24T07:48:29.590Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

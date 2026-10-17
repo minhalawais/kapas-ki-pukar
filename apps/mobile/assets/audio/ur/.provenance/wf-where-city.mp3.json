@@ -1,0 +1,28 @@
+{
+  "promptId": "WF-where-city",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "کون سا شہر یا ضلع؟ قریب ترین شہر یا ضلع کا نام لکھیں۔",
+  "scriptSha256": "76a9b3044015bc7b81837fc2e2e056e375f35c29d087a5395b14932868bb1cba",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "13c87b43e3ff5fa2f1789b8a2bbb031983fa5c399e20e8a5fe8d794bc9e52421",
+  "generatedAt": "2026-08-22T08:38:28.566Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 6.521,
+    "integratedLufs": -17.91,
+    "truePeakDb": -4.56
+  },
+  "remasteredAt": "2026-08-24T07:47:41.978Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

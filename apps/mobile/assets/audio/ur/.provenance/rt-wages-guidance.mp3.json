@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-wages-guidance",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یاد رکھنے کی باتیں۔ پوچھیں کہ روزانہ یا فی وزن اجرت، کپاس کا وزن اور ہر کٹوتی کیسے گنی جائے گی۔ بہت کم زبانی طے شدہ رقم ہر صورت کم از کم اجرت یا برابر اجرت کا حق ختم نہیں کرتی۔",
+  "scriptSha256": "038a33b4f363fb41edbe53ead17a36e99a8919458fdba4cc74a1ed2c5baf2bc2",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "041d8a108e74870d17fa37d8dc988b14551b0ac44bc14b7aaa6d8ce7fff42310",
+  "generatedAt": "2026-08-23T09:20:02.179Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 18.081,
+    "integratedLufs": -18.55,
+    "truePeakDb": -2.42
+  },
+  "remasteredAt": "2026-08-24T07:48:08.639Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

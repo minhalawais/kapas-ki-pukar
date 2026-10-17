@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-injury-safety-guidance",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یاد رکھنے کی باتیں۔ کام کا سامان درست ہونا چاہیے اور مزدور کو مناسب بچاؤ، معلومات اور ابتدائی طبی امداد ملنی چاہیے۔ سنگین اور فوری خطرہ بتانے پر مزدور کو سزا نہیں ملنی چاہیے۔",
+  "scriptSha256": "c7c54627af8c0577156edd9c027d534e6c9ed434885a88969a3f1e53fc92475b",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "018fce10dd9d5a7de93826ae0542765e2547fd53f2f516c88be734bd4df353e6",
+  "generatedAt": "2026-08-23T09:30:46.784Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 15.796,
+    "integratedLufs": -18.52,
+    "truePeakDb": -2.34
+  },
+  "remasteredAt": "2026-08-24T07:48:20.053Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

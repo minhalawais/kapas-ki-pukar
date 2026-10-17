@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-wag-who",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "ادائیگی کس نے سنبھالی؟ جواب کے لیے ٹھیکیدار، کسان یا منیجر، خریدار یا آڑھتی، کوئی اور، نام معلوم نہیں میں سے انتخاب کریں۔",
+  "scriptSha256": "bf565a4893a2a5e1fdb76447015a0fadef375a278b9dd05937db868c349660d4",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "3527b9c4e271c2d32875ccc9196b3bc3fe761e446055a1df6bbd30efab97e9fc",
+  "generatedAt": "2026-08-27T17:43:04.733Z",
+  "attempt": 2,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 15.062,
+    "integratedLufs": -18.95,
+    "truePeakDb": -4.01
+  }
+}

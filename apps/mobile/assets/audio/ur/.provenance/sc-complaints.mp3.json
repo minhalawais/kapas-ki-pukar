@@ -1,0 +1,28 @@
+{
+  "promptId": "SC-complaints",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یہاں آپ اپنی شکایات کی موجودہ حالت، اگلا قدم، اور تازہ پیش رفت دیکھ سکتے ہیں۔ شکایت کھولنے کے لیے اس پر دبائیں۔",
+  "scriptSha256": "1add2d2b2c8c2befd7b669c53372a544b240df5ed20e0ac8d8546e69fdf3d5e8",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "7601bd365341cd699f2e0fb52d98a317e4539249c7a852eb0f2cf97bc9998125",
+  "generatedAt": "2026-08-22T08:31:16.259Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 8.296,
+    "integratedLufs": -19.49,
+    "truePeakDb": -2.52
+  },
+  "remasteredAt": "2026-08-24T07:47:32.399Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

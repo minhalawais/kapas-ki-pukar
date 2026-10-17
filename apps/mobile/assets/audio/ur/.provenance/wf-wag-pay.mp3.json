@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-wag-pay",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "ادائیگی کیسے ہونی تھی؟ جواب کے لیے روزانہ، فی کلو / پیس، فی ایکڑ یا مکمل کام، ایک ساتھ، زبانی طے ہوئی تھی، طریقہ یاد نہیں میں سے انتخاب کریں۔",
+  "scriptSha256": "1521ab4e476f58f0baebbcd67089486e66e33d9f517f8663750ad6dbdc03d0a8",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "0f0f030fb7fb9bb05cb40ca188352d6159c96d06590d752e1cc8a47bbfd681ed",
+  "generatedAt": "2026-08-27T17:42:30.351Z",
+  "attempt": 3,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 15.678,
+    "integratedLufs": -19.18,
+    "truePeakDb": -4.05
+  }
+}

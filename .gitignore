@@ -1,0 +1,26 @@
+# Kapas ki Pukaar — Product Phase 1 frontend only. No production secrets.
+
+node_modules
+.pnpm-store
+.turbo
+.deploy-test-worker
+dist
+dist-ci
+.next
+out
+.expo
+.expo-shared
+*.tsbuildinfo
+coverage
+playwright-report
+test-results
+.env
+.env.local
+*.log
+.DS_Store
+Thumbs.db
+apps/mobile/ios
+apps/mobile/android
+packages/database/src/generated
+deploy/compose/.env.local
+storage

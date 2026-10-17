@@ -1,0 +1,28 @@
+{
+  "promptId": "SC-success",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "آپ کی رپورٹ موصول ہو گئی ہے۔ شکایت کا نمبر محفوظ رکھیں تاکہ آپ بعد میں پیش رفت دیکھ سکیں۔",
+  "scriptSha256": "9c2999ba26d322e24111d5c2ad61478839b2fdbf270ed03d4f6747bfff933df5",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "651aa8aefe128ebfc49dd14fd585882959add02a13ec91ddeb494ea5fa29a162",
+  "generatedAt": "2026-08-22T08:30:17.715Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 8.346,
+    "integratedLufs": -18.79,
+    "truePeakDb": -2.62
+  },
+  "remasteredAt": "2026-08-24T07:47:31.097Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

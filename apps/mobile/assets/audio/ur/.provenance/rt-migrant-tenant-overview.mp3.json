@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-migrant-tenant-overview",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "مہاجر اور مزارع مزدور۔ مہاجر حیثیت، رہائش، مزارعت یا فصل کی شراکت کو دھمکی یا امتیاز کا بہانہ نہیں بنایا جا سکتا۔",
+  "scriptSha256": "8bd7e163240dbf5cc140787e8ea23f58b8fdd0eb4db54fdd4ae9a3ccbd287234",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "87dfc98c92822ee4a6baba9297cf1f2a92b42013a8d0376ff654b311423e1c26",
+  "generatedAt": "2026-08-24T07:38:20.163Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 12.394,
+    "integratedLufs": -18.49,
+    "truePeakDb": -3.07
+  },
+  "remasteredAt": "2026-08-24T07:48:51.814Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

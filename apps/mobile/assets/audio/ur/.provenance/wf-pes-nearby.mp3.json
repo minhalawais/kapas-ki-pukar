@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-pes-nearby",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "سپرے یا کیمیکل کے قریب اور کون تھا؟ جواب کے لیے بچے، حاملہ عورت، دوسرے مزدور، کوئی اور نہیں، مجھے معلوم نہیں میں سے انتخاب کریں۔",
+  "scriptSha256": "d1491bd38955d55b06dcf6d466ebe07c9180ce9b4a4931a7465c016f167eaf0b",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "883e0a452d3bb14c4a44179cd265cac2fc6efb7f9e416dad1e71e255b1e7f554",
+  "generatedAt": "2026-08-27T17:39:18.723Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 13.514,
+    "integratedLufs": -18.58,
+    "truePeakDb": -3.92
+  }
+}

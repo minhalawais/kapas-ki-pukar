@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-worker-voice-action",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "اب آپ کیا کر سکتے ہیں۔ بدلے کا خطرہ ہو تو گروپ کے رابطے کی معلومات راز میں رکھیں۔ بدلے کی رپورٹ کریں اور تسلیم شدہ یونین یا مزدور تنظیم سے مدد لیں۔",
+  "scriptSha256": "116b445f40133eb4852f50d335ac7ce0d50c4fd4936220188b7641bd5a428de3",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "8a0c997996620c1a9934a545eccb1cdc0705d886cfe250e6c97749deec65ae91",
+  "generatedAt": "2026-08-24T07:35:37.039Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 13.442,
+    "integratedLufs": -17.65,
+    "truePeakDb": -2.31
+  },
+  "remasteredAt": "2026-08-24T07:48:47.781Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

@@ -1,0 +1,80 @@
+@import "@kapas/design-tokens/css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  background: var(--page-admin);
+  color: var(--text-primary);
+  font-family: var(--font-inter), var(--font-ui);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+html[dir="rtl"] body {
+  font-family: var(--font-naskh), var(--font-ui);
+}
+
+button,
+input,
+select,
+textarea {
+  letter-spacing: 0;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--surface-soft-teal);
+}
+
+@media (max-width: 1023px) {
+  body {
+    overflow-x: hidden;
+  }
+}
+
+.portal-sidebar {
+  transform: translateX(-100%);
+}
+
+html[dir="rtl"] .portal-sidebar {
+  transform: translateX(100%);
+}
+
+.portal-sidebar[data-open="true"] {
+  transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+  .portal-sidebar,
+  html[dir="rtl"] .portal-sidebar {
+    transform: translateX(0);
+  }
+}
+
+*:focus-visible {
+  outline: 2px solid var(--brand-fos-teal-dark);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  z-index: 60;
+  border-radius: var(--radius-control);
+  background: var(--surface-default);
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.skip-link:focus {
+  left: 8px;
+}

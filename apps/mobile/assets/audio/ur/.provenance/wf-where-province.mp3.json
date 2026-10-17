@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-where-province",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "کون سا صوبہ یا علاقہ؟ جواب کے لیے پنجاب، سندھ، خیبر پختونخوا، بلوچستان، اسلام آباد، گلگت بلتستان، یا آزاد کشمیر چنیں۔",
+  "scriptSha256": "ff5de9aa05b1edd9f62d5455afe1f5f6e4fab6bc173d854139aa28d4da21304c",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "ac20716d1c9b5d8f73fa3e4731cb7eb0bcda63e397d3c012d2c91ec7493f7bfd",
+  "generatedAt": "2026-08-27T18:15:49.585Z",
+  "attempt": 2,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 14.47,
+    "integratedLufs": -18.93,
+    "truePeakDb": -3.8
+  }
+}

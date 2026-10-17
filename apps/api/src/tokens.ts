@@ -1,0 +1,3 @@
+export const RUNTIME_CONFIG = Symbol("RUNTIME_CONFIG");
+export const DEPENDENCY_HEALTH = Symbol("DEPENDENCY_HEALTH");
+export const SERVICE_METRICS = Symbol("SERVICE_METRICS");

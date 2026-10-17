@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-when",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "یہ کب ہوا؟ جواب کے لیے آج، کل، اس ہفتے، اس سے پہلے، تاریخ یاد نہیں میں سے انتخاب کریں۔",
+  "scriptSha256": "b28c62a1bc2058d7263828803f41ce7f80065abeb141a724f6fbddcaa9175f90",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "30bf56ec07c3e1c4b656a078dcabadb689391f4ce854e0da074d6142d2946670",
+  "generatedAt": "2026-08-27T17:31:50.069Z",
+  "attempt": 2,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 10.127,
+    "integratedLufs": -18.17,
+    "truePeakDb": -3.59
+  }
+}

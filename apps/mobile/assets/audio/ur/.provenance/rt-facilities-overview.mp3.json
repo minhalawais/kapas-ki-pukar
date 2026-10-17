@@ -1,0 +1,28 @@
+{
+  "promptId": "RT-facilities-overview",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "پانی، سایہ اور بیت الخلا۔ صاف پینے کا پانی، سایہ، دھونے اور باعزت بیت الخلا تک رسائی محفوظ کھیت کے کام کا حصہ ہیں۔",
+  "scriptSha256": "27edfac314c60de7f640ddbf5acc505fd6b0ffa05dbfadc1aeff1ad7b894c7cd",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "a44b34d1765b112dc91412d7721d255d0994446a2e5085b42acff59fa1739c39",
+  "generatedAt": "2026-08-24T07:27:04.856Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 13.271,
+    "integratedLufs": -18.48,
+    "truePeakDb": -2.29
+  },
+  "remasteredAt": "2026-08-24T07:48:34.919Z",
+  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+}

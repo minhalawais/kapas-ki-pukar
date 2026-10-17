@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-identity-phone",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "اپنا 11 ہندسوں کا موبائل نمبر لکھیں اور آگے بڑھیں کا بٹن دبائیں۔",
+  "scriptSha256": "387d06995d975ad6ff9627b032e7fc4bbc497c0cfa0307ac0d1ec14df01deb25",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "c91450098c1ba25d24584869776d27a0f388659332e369e34ef9cdc315c30881",
+  "generatedAt": "2026-08-27T12:55:41.530Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "approved",
+  "reviewer": "Project Owner",
+  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 7.959,
+    "integratedLufs": -18.66,
+    "truePeakDb": -3.05
+  }
+}
