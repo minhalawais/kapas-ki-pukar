@@ -104,7 +104,7 @@ jobs:
       - name: Build worker image
         run: docker build -f apps/worker/Dockerfile -t kapas-worker:ci .
       - name: Scan API image
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: kapas-api:ci
           format: table
@@ -112,7 +112,7 @@ jobs:
           severity: CRITICAL,HIGH
           ignore-unfixed: true
       - name: Scan worker image
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: kapas-worker:ci
           format: table
