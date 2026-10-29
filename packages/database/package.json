@@ -17,7 +17,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src scripts prisma.config.ts --max-warnings 0",
     "test": "vitest run --exclude '**/*.integration.test.ts'",
-    "test:integration": "node ../../tooling/test/require-integration-env.mjs TEST_DATABASE_URL && vitest run --no-file-parallelism src/database.integration.test.ts src/persistence.integration.test.ts src/identity.integration.test.ts",
+    "test:integration": "node ../../tooling/test/require-integration-env.mjs TEST_DATABASE_URL && vitest run --no-file-parallelism --reporter=verbose --reporter=github-actions src/database.integration.test.ts src/persistence.integration.test.ts src/identity.integration.test.ts",
     "db:seed:synthetic": "tsx scripts/seed-synthetic.ts",
     "db:bootstrap-admin": "tsx scripts/bootstrap-admin.ts",
     "ensure-e2e-staff": "tsx scripts/ensure-e2e-staff.ts",
