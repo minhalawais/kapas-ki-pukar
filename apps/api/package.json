@@ -36,6 +36,7 @@
     "dotenv": "^18.0.8",
     "fastify": "^5.12.7",
     "ioredis": "^6.0.0",
+    "once": "1.4.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"
   },
