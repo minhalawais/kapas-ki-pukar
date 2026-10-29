@@ -16,11 +16,7 @@ let repository: PostgresIdentityAccessRepository;
 
 integration("identity and session persistence", () => {
   beforeAll(() => {
-    client = createDatabaseClient({
-      connectionString: databaseUrl as string,
-      transactionMaxWaitMs: 10_000,
-      transactionTimeoutMs: 30_000,
-    });
+    client = createDatabaseClient({ connectionString: databaseUrl as string });
     repository = new PostgresIdentityAccessRepository(client, "integration-pepper");
   });
   afterAll(async () => client.$disconnect());

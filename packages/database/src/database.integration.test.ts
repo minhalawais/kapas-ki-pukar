@@ -8,12 +8,7 @@ let client: DatabaseClient;
 
 integration("PostgreSQL foundation", () => {
   beforeAll(() => {
-    client = createDatabaseClient({
-      connectionString: databaseUrl as string,
-      maxConnections: 4,
-      transactionMaxWaitMs: 10_000,
-      transactionTimeoutMs: 30_000,
-    });
+    client = createDatabaseClient({ connectionString: databaseUrl as string, maxConnections: 2 });
   });
 
   afterAll(async () => {

@@ -38,12 +38,7 @@ function uniqueFixture(label: string) {
 
 integration("production persistence", () => {
   beforeAll(() => {
-    client = createDatabaseClient({
-      connectionString: databaseUrl as string,
-      maxConnections: 12,
-      transactionMaxWaitMs: 10_000,
-      transactionTimeoutMs: 30_000,
-    });
+    client = createDatabaseClient({ connectionString: databaseUrl as string, maxConnections: 8 });
     repository = new PostgresComplaintRepository(client);
   });
 
