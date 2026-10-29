@@ -6,6 +6,7 @@ import {
   canTransitionCase,
   InvalidCaseTransitionError,
 } from "./caseLifecycle";
+import { complaintSla } from "./caseWorkflow";
 import {
   COMPLAINT_ID_PATTERN,
   COMPLAINT_REFERENCE_PATTERN,
@@ -22,7 +23,6 @@ import { privacyModes } from "./privacy";
 import { canSubmitDraft, validateComplaintDraft } from "./submitRules";
 import { workerCategoryCodes } from "./taxonomy";
 import { assertTaxonomySelection, categoryForSubcategory, isSubcategoryOf } from "./taxonomyRules";
-import { complaintSla } from "./caseWorkflow";
 
 describe("domain", () => {
   it("accepts readable and legacy reference formats", () => {
