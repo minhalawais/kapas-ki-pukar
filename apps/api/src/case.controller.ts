@@ -131,10 +131,7 @@ export class CaseController {
         exactCoordinatesAadContext: true,
       },
     });
-    const exactCoordinates = decryptLocationCoordinates(
-      locationRow,
-      this.config.sessionSecret,
-    );
+    const exactCoordinates = decryptLocationCoordinates(locationRow, this.config.sessionSecret);
     return { ...detail, exactCoordinates };
   }
 
@@ -267,7 +264,9 @@ export class CaseController {
     @Body() body: { expectedVersion?: number; summary?: string; requestId?: string },
     @Req() request: FastifyRequest & { user?: { userId: string } },
   ) {
-    void id; void body; void request;
+    void id;
+    void body;
+    void request;
     throw new BadRequestException("Use POST /cases/:id/outcomes");
   }
 
@@ -309,8 +308,7 @@ export class CaseController {
       const nextVersion = current.version + 1;
       const toStatus = definition.toStatus;
       const valid =
-        !toStatus ||
-        (toStatus === "Triage" && ["Received", "Reopened"].includes(current.status));
+        !toStatus || (toStatus === "Triage" && ["Received", "Reopened"].includes(current.status));
       if (!valid) throw new BadRequestException("Invalid lifecycle transition");
       await tx.complaint.update({
         where: { id: complaintId },
@@ -425,27 +423,58 @@ export class CaseController {
     const complaintId = await this.resolveCaseKey(id);
     const [legacy, v3] = await Promise.all([
       this.client.evidenceAsset.findMany({
-        where: { complaintId, availabilityState: "available", retentionState: "active", deletedAt: null },
+        where: {
+          complaintId,
+          availabilityState: "available",
+          retentionState: "active",
+          deletedAt: null,
+        },
         orderBy: { receivedAt: "asc" },
-        select: { storageId: true, kind: true, originalName: true, detectedMimeType: true,
-          byteLength: true, sha256Digest: true, capturedAt: true, encryptionKeyId: true,
-          encryptionAlgorithm: true, receivedAt: true },
+        select: {
+          storageId: true,
+          kind: true,
+          originalName: true,
+          detectedMimeType: true,
+          byteLength: true,
+          sha256Digest: true,
+          capturedAt: true,
+          encryptionKeyId: true,
+          encryptionAlgorithm: true,
+          receivedAt: true,
+        },
       }),
       this.client.evidenceDeclaration.findMany({
         where: { complaintId, status: "available" },
         orderBy: { createdAt: "asc" },
-        select: { id: true, kind: true, displayName: true, detectedMimeType: true,
-          totalBytes: true, sha256Digest: true, capturedAt: true, encryptionKeyId: true,
-          createdAt: true },
+        select: {
+          id: true,
+          kind: true,
+          displayName: true,
+          detectedMimeType: true,
+          totalBytes: true,
+          sha256Digest: true,
+          capturedAt: true,
+          encryptionKeyId: true,
+          createdAt: true,
+        },
       }),
     ]);
     const rows = [
       ...legacy.map((item) => ({ ...item, id: item.storageId, version: "legacy" as const })),
-      ...v3.map((item) => ({ id: item.id, storageId: item.id, version: "v3" as const,
-        kind: item.kind, originalName: item.displayName, detectedMimeType: item.detectedMimeType,
-        byteLength: item.totalBytes, sha256Digest: item.sha256Digest, capturedAt: item.capturedAt,
-        encryptionKeyId: item.encryptionKeyId, encryptionAlgorithm: "AES-256-GCM",
-        receivedAt: item.createdAt })),
+      ...v3.map((item) => ({
+        id: item.id,
+        storageId: item.id,
+        version: "v3" as const,
+        kind: item.kind,
+        originalName: item.displayName,
+        detectedMimeType: item.detectedMimeType,
+        byteLength: item.totalBytes,
+        sha256Digest: item.sha256Digest,
+        capturedAt: item.capturedAt,
+        encryptionKeyId: item.encryptionKeyId,
+        encryptionAlgorithm: "AES-256-GCM",
+        receivedAt: item.createdAt,
+      })),
     ].sort((left, right) => left.receivedAt.getTime() - right.receivedAt.getTime());
     await this.client.auditEvent.create({
       data: {
@@ -471,7 +500,12 @@ export class CaseController {
     @Req() request: FastifyRequest & { user?: { userId: string } },
   ) {
     const complaintId = await this.resolveCaseKey(id);
-    const evidence = await resolveEvidenceContent(this.client, this.config, complaintId, evidenceId);
+    const evidence = await resolveEvidenceContent(
+      this.client,
+      this.config,
+      complaintId,
+      evidenceId,
+    );
     if (!evidence) throw new NotFoundException("Evidence is unavailable");
     await this.client.auditEvent.create({
       data: {

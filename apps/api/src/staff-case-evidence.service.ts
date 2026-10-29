@@ -105,7 +105,8 @@ export class StaffCaseEvidenceService {
     return this.client.$transaction(async (tx) => {
       const current = await tx.complaint.findUnique({ where: { id: input.complaintId } });
       if (!current) throw new BadRequestException("Complaint not found");
-      if (current.version !== input.expectedVersion) throw new ConflictException("VERSION_CONFLICT");
+      if (current.version !== input.expectedVersion)
+        throw new ConflictException("VERSION_CONFLICT");
       if (current.status === "Closed") throw new BadRequestException("Case is closed");
 
       const version = current.version + 1;

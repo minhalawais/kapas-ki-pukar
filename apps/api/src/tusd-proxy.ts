@@ -5,11 +5,7 @@ type FastifyRegisterHost = {
   register: (plugin: unknown, opts?: unknown) => Promise<unknown>;
 };
 
-function rewriteLocation(
-  location: string,
-  internal: URL,
-  publicBase: URL,
-): string {
+function rewriteLocation(location: string, internal: URL, publicBase: URL): string {
   try {
     const resolved = new URL(location, internal);
     if (!resolved.pathname.startsWith("/files")) return location;

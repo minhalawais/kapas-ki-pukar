@@ -17,8 +17,7 @@ export function parseWorkerPushRegistrationBody(body: unknown):
   | { error: string } {
   if (!body || typeof body !== "object") return { error: "body is required" };
   const record = body as Record<string, unknown>;
-  const expoPushToken =
-    typeof record.expoPushToken === "string" ? record.expoPushToken.trim() : "";
+  const expoPushToken = typeof record.expoPushToken === "string" ? record.expoPushToken.trim() : "";
   const platform = record.platform;
   const requestId = typeof record.requestId === "string" ? record.requestId.trim() : "";
   if (!isValidExpoPushToken(expoPushToken)) return { error: "expoPushToken is invalid" };
@@ -26,9 +25,7 @@ export function parseWorkerPushRegistrationBody(body: unknown):
     return { error: "platform is invalid" };
   if (!requestId || requestId.length > 120) return { error: "requestId is required" };
   const locale =
-    typeof record.locale === "string" && record.locale.length <= 12
-      ? record.locale
-      : undefined;
+    typeof record.locale === "string" && record.locale.length <= 12 ? record.locale : undefined;
   const deviceInstallId =
     typeof record.deviceInstallId === "string" && record.deviceInstallId.length <= 64
       ? record.deviceInstallId

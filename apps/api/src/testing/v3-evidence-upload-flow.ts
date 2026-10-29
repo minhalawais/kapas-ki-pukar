@@ -171,7 +171,9 @@ export async function runV3EvidenceUploadFlow(apiBase: string): Promise<V3Eviden
     };
     evidenceStatus = delivery.evidenceStatus;
     lastRow =
-      delivery.evidence.find((row) => row.clientMediaId === clientMediaId) ?? delivery.evidence[0] ?? null;
+      delivery.evidence.find((row) => row.clientMediaId === clientMediaId) ??
+      delivery.evidence[0] ??
+      null;
     const uploaded = Number(lastRow?.uploadedBytes ?? 0);
     const total = Number(lastRow?.totalBytes ?? totalBytes);
     const status = lastRow?.status ?? "unknown";
@@ -194,7 +196,9 @@ export async function runV3EvidenceUploadFlow(apiBase: string): Promise<V3Eviden
   );
 }
 
-export async function isTusdReachable(internalUrl = "http://127.0.0.1:1080/files/"): Promise<boolean> {
+export async function isTusdReachable(
+  internalUrl = "http://127.0.0.1:1080/files/",
+): Promise<boolean> {
   try {
     const response = await fetch(internalUrl, { method: "GET" });
     return response.status === 405 || response.status === 200 || response.status === 404;

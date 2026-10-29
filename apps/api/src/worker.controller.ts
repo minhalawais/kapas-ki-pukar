@@ -90,7 +90,12 @@ export class WorkerController {
   ) {
     const session = await this.authorizedReference(request, referenceNumber);
     const complaint = await this.assertReferenceAccess(session, referenceNumber);
-    const evidence = await resolveEvidenceContent(this.client, this.config, complaint.id, evidenceId);
+    const evidence = await resolveEvidenceContent(
+      this.client,
+      this.config,
+      complaint.id,
+      evidenceId,
+    );
     if (!evidence) throw new NotFoundException("Evidence not found");
     await this.client.auditEvent.create({
       data: {
@@ -112,9 +117,7 @@ export class WorkerController {
       )
       .header("X-Content-Type-Options", "nosniff")
       .header("Cache-Control", "private, no-store");
-    return reply.send(
-      evidence.stream,
-    );
+    return reply.send(evidence.stream);
   }
 
   @Post("complaints/:referenceNumber/feedback")

@@ -118,11 +118,15 @@ export function buildAnalyticsSnapshot(rows: readonly AnalyticsRows[]) {
   );
   const overdue = open.filter((row) => row.dueAt < now);
   const firstActionHours = rows.flatMap((row) => {
-    const action = row.history.find((item) => item.actionType === "Triage Completed" || item.actionType === "Review Started");
+    const action = row.history.find(
+      (item) => item.actionType === "Triage Completed" || item.actionType === "Review Started",
+    );
     return action ? [(action.occurredAt.getTime() - row.submittedAt.getTime()) / 3_600_000] : [];
   });
   const resolutionHours = rows.flatMap((row) => {
-    const action = row.history.find((item) => item.actionType === "Complaint Closed" || item.actionType === "Resolved");
+    const action = row.history.find(
+      (item) => item.actionType === "Complaint Closed" || item.actionType === "Resolved",
+    );
     return action ? [(action.occurredAt.getTime() - row.submittedAt.getTime()) / 3_600_000] : [];
   });
   const feedback = rows.flatMap((row) => row.feedback);
@@ -132,7 +136,9 @@ export function buildAnalyticsSnapshot(rows: readonly AnalyticsRows[]) {
       ? Number((values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(1))
       : null;
   const reopened = rows.filter((row) =>
-    row.history.some((item) => item.actionType === "Complaint Reopened" || item.actionType === "Reopened"),
+    row.history.some(
+      (item) => item.actionType === "Complaint Reopened" || item.actionType === "Reopened",
+    ),
   ).length;
   return {
     generatedAt: now.toISOString(),

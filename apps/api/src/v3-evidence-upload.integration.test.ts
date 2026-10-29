@@ -60,7 +60,9 @@ integration("V3 evidence upload (mobile pipeline)", () => {
 
     expect(result.uploadedBytes).toBe(result.totalBytes);
     expect(result.totalBytes).toBeGreaterThan(0);
-    expect(["uploading", "quarantined", "processing", "available"].includes(result.rowStatus)).toBe(true);
+    expect(["uploading", "quarantined", "processing", "available"].includes(result.rowStatus)).toBe(
+      true,
+    );
     expect(result.referenceNumber).toMatch(/^KP-/u);
   }, 120_000);
 });

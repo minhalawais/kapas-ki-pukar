@@ -9,7 +9,8 @@ import { createDatabaseClient } from "../src/index";
 const root = resolve(import.meta.dirname, "../../..");
 if (existsSync(resolve(root, ".env"))) loadDotenv({ path: resolve(root, ".env") });
 
-const login = process.env.E2E_STAFF_LOGIN ?? process.env.BOOTSTRAP_ADMIN_LOGIN ?? "admin@example.local";
+const login =
+  process.env.E2E_STAFF_LOGIN ?? process.env.BOOTSTRAP_ADMIN_LOGIN ?? "admin@example.local";
 const password =
   process.env.E2E_STAFF_PASSWORD ??
   process.env.BOOTSTRAP_ADMIN_PASSWORD ??

@@ -371,7 +371,9 @@ export class PostgresComplaintRepository
                   type: command.reporterType,
                   displayName: command.reporterDisplayName,
                   contactAllowed: command.contactAllowed,
-                  contactPreference: command.contactPreference ?? (command.contactAllowed ? "either" : "do-not-initiate"),
+                  contactPreference:
+                    command.contactPreference ??
+                    (command.contactAllowed ? "either" : "do-not-initiate"),
                   safeContactWindow: command.safeContactWindow,
                   preferredLanguage: command.preferredLanguage,
                   safeVoicemail: command.safeVoicemail ?? false,
@@ -660,7 +662,13 @@ export class PostgresComplaintRepository
           resourceVersion: nextVersion,
         },
       });
-      await this.writeMutationEvents(tx, context, current.id, "complaint.outcome_recorded", nextVersion);
+      await this.writeMutationEvents(
+        tx,
+        context,
+        current.id,
+        "complaint.outcome_recorded",
+        nextVersion,
+      );
     });
   }
 
@@ -747,9 +755,7 @@ export class PostgresComplaintRepository
     const isUuid =
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(key);
     const row = await this.client.complaint.findFirst({
-      where: isUuid
-        ? { OR: [{ id: key }, { referenceNumber: key }] }
-        : { referenceNumber: key },
+      where: isUuid ? { OR: [{ id: key }, { referenceNumber: key }] } : { referenceNumber: key },
       select: { id: true },
     });
     return row?.id ?? null;
@@ -839,7 +845,8 @@ export class PostgresComplaintRepository
       incidentDescription: row.incident.description ?? undefined,
       structuredAnswers: row.incident.structuredAnswers as JsonObject,
       contactAllowed: row.reporter?.contactAllowed ?? false,
-      contactPreference: (row.reporter?.contactPreference ?? "do-not-initiate") as StaffCaseDetail["contactPreference"],
+      contactPreference: (row.reporter?.contactPreference ??
+        "do-not-initiate") as StaffCaseDetail["contactPreference"],
       safeContactWindow: row.reporter?.safeContactWindow ?? undefined,
       preferredLanguage: row.reporter?.preferredLanguage as StaffCaseDetail["preferredLanguage"],
       safeVoicemail: row.reporter?.safeVoicemail ?? false,

@@ -101,9 +101,7 @@ describe("domain", () => {
     expect(canTransitionCase("Triage", "Verification")).toBe(true);
     expect(canTransitionCase("Investigation", "Escalated")).toBe(true);
     expect(canTransitionCase("Closed", "Triage")).toBe(false);
-    expect(() => assertCaseTransition("Closed", "Triage")).toThrow(
-      InvalidCaseTransitionError,
-    );
+    expect(() => assertCaseTransition("Closed", "Triage")).toThrow(InvalidCaseTransitionError);
     expect(() => assertTransitionReason("Closed", undefined)).toThrow();
     expect(() =>
       assertTransitionReason("Closed", { reason: "resolved and confirmed" }),
@@ -112,9 +110,15 @@ describe("domain", () => {
 
   it("calculates priority-specific workflow targets", () => {
     const accepted = new Date("2026-10-28T00:00:00.000Z");
-    expect(complaintSla("Emergency", accepted).triageDueAt.toISOString()).toBe("2026-10-28T00:15:00.000Z");
-    expect(complaintSla("Critical", accepted).contactDueAt.toISOString()).toBe("2026-10-28T08:00:00.000Z");
-    expect(complaintSla("Standard", accepted).nextUpdateDueAt.toISOString()).toBe("2026-11-02T00:00:00.000Z");
+    expect(complaintSla("Emergency", accepted).triageDueAt.toISOString()).toBe(
+      "2026-10-28T00:15:00.000Z",
+    );
+    expect(complaintSla("Critical", accepted).contactDueAt.toISOString()).toBe(
+      "2026-10-28T08:00:00.000Z",
+    );
+    expect(complaintSla("Standard", accepted).nextUpdateDueAt.toISOString()).toBe(
+      "2026-11-02T00:00:00.000Z",
+    );
   });
 
   it("enforces canonical category and subcategory ownership", () => {
@@ -176,7 +180,12 @@ describe("domain", () => {
       privacyMode: "ANON",
       reporterIdentity: { mode: "anonymous", cnicVerified: false },
       incident: { whenLabel: "today", othersAffected: "individual", immediateDanger: false },
-      location: { province: "Punjab", district: "Multan", placeLabel: "Cotton market", source: "manual" },
+      location: {
+        province: "Punjab",
+        district: "Multan",
+        placeLabel: "Cotton market",
+        source: "manual",
+      },
       evidence: [],
       voice: null,
       updatedAt: "2026-10-27T00:00:00.000Z",
@@ -197,6 +206,11 @@ describe("domain", () => {
       voice: null,
       updatedAt: "2026-10-27T00:00:00.000Z",
     });
-    expect(result).toEqual({ valid: false, code: "location_required", stepId: "where-province", field: "location" });
+    expect(result).toEqual({
+      valid: false,
+      code: "location_required",
+      stepId: "where-province",
+      field: "location",
+    });
   });
 });

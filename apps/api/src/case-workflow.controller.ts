@@ -67,7 +67,11 @@ export class CaseWorkflowController {
       this.client.caseHistory.findMany({ where: { complaintId }, orderBy: { occurredAt: "asc" } }),
     ]);
     if (!complaint) throw new NotFoundException("Complaint not found");
-    return { ...complaint, history, availableActions: this.actionsFor(complaint.status as CaseStatus) };
+    return {
+      ...complaint,
+      history,
+      availableActions: this.actionsFor(complaint.status as CaseStatus),
+    };
   }
 
   @Post(":id/triage")
@@ -163,16 +167,22 @@ export class CaseWorkflowController {
       });
       this.assertVersion(current.version, input.expectedVersion);
       this.assertCaseOpen(current.status);
-      const preference = current.reporter?.contactPreference ?? (current.reporter?.contactAllowed ? "either" : "do-not-initiate");
+      const preference =
+        current.reporter?.contactPreference ??
+        (current.reporter?.contactAllowed ? "either" : "do-not-initiate");
       const channelAllowed =
         input.channel === "none" ||
         preference === "either" ||
         preference === input.channel ||
         (preference === "representative" && input.channel === "representative");
       const overrideAllowed =
-        input.emergencyOverride && current.priority === "Emergency" && current.incident?.immediateDanger === true;
-      if (!channelAllowed && !overrideAllowed) throw new BadRequestException("CONTACT_NOT_PERMITTED");
-      if (input.emergencyOverride && !overrideAllowed) throw new BadRequestException("EMERGENCY_OVERRIDE_NOT_ALLOWED");
+        input.emergencyOverride &&
+        current.priority === "Emergency" &&
+        current.incident?.immediateDanger === true;
+      if (!channelAllowed && !overrideAllowed)
+        throw new BadRequestException("CONTACT_NOT_PERMITTED");
+      if (input.emergencyOverride && !overrideAllowed)
+        throw new BadRequestException("EMERGENCY_OVERRIDE_NOT_ALLOWED");
       const successful = ["connected", "representative-contacted"].includes(input.outcome);
       const verificationCompleteWithoutContact =
         input.outcome === "prohibited" &&
@@ -235,7 +245,9 @@ export class CaseWorkflowController {
             : verificationCompleteWithoutContact
               ? "Contact Attempted"
               : "Contact Attempted",
-        auditAction: input.emergencyOverride ? "case.contact.emergency_override" : "case.contact.recorded",
+        auditAction: input.emergencyOverride
+          ? "case.contact.emergency_override"
+          : "case.contact.recorded",
         fromStatus: completesVerification ? current.status : undefined,
         toStatus: completesVerification ? nextStatus : undefined,
         version,
@@ -271,7 +283,8 @@ export class CaseWorkflowController {
         include: { reporter: true },
       });
       this.assertVersion(current.version, expectedVersion);
-      if (current.status !== "Verification") throw new BadRequestException("Case must be in Verification");
+      if (current.status !== "Verification")
+        throw new BadRequestException("Case must be in Verification");
       const preference =
         current.reporter?.contactPreference ??
         (current.reporter?.contactAllowed ? "either" : "do-not-initiate");
@@ -329,7 +342,10 @@ export class CaseWorkflowController {
         assertCaseTransition(current.status as CaseStatus, "Investigation");
         nextStatus = "Investigation";
       }
-      await tx.complaint.update({ where: { id: complaintId }, data: { status: nextStatus, version } });
+      await tx.complaint.update({
+        where: { id: complaintId },
+        data: { status: nextStatus, version },
+      });
       await this.auditMutation(tx, {
         complaintId,
         requestId: body.requestId as string,
@@ -360,11 +376,18 @@ export class CaseWorkflowController {
       this.assertVersion(current.version, input.expectedVersion);
       this.assertCaseOpen(current.status);
       const version = current.version + 1;
-      const fact = await tx.caseFact.create({ data: {
-        complaintId, workerContactId: input.workerContactId, fact: input.fact,
-        structuredValue: input.structuredValue as never, sourceType: input.sourceType,
-        sourceRecordId: input.sourceRecordId, verificationState: input.verificationState, recordedBy: actorId,
-      } });
+      const fact = await tx.caseFact.create({
+        data: {
+          complaintId,
+          workerContactId: input.workerContactId,
+          fact: input.fact,
+          structuredValue: input.structuredValue as never,
+          sourceType: input.sourceType,
+          sourceRecordId: input.sourceRecordId,
+          verificationState: input.verificationState,
+          recordedBy: actorId,
+        },
+      });
       await tx.complaint.update({ where: { id: complaintId }, data: { version } });
       await this.auditMutation(tx, {
         complaintId,
@@ -396,11 +419,19 @@ export class CaseWorkflowController {
       this.assertVersion(current.version, input.expectedVersion);
       this.assertCaseOpen(current.status);
       const version = current.version + 1;
-      const finding = await tx.investigationFinding.create({ data: {
-        complaintId, issue: input.issue, allegation: input.allegation, conclusion: input.conclusion,
-        rationale: input.rationale, rootCause: input.rootCause, affectedScope: input.affectedScope,
-        recommendedAction: input.recommendedAction, recordedBy: actorId,
-      } });
+      const finding = await tx.investigationFinding.create({
+        data: {
+          complaintId,
+          issue: input.issue,
+          allegation: input.allegation,
+          conclusion: input.conclusion,
+          rationale: input.rationale,
+          rootCause: input.rootCause,
+          affectedScope: input.affectedScope,
+          recommendedAction: input.recommendedAction,
+          recordedBy: actorId,
+        },
+      });
       await tx.complaint.update({ where: { id: complaintId }, data: { version } });
       await this.auditMutation(tx, {
         complaintId,
@@ -438,15 +469,24 @@ export class CaseWorkflowController {
           workingStatus = "Investigation";
         }
       }
-      if (workingStatus === "Investigation") assertCaseTransition("Investigation", "Action in Progress");
+      if (workingStatus === "Investigation")
+        assertCaseTransition("Investigation", "Action in Progress");
       await tx.user.findUniqueOrThrow({ where: { id: ownerStaffId } });
       const version = current.version + 1;
-      const action = await tx.correctiveAction.create({ data: {
-        complaintId, type: input.type, title: input.title, description: input.description,
-        ownerStaffId, responsibleParty: input.responsibleParty,
-        expectedOutcome: input.expectedOutcome, workerVisibleSummary: input.workerVisibleSummary,
-        dueAt: new Date(input.dueAt), followUpAt: input.followUpAt ? new Date(input.followUpAt) : undefined,
-      } });
+      const action = await tx.correctiveAction.create({
+        data: {
+          complaintId,
+          type: input.type,
+          title: input.title,
+          description: input.description,
+          ownerStaffId,
+          responsibleParty: input.responsibleParty,
+          expectedOutcome: input.expectedOutcome,
+          workerVisibleSummary: input.workerVisibleSummary,
+          dueAt: new Date(input.dueAt),
+          followUpAt: input.followUpAt ? new Date(input.followUpAt) : undefined,
+        },
+      });
       const attachedDocuments: string[] = [];
       for (const evidenceId of input.attachmentEvidenceIds ?? []) {
         const evidence = await tx.evidenceDeclaration.findFirst({
@@ -501,23 +541,44 @@ export class CaseWorkflowController {
 
   @Patch(":id/corrective-actions/:actionId")
   @RequirePermission("case.mutate")
-  async updateAction(@Param("id") id: string, @Param("actionId") actionId: string, @Body() body: unknown, @Req() request: StaffRequest) {
+  async updateAction(
+    @Param("id") id: string,
+    @Param("actionId") actionId: string,
+    @Body() body: unknown,
+    @Req() request: StaffRequest,
+  ) {
     const input = this.parse(correctiveActionUpdateSchema.safeParse(body));
     const complaintId = await this.resolveCaseKey(id);
     const actorId = this.actor(request);
     return this.client.$transaction(async (tx) => {
       const current = await tx.complaint.findUniqueOrThrow({ where: { id: complaintId } });
       this.assertVersion(current.version, input.expectedVersion);
-      const existing = await tx.correctiveAction.findFirst({ where: { id: actionId, complaintId } });
+      const existing = await tx.correctiveAction.findFirst({
+        where: { id: actionId, complaintId },
+      });
       if (!existing) throw new NotFoundException("Corrective action not found");
       const version = current.version + 1;
-      await tx.correctiveAction.update({ where: { id: actionId }, data: {
-        state: input.state, actualResult: input.actualResult, cancellationReason: input.cancellationReason,
-        followUpAt: input.followUpAt ? new Date(input.followUpAt) : undefined,
-        completedAt: input.state === "completed" ? new Date() : undefined,
-      } });
+      await tx.correctiveAction.update({
+        where: { id: actionId },
+        data: {
+          state: input.state,
+          actualResult: input.actualResult,
+          cancellationReason: input.cancellationReason,
+          followUpAt: input.followUpAt ? new Date(input.followUpAt) : undefined,
+          completedAt: input.state === "completed" ? new Date() : undefined,
+        },
+      });
       await tx.complaint.update({ where: { id: complaintId }, data: { version } });
-      await this.auditMutation(tx, { complaintId, requestId: input.requestId, actorId, actionType: "Action Updated", auditAction: "case.corrective_action.updated", version, visibility: existing.workerVisibleSummary ? "worker-visible" : "internal", reasonData: { actionId, state: input.state, result: input.actualResult ?? "" } });
+      await this.auditMutation(tx, {
+        complaintId,
+        requestId: input.requestId,
+        actorId,
+        actionType: "Action Updated",
+        auditAction: "case.corrective_action.updated",
+        version,
+        visibility: existing.workerVisibleSummary ? "worker-visible" : "internal",
+        reasonData: { actionId, state: input.state, result: input.actualResult ?? "" },
+      });
       return { id: complaintId, actionId, version, state: input.state };
     });
   }
@@ -531,16 +592,42 @@ export class CaseWorkflowController {
     return this.client.$transaction(async (tx) => {
       const current = await tx.complaint.findUniqueOrThrow({ where: { id: complaintId } });
       this.assertVersion(current.version, input.expectedVersion);
-      if (!["Triage", "Verification", "Investigation", "Action in Progress", "Escalated"].includes(current.status)) throw new BadRequestException("Case cannot be referred from its current stage");
+      if (
+        !["Triage", "Verification", "Investigation", "Action in Progress", "Escalated"].includes(
+          current.status,
+        )
+      )
+        throw new BadRequestException("Case cannot be referred from its current stage");
       const version = current.version + 1;
-      const referral = await tx.externalReferral.create({ data: {
-        complaintId, organization: input.organization, reason: input.reason,
-        referenceNumber: input.referenceNumber, consentState: input.consentState,
-        referredAt: new Date(input.referredAt), ownerStaffId: input.ownerStaffId,
-        status: input.status, outcome: input.outcome,
-      } });
-      await tx.complaint.update({ where: { id: complaintId }, data: { status: "Escalated", version } });
-      await this.auditMutation(tx, { complaintId, requestId: input.requestId, actorId, actionType: "External Referral Recorded", auditAction: "case.referral.recorded", fromStatus: current.status === "Escalated" ? undefined : current.status, toStatus: current.status === "Escalated" ? undefined : "Escalated", version, visibility: "worker-visible", reasonData: { referralId: referral.id, organization: input.organization } });
+      const referral = await tx.externalReferral.create({
+        data: {
+          complaintId,
+          organization: input.organization,
+          reason: input.reason,
+          referenceNumber: input.referenceNumber,
+          consentState: input.consentState,
+          referredAt: new Date(input.referredAt),
+          ownerStaffId: input.ownerStaffId,
+          status: input.status,
+          outcome: input.outcome,
+        },
+      });
+      await tx.complaint.update({
+        where: { id: complaintId },
+        data: { status: "Escalated", version },
+      });
+      await this.auditMutation(tx, {
+        complaintId,
+        requestId: input.requestId,
+        actorId,
+        actionType: "External Referral Recorded",
+        auditAction: "case.referral.recorded",
+        fromStatus: current.status === "Escalated" ? undefined : current.status,
+        toStatus: current.status === "Escalated" ? undefined : "Escalated",
+        version,
+        visibility: "worker-visible",
+        reasonData: { referralId: referral.id, organization: input.organization },
+      });
       return { id: complaintId, referralId: referral.id, version, status: "Escalated" };
     });
   }
@@ -554,23 +641,47 @@ export class CaseWorkflowController {
     return this.client.$transaction(async (tx) => {
       const current = await tx.complaint.findUniqueOrThrow({ where: { id: complaintId } });
       this.assertVersion(current.version, input.expectedVersion);
-      if (!["Investigation", "Action in Progress"].includes(current.status)) throw new BadRequestException("Case must be in Investigation or Action in Progress");
+      if (!["Investigation", "Action in Progress"].includes(current.status))
+        throw new BadRequestException("Case must be in Investigation or Action in Progress");
       assertCaseTransition(current.status as CaseStatus, "Outcome Verification");
-      const openActions = await tx.correctiveAction.count({ where: { complaintId, state: { in: ["planned", "accepted", "in-progress", "overdue"] } } });
+      const openActions = await tx.correctiveAction.count({
+        where: { complaintId, state: { in: ["planned", "accepted", "in-progress", "overdue"] } },
+      });
       if (openActions > 0) throw new BadRequestException("OPEN_CORRECTIVE_ACTIONS");
       const version = current.version + 1;
-      const outcome = await tx.caseOutcome.create({ data: {
-        complaintId, remedyType: input.remedyType, details: input.details,
-        remedyDelivered: input.remedyDelivered, deliveredAt: input.deliveredAt ? new Date(input.deliveredAt) : undefined,
-        amountPaid: input.amountPaid, communicated: input.communicated,
-        communicationChannel: input.communicationChannel,
-        communicatedAt: input.communicatedAt ? new Date(input.communicatedAt) : undefined,
-        communicationExceptionReason: input.communicationExceptionReason,
-        retaliationSafetyResult: input.retaliationSafetyResult,
-        workerVisibleSummary: input.workerVisibleSummary, recordedBy: actorId,
-      } });
-      await tx.complaint.update({ where: { id: complaintId }, data: { status: "Outcome Verification", version } });
-      await this.auditMutation(tx, { complaintId, requestId: input.requestId, actorId, actionType: "Outcome Recorded", auditAction: "case.outcome.recorded", fromStatus: current.status, toStatus: "Outcome Verification", version, visibility: "worker-visible", reasonData: { outcomeId: outcome.id, summary: input.workerVisibleSummary } });
+      const outcome = await tx.caseOutcome.create({
+        data: {
+          complaintId,
+          remedyType: input.remedyType,
+          details: input.details,
+          remedyDelivered: input.remedyDelivered,
+          deliveredAt: input.deliveredAt ? new Date(input.deliveredAt) : undefined,
+          amountPaid: input.amountPaid,
+          communicated: input.communicated,
+          communicationChannel: input.communicationChannel,
+          communicatedAt: input.communicatedAt ? new Date(input.communicatedAt) : undefined,
+          communicationExceptionReason: input.communicationExceptionReason,
+          retaliationSafetyResult: input.retaliationSafetyResult,
+          workerVisibleSummary: input.workerVisibleSummary,
+          recordedBy: actorId,
+        },
+      });
+      await tx.complaint.update({
+        where: { id: complaintId },
+        data: { status: "Outcome Verification", version },
+      });
+      await this.auditMutation(tx, {
+        complaintId,
+        requestId: input.requestId,
+        actorId,
+        actionType: "Outcome Recorded",
+        auditAction: "case.outcome.recorded",
+        fromStatus: current.status,
+        toStatus: "Outcome Verification",
+        version,
+        visibility: "worker-visible",
+        reasonData: { outcomeId: outcome.id, summary: input.workerVisibleSummary },
+      });
       return { id: complaintId, outcomeId: outcome.id, version, status: "Outcome Verification" };
     });
   }
@@ -582,7 +693,10 @@ export class CaseWorkflowController {
     const complaintId = await this.resolveCaseKey(id);
     const actorId = this.actor(request);
     return this.client.$transaction(async (tx) => {
-      const current = await tx.complaint.findUniqueOrThrow({ where: { id: complaintId }, include: { triage: true } });
+      const current = await tx.complaint.findUniqueOrThrow({
+        where: { id: complaintId },
+        include: { triage: true },
+      });
       this.assertVersion(current.version, input.expectedVersion);
       this.assertCaseOpen(current.status);
       if (current.status !== "Outcome Verification") {
@@ -599,7 +713,10 @@ export class CaseWorkflowController {
             outstandingReferralAcknowledged: input.outstandingReferralAcknowledged,
           },
         });
-        await tx.complaint.update({ where: { id: complaintId }, data: { status: "Closed", version } });
+        await tx.complaint.update({
+          where: { id: complaintId },
+          data: { status: "Closed", version },
+        });
         await this.auditMutation(tx, {
           complaintId,
           requestId: input.requestId,
@@ -619,32 +736,82 @@ export class CaseWorkflowController {
         });
         return { id: complaintId, closureId: closure.id, version, status: "Closed" };
       }
-      if (!current.assignedStaffId || !current.triage) throw new BadRequestException("TRIAGE_AND_ASSIGNMENT_REQUIRED");
-      const [findingCount, openActionCount, latestOutcome, remedyEvidenceCount, openReferralCount] = await Promise.all([
-        tx.investigationFinding.count({ where: { complaintId } }),
-        tx.correctiveAction.count({ where: { complaintId, state: { in: ["planned", "accepted", "in-progress", "overdue"] } } }),
-        tx.caseOutcome.findFirst({ where: { complaintId }, orderBy: { recordedAt: "desc" } }),
-        tx.caseEvidenceLink.count({ where: { complaintId, caseOutcomeId: { not: null } } }),
-        tx.externalReferral.count({ where: { complaintId, status: { in: ["submitted", "accepted", "in-progress"] } } }),
-      ]);
-      const nonInvestigation = ["outside-mandate", "duplicate-merged", "worker-withdrew"].includes(input.code);
-      if (!nonInvestigation && findingCount === 0) throw new BadRequestException("FINDING_REQUIRED");
+      if (!current.assignedStaffId || !current.triage)
+        throw new BadRequestException("TRIAGE_AND_ASSIGNMENT_REQUIRED");
+      const [findingCount, openActionCount, latestOutcome, remedyEvidenceCount, openReferralCount] =
+        await Promise.all([
+          tx.investigationFinding.count({ where: { complaintId } }),
+          tx.correctiveAction.count({
+            where: {
+              complaintId,
+              state: { in: ["planned", "accepted", "in-progress", "overdue"] },
+            },
+          }),
+          tx.caseOutcome.findFirst({ where: { complaintId }, orderBy: { recordedAt: "desc" } }),
+          tx.caseEvidenceLink.count({ where: { complaintId, caseOutcomeId: { not: null } } }),
+          tx.externalReferral.count({
+            where: { complaintId, status: { in: ["submitted", "accepted", "in-progress"] } },
+          }),
+        ]);
+      const nonInvestigation = ["outside-mandate", "duplicate-merged", "worker-withdrew"].includes(
+        input.code,
+      );
+      if (!nonInvestigation && findingCount === 0)
+        throw new BadRequestException("FINDING_REQUIRED");
       if (openActionCount > 0) throw new BadRequestException("OPEN_CORRECTIVE_ACTIONS");
-      if (!latestOutcome && !["outside-mandate", "duplicate-merged"].includes(input.code)) throw new BadRequestException("OUTCOME_REQUIRED");
-      if (latestOutcome?.remedyDelivered && remedyEvidenceCount === 0) throw new BadRequestException("REMEDY_EVIDENCE_REQUIRED");
-      if (latestOutcome && !latestOutcome.communicated && !(input.communicationExceptionReason ?? latestOutcome.communicationExceptionReason)?.trim()) throw new BadRequestException("COMMUNICATION_EXCEPTION_REQUIRED");
-      if ((["Emergency", "Critical"].includes(current.priority) || current.triage.safetyRisk || current.triage.safeguardingRisk || current.triage.retaliationRisk) && !latestOutcome?.retaliationSafetyResult?.trim()) throw new BadRequestException("SAFETY_FOLLOW_UP_REQUIRED");
-      if (openReferralCount > 0 && !input.outstandingReferralAcknowledged) throw new BadRequestException("OUTSTANDING_REFERRAL_ACKNOWLEDGEMENT_REQUIRED");
+      if (!latestOutcome && !["outside-mandate", "duplicate-merged"].includes(input.code))
+        throw new BadRequestException("OUTCOME_REQUIRED");
+      if (latestOutcome?.remedyDelivered && remedyEvidenceCount === 0)
+        throw new BadRequestException("REMEDY_EVIDENCE_REQUIRED");
+      if (
+        latestOutcome &&
+        !latestOutcome.communicated &&
+        !(input.communicationExceptionReason ?? latestOutcome.communicationExceptionReason)?.trim()
+      )
+        throw new BadRequestException("COMMUNICATION_EXCEPTION_REQUIRED");
+      if (
+        (["Emergency", "Critical"].includes(current.priority) ||
+          current.triage.safetyRisk ||
+          current.triage.safeguardingRisk ||
+          current.triage.retaliationRisk) &&
+        !latestOutcome?.retaliationSafetyResult?.trim()
+      )
+        throw new BadRequestException("SAFETY_FOLLOW_UP_REQUIRED");
+      if (openReferralCount > 0 && !input.outstandingReferralAcknowledged)
+        throw new BadRequestException("OUTSTANDING_REFERRAL_ACKNOWLEDGEMENT_REQUIRED");
       assertCaseTransition("Outcome Verification", "Closed");
       const version = current.version + 1;
-      const closure = await tx.caseClosure.create({ data: {
-        complaintId, code: input.code, summary: input.summary, closedBy: actorId,
-        checklistSnapshot: { findingCount, openActionCount, outcomeId: latestOutcome?.id ?? null },
-        communicationExceptionReason: input.communicationExceptionReason,
-        outstandingReferralAcknowledged: input.outstandingReferralAcknowledged,
-      } });
-      await tx.complaint.update({ where: { id: complaintId }, data: { status: "Closed", version } });
-      await this.auditMutation(tx, { complaintId, requestId: input.requestId, actorId, actionType: "Complaint Closed", auditAction: "case.closed", fromStatus: "Outcome Verification", toStatus: "Closed", version, visibility: "worker-visible", reasonData: { closureId: closure.id, code: input.code, summary: input.summary } });
+      const closure = await tx.caseClosure.create({
+        data: {
+          complaintId,
+          code: input.code,
+          summary: input.summary,
+          closedBy: actorId,
+          checklistSnapshot: {
+            findingCount,
+            openActionCount,
+            outcomeId: latestOutcome?.id ?? null,
+          },
+          communicationExceptionReason: input.communicationExceptionReason,
+          outstandingReferralAcknowledged: input.outstandingReferralAcknowledged,
+        },
+      });
+      await tx.complaint.update({
+        where: { id: complaintId },
+        data: { status: "Closed", version },
+      });
+      await this.auditMutation(tx, {
+        complaintId,
+        requestId: input.requestId,
+        actorId,
+        actionType: "Complaint Closed",
+        auditAction: "case.closed",
+        fromStatus: "Outcome Verification",
+        toStatus: "Closed",
+        version,
+        visibility: "worker-visible",
+        reasonData: { closureId: closure.id, code: input.code, summary: input.summary },
+      });
       return { id: complaintId, closureId: closure.id, version, status: "Closed" };
     });
   }
@@ -703,12 +870,30 @@ export class CaseWorkflowController {
 
   @Post(":id/evidence-links")
   @RequirePermission("case.mutate")
-  async linkEvidence(@Param("id") id: string, @Body() body: {
-    expectedVersion?: number; requestId?: string; evidenceId?: string;
-    targetType?: "contact" | "finding" | "corrective-action" | "referral" | "outcome" | "closure";
-    targetId?: string; visibility?: "internal" | "worker-visible"; sensitivity?: "standard" | "sensitive" | "restricted";
-  }, @Req() request: StaffRequest) {
-    if (!Number.isInteger(body.expectedVersion) || !body.requestId || !body.evidenceId || !body.targetType || !body.targetId || !body.visibility || !body.sensitivity) throw new BadRequestException("Complete evidence target metadata is required");
+  async linkEvidence(
+    @Param("id") id: string,
+    @Body()
+    body: {
+      expectedVersion?: number;
+      requestId?: string;
+      evidenceId?: string;
+      targetType?: "contact" | "finding" | "corrective-action" | "referral" | "outcome" | "closure";
+      targetId?: string;
+      visibility?: "internal" | "worker-visible";
+      sensitivity?: "standard" | "sensitive" | "restricted";
+    },
+    @Req() request: StaffRequest,
+  ) {
+    if (
+      !Number.isInteger(body.expectedVersion) ||
+      !body.requestId ||
+      !body.evidenceId ||
+      !body.targetType ||
+      !body.targetId ||
+      !body.visibility ||
+      !body.sensitivity
+    )
+      throw new BadRequestException("Complete evidence target metadata is required");
     const complaintId = await this.resolveCaseKey(id);
     const actorId = this.actor(request);
     const requestId = body.requestId as string;
@@ -720,36 +905,68 @@ export class CaseWorkflowController {
     return this.client.$transaction(async (tx) => {
       const current = await tx.complaint.findUniqueOrThrow({ where: { id: complaintId } });
       this.assertVersion(current.version, body.expectedVersion as number);
-      const evidence = await tx.evidenceDeclaration.findFirst({ where: { id: evidenceId, complaintId, status: "available" } });
+      const evidence = await tx.evidenceDeclaration.findFirst({
+        where: { id: evidenceId, complaintId, status: "available" },
+      });
       if (!evidence) throw new BadRequestException("EVIDENCE_NOT_AVAILABLE");
       const targetChecks = {
         contact: () => tx.workerContact.findFirst({ where: { id: targetId, complaintId } }),
         finding: () => tx.investigationFinding.findFirst({ where: { id: targetId, complaintId } }),
-        "corrective-action": () => tx.correctiveAction.findFirst({ where: { id: targetId, complaintId } }),
+        "corrective-action": () =>
+          tx.correctiveAction.findFirst({ where: { id: targetId, complaintId } }),
         referral: () => tx.externalReferral.findFirst({ where: { id: targetId, complaintId } }),
         outcome: () => tx.caseOutcome.findFirst({ where: { id: targetId, complaintId } }),
         closure: () => tx.caseClosure.findFirst({ where: { id: targetId, complaintId } }),
       };
-      if (!await targetChecks[targetType]()) throw new BadRequestException("EVIDENCE_TARGET_NOT_FOUND");
+      if (!(await targetChecks[targetType]()))
+        throw new BadRequestException("EVIDENCE_TARGET_NOT_FOUND");
       const targetField = {
-        contact: "workerContactId", finding: "findingId", "corrective-action": "correctiveActionId",
-        referral: "externalReferralId", outcome: "caseOutcomeId", closure: "caseClosureId",
+        contact: "workerContactId",
+        finding: "findingId",
+        "corrective-action": "correctiveActionId",
+        referral: "externalReferralId",
+        outcome: "caseOutcomeId",
+        closure: "caseClosureId",
       } as const;
-      const link = await tx.caseEvidenceLink.create({ data: {
-        complaintId, evidenceId, visibility, sensitivity,
-        [targetField[targetType]]: targetId,
-      } });
+      const link = await tx.caseEvidenceLink.create({
+        data: {
+          complaintId,
+          evidenceId,
+          visibility,
+          sensitivity,
+          [targetField[targetType]]: targetId,
+        },
+      });
       const version = current.version + 1;
       await tx.complaint.update({ where: { id: complaintId }, data: { version } });
-      await this.auditMutation(tx, { complaintId, requestId, actorId, actionType: "Evidence Added", auditAction: "case.evidence.linked", version, visibility, reasonData: { linkId: link.id, evidenceId, targetType, targetId, sensitivity } });
+      await this.auditMutation(tx, {
+        complaintId,
+        requestId,
+        actorId,
+        actionType: "Evidence Added",
+        auditAction: "case.evidence.linked",
+        version,
+        visibility,
+        reasonData: { linkId: link.id, evidenceId, targetType, targetId, sensitivity },
+      });
       return { id: link.id, version };
     });
   }
 
   @Post(":id/reopen")
   @RequirePermission("case.mutate")
-  async reopen(@Param("id") id: string, @Body() body: { expectedVersion?: number; requestId?: string; reason?: string }, @Req() request: StaffRequest) {
-    if (!Number.isInteger(body.expectedVersion) || !body.requestId || !body.reason || body.reason.trim().length < 8) throw new BadRequestException("expectedVersion, requestId and reason are required");
+  async reopen(
+    @Param("id") id: string,
+    @Body() body: { expectedVersion?: number; requestId?: string; reason?: string },
+    @Req() request: StaffRequest,
+  ) {
+    if (
+      !Number.isInteger(body.expectedVersion) ||
+      !body.requestId ||
+      !body.reason ||
+      body.reason.trim().length < 8
+    )
+      throw new BadRequestException("expectedVersion, requestId and reason are required");
     const reason = body.reason.trim();
     const requestId = body.requestId as string;
     const complaintId = await this.resolveCaseKey(id);
@@ -759,8 +976,22 @@ export class CaseWorkflowController {
       this.assertVersion(current.version, body.expectedVersion as number);
       assertCaseTransition(current.status as CaseStatus, "Reopened");
       const version = current.version + 1;
-      await tx.complaint.update({ where: { id: complaintId }, data: { status: "Reopened", version } });
-      await this.auditMutation(tx, { complaintId, requestId, actorId, actionType: "Complaint Reopened", auditAction: "case.reopened", fromStatus: current.status, toStatus: "Reopened", version, visibility: "worker-visible", reasonData: { reason } });
+      await tx.complaint.update({
+        where: { id: complaintId },
+        data: { status: "Reopened", version },
+      });
+      await this.auditMutation(tx, {
+        complaintId,
+        requestId,
+        actorId,
+        actionType: "Complaint Reopened",
+        auditAction: "case.reopened",
+        fromStatus: current.status,
+        toStatus: "Reopened",
+        version,
+        visibility: "worker-visible",
+        reasonData: { reason },
+      });
       return { id: complaintId, version, status: "Reopened" };
     });
   }
@@ -783,13 +1014,16 @@ export class CaseWorkflowController {
     };
   }
 
-  private parse<T>(result: { success: true; data: T } | { success: false; error: { flatten(): unknown } }): T {
+  private parse<T>(
+    result: { success: true; data: T } | { success: false; error: { flatten(): unknown } },
+  ): T {
     if (!result.success) throw new BadRequestException(result.error.flatten());
     return result.data;
   }
 
   private actor(request: StaffRequest): string {
-    if (!request.user?.userId) throw new BadRequestException("Authenticated staff actor is required");
+    if (!request.user?.userId)
+      throw new BadRequestException("Authenticated staff actor is required");
     return request.user.userId;
   }
 
@@ -807,27 +1041,58 @@ export class CaseWorkflowController {
     return complaintId;
   }
 
-  private async auditMutation(tx: Prisma.TransactionClient, input: {
-    complaintId: string; requestId: string; actorId: string; actionType: string; auditAction: string;
-    version: number; visibility: "internal" | "worker-visible"; fromStatus?: string; toStatus?: string;
-    reasonData: Record<string, unknown>;
-  }) {
-    await tx.caseHistory.create({ data: {
-      complaintId: input.complaintId, actionType: input.actionType, actorType: "staff",
-      actorId: input.actorId, visibility: input.visibility, requestId: input.requestId,
-      fromStatus: input.fromStatus, toStatus: input.toStatus, reasonData: input.reasonData as Prisma.InputJsonValue,
-      resourceVersion: input.version,
-    } });
-    await tx.auditEvent.create({ data: {
-      complaintId: input.complaintId, actorType: "staff", actorId: input.actorId,
-      action: input.auditAction, targetType: "complaint", targetId: input.complaintId,
-      outcome: "success", requestId: input.requestId, metadata: input.reasonData as Prisma.InputJsonValue,
-    } });
-    await tx.outboxEvent.create({ data: {
-      complaintId: input.complaintId, aggregateType: "complaint", aggregateId: input.complaintId,
-      eventType: input.auditAction, payload: { complaintId: input.complaintId, version: input.version },
-      dedupeKey: `${input.auditAction}:${input.requestId}`,
-    } });
+  private async auditMutation(
+    tx: Prisma.TransactionClient,
+    input: {
+      complaintId: string;
+      requestId: string;
+      actorId: string;
+      actionType: string;
+      auditAction: string;
+      version: number;
+      visibility: "internal" | "worker-visible";
+      fromStatus?: string;
+      toStatus?: string;
+      reasonData: Record<string, unknown>;
+    },
+  ) {
+    await tx.caseHistory.create({
+      data: {
+        complaintId: input.complaintId,
+        actionType: input.actionType,
+        actorType: "staff",
+        actorId: input.actorId,
+        visibility: input.visibility,
+        requestId: input.requestId,
+        fromStatus: input.fromStatus,
+        toStatus: input.toStatus,
+        reasonData: input.reasonData as Prisma.InputJsonValue,
+        resourceVersion: input.version,
+      },
+    });
+    await tx.auditEvent.create({
+      data: {
+        complaintId: input.complaintId,
+        actorType: "staff",
+        actorId: input.actorId,
+        action: input.auditAction,
+        targetType: "complaint",
+        targetId: input.complaintId,
+        outcome: "success",
+        requestId: input.requestId,
+        metadata: input.reasonData as Prisma.InputJsonValue,
+      },
+    });
+    await tx.outboxEvent.create({
+      data: {
+        complaintId: input.complaintId,
+        aggregateType: "complaint",
+        aggregateId: input.complaintId,
+        eventType: input.auditAction,
+        payload: { complaintId: input.complaintId, version: input.version },
+        dedupeKey: `${input.auditAction}:${input.requestId}`,
+      },
+    });
     if (input.visibility === "worker-visible") {
       await tx.outboxEvent.create({
         data: {

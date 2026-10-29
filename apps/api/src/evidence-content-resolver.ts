@@ -99,7 +99,8 @@ export async function resolveEvidenceContent(
     !declaration.encryptionNonce ||
     !declaration.encryptionAuthTag ||
     !declaration.detectedMimeType
-  ) return null;
+  )
+    return null;
 
   const dataKey = unwrapV3DataKey(
     declaration.id,
@@ -107,10 +108,12 @@ export async function resolveEvidenceContent(
     declaration.encryptionKeyId ?? config.encryptionKeyId,
     config.evidenceKekSecret,
   );
-  const object = await objectClient(config).send(new GetObjectCommand({
-    Bucket: config.protectedEvidenceBucket,
-    Key: declaration.protectedKey,
-  }));
+  const object = await objectClient(config).send(
+    new GetObjectCommand({
+      Bucket: config.protectedEvidenceBucket,
+      Key: declaration.protectedKey,
+    }),
+  );
   if (!object.Body) return null;
   const decipher = createV3EvidenceDecipher(
     declaration.id,
@@ -119,10 +122,13 @@ export async function resolveEvidenceContent(
     declaration.encryptionNonce,
     declaration.encryptionAuthTag,
   );
-  const source = object.Body as NodeJS.ReadableStream & { transformToWebStream?: () => ReadableStream };
-  const readable = typeof source.pipe === "function"
-    ? source
-    : Readable.fromWeb(source.transformToWebStream!() as never);
+  const source = object.Body as NodeJS.ReadableStream & {
+    transformToWebStream?: () => ReadableStream;
+  };
+  const readable =
+    typeof source.pipe === "function"
+      ? source
+      : Readable.fromWeb(source.transformToWebStream!() as never);
   return {
     version: "v3",
     id: declaration.id,

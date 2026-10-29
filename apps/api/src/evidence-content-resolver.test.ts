@@ -11,15 +11,30 @@ describe("V3 evidence cryptography", () => {
     const kind = "voice";
     const secret = "development-secret-with-sufficient-entropy";
     const dataKey = randomBytes(32);
-    const wrapped = encryptEnvelope(dataKey, deriveKey(secret, "evidence-data-key-v3"), "key-1", `evidence-data-key:${evidenceId}`);
-    const storedWrapped = Buffer.concat([Buffer.from(wrapped.nonce), Buffer.from(wrapped.tag), Buffer.from(wrapped.ciphertext)]);
+    const wrapped = encryptEnvelope(
+      dataKey,
+      deriveKey(secret, "evidence-data-key-v3"),
+      "key-1",
+      `evidence-data-key:${evidenceId}`,
+    );
+    const storedWrapped = Buffer.concat([
+      Buffer.from(wrapped.nonce),
+      Buffer.from(wrapped.tag),
+      Buffer.from(wrapped.ciphertext),
+    ]);
     const nonce = randomBytes(12);
     const plaintext = Buffer.from("evidence bytes");
     const cipher = createCipheriv("aes-256-gcm", dataKey, nonce);
     cipher.setAAD(Buffer.from(`evidence-v3:${evidenceId}:${kind}`));
     const ciphertext = Buffer.concat([cipher.update(plaintext), cipher.final()]);
     const restored = unwrapV3DataKey(evidenceId, storedWrapped, "key-1", secret);
-    const decipher = createV3EvidenceDecipher(evidenceId, kind, restored, nonce, cipher.getAuthTag());
+    const decipher = createV3EvidenceDecipher(
+      evidenceId,
+      kind,
+      restored,
+      nonce,
+      cipher.getAuthTag(),
+    );
     expect(Buffer.concat([decipher.update(ciphertext), decipher.final()])).toEqual(plaintext);
   });
 

@@ -82,7 +82,11 @@ export class ComplaintIntakeV3Service {
     if (!parsed.success) {
       const issue = parsed.error.issues[0];
       const path = issue?.path
-        .map((part) => String(part).replace(/[^a-zA-Z0-9]+/g, "_").toLowerCase())
+        .map((part) =>
+          String(part)
+            .replace(/[^a-zA-Z0-9]+/g, "_")
+            .toLowerCase(),
+        )
         .filter(Boolean)
         .join("_");
       throw validationError(path ? `invalid_${path}` : "invalid_submission");
@@ -149,7 +153,9 @@ export class ComplaintIntakeV3Service {
       privacyMode: submission.privacyMode,
       reporterType: complaint.reporterType,
       reporterDisplayName: complaint.reporterDisplayName,
-      contactAllowed: ["call", "message", "either", "representative"].includes(complaint.contactPreference),
+      contactAllowed: ["call", "message", "either", "representative"].includes(
+        complaint.contactPreference,
+      ),
       contactPreference: complaint.contactPreference,
       safeContactWindow: complaint.safeContactWindow,
       preferredLanguage: complaint.preferredLanguage,
