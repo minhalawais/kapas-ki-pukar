@@ -274,6 +274,62 @@
         ]
       }
     },
+    "/api/v1/cases/{id}/close": {
+      "post": {
+        "operationId": "CaseWorkflowController_close",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/contacts": {
+      "post": {
+        "operationId": "CaseWorkflowController_contact",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/corrective-actions": {
+      "post": {
+        "operationId": "CaseWorkflowController_createAction",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/corrective-actions/{actionId}": {
+      "patch": {
+        "operationId": "CaseWorkflowController_updateAction",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
     "/api/v1/cases/{id}/evidence": {
       "get": {
         "operationId": "CaseController_evidence",
@@ -288,6 +344,20 @@
         ]
       }
     },
+    "/api/v1/cases/{id}/evidence-links": {
+      "post": {
+        "operationId": "CaseWorkflowController_linkEvidence",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
     "/api/v1/cases/{id}/evidence/{evidenceId}/content": {
       "get": {
         "operationId": "CaseController_evidenceContent",
@@ -299,6 +369,34 @@
         },
         "tags": [
           "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/facts": {
+      "post": {
+        "operationId": "CaseWorkflowController_fact",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/findings": {
+      "post": {
+        "operationId": "CaseWorkflowController_finding",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
         ]
       }
     },
@@ -330,6 +428,34 @@
         ]
       }
     },
+    "/api/v1/cases/{id}/investigation/start": {
+      "post": {
+        "operationId": "CaseWorkflowController_startInvestigation",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/outcomes": {
+      "post": {
+        "operationId": "CaseWorkflowController_outcome",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
     "/api/v1/cases/{id}/priority": {
       "patch": {
         "operationId": "CaseController_priority",
@@ -341,6 +467,34 @@
         },
         "tags": [
           "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/referrals": {
+      "post": {
+        "operationId": "CaseWorkflowController_referral",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/reopen": {
+      "post": {
+        "operationId": "CaseWorkflowController_reopen",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
         ]
       }
     },
@@ -358,6 +512,20 @@
         ]
       }
     },
+    "/api/v1/cases/{id}/staff-evidence": {
+      "post": {
+        "operationId": "CaseWorkflowController_uploadStaffEvidence",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
     "/api/v1/cases/{id}/status": {
       "patch": {
         "operationId": "CaseController_transition",
@@ -369,6 +537,48 @@
         },
         "tags": [
           "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/triage": {
+      "post": {
+        "operationId": "CaseWorkflowController_triage",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/verification/complete-without-contact": {
+      "post": {
+        "operationId": "CaseWorkflowController_completeVerificationWithoutContact",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/workspace": {
+      "get": {
+        "operationId": "CaseWorkflowController_workspace",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CaseWorkflow"
         ]
       }
     },
@@ -951,6 +1161,34 @@
         ]
       }
     },
+    "/api/v1/worker/complaints/{referenceNumber}/push-token": {
+      "post": {
+        "operationId": "WorkerController_registerPushToken",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Worker"
+        ]
+      }
+    },
+    "/api/v1/worker/complaints/{referenceNumber}/push-token/revoke": {
+      "post": {
+        "operationId": "WorkerController_revokePushToken",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Worker"
+        ]
+      }
+    },
     "/api/v3/complaints/{reference}/delivery": {
       "get": {
         "operationId": "EvidenceDeliveryV3Controller_delivery",
@@ -1223,6 +1461,7 @@
                           "call",
                           "message",
                           "either",
+                          "representative",
                           "do-not-initiate"
                         ],
                         "type": "string"
@@ -1368,6 +1607,13 @@
                         ],
                         "type": "object"
                       },
+                      "preferredLanguage": {
+                        "enum": [
+                          "ur",
+                          "en"
+                        ],
+                        "type": "string"
+                      },
                       "priority": {
                         "default": "Standard",
                         "enum": [
@@ -1395,6 +1641,20 @@
                         ],
                         "type": "string"
                       },
+                      "representativeContact": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "safeContactWindow": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "safeVoicemail": {
+                        "default": false,
+                        "type": "boolean"
+                      },
                       "subcategoryCode": {
                         "maxLength": 7,
                         "minLength": 1,
@@ -1406,6 +1666,7 @@
                       "priority",
                       "reporterType",
                       "contactPreference",
+                      "safeVoicemail",
                       "incident",
                       "location"
                     ],
