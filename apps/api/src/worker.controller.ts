@@ -317,13 +317,14 @@ export class WorkerController {
   private async assertReferenceAccess(session: WorkerAccessSession, referenceNumber: string) {
     const complaint = await this.client.complaint.findUnique({
       where: { referenceNumber },
-      select: { id: true, workerProfileId: true },
+      select: { id: true, referenceNumber: true, workerProfileId: true },
     });
+    if (!complaint) throw new NotFoundException("Complaint not found");
     const authorized = session.complaintId
-      ? complaint?.id === session.complaintId
+      ? complaint.id === session.complaintId
       : session.profileId
-        ? complaint?.workerProfileId === session.profileId
-        : complaint?.referenceNumber === session.referenceNumber;
+        ? complaint.workerProfileId === session.profileId
+        : complaint.referenceNumber === session.referenceNumber;
     if (!authorized) throw new NotFoundException("Complaint not found");
     return complaint;
   }
