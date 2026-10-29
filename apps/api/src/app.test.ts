@@ -2,7 +2,14 @@ import "reflect-metadata";
 
 import { loadRuntimeConfig } from "@kapas/config";
 import type { NestFastifyApplication } from "@nestjs/platform-fastify";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+// The proxy package is exercised by production wiring, but its transitive
+// stream stack is irrelevant to these in-process API tests. Mock the adapter
+// so the test suite remains deterministic across pnpm linkers/platforms.
+vi.mock("@fastify/http-proxy", () => ({
+  default: async () => undefined,
+}));
 
 import { createApplication } from "./application";
 import type { DependencyHealth } from "./dependency-health";
