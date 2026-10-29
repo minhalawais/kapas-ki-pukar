@@ -17,6 +17,8 @@ overrides:
   shell-quote: 1.11.0
   source-map-js: 1.2.2
 
+packageExtensionsChecksum: 90961892ea1e9a2de23fafb938cae445
+
 importers:
 
   .:
@@ -8520,6 +8522,7 @@ snapshots:
       fast-content-type-parse: 4.0.1
       fast-querystring: 1.1.2
       fastify-plugin: 6.0.1
+      once: 1.4.0
       toad-cache: 3.7.4
       undici: 7.30.1
 
