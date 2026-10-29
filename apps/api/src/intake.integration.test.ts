@@ -588,7 +588,7 @@ integration("complaint intake and evidence pipeline", () => {
         requestId: `feedback-${clientSubmissionId}`,
       },
     });
-    expect(feedback.statusCode).toBe(201);
+    expect(feedback.statusCode, feedback.body).toBe(201);
     const feedbackAgain = await app.inject({
       method: "POST",
       url: `/api/v1/worker/complaints/${complaint.referenceNumber}/feedback`,
