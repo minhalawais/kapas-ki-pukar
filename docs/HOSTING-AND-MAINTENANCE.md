@@ -85,19 +85,22 @@ MoIP-GP uses the same host/user pattern with repo secret name `VPS_SSH_PRIVATE_K
 
 See [`.github/CICD.md`](../.github/CICD.md).
 
-### Manual release on VPS (break-glass)
+### Manual release on VPS (break-glass only)
+
+Prefer **push to `main`** (CI → Deploy production). Do not build or SCP tarballs for routine releases.
+
+For emergencies when GitHub deploy cannot run:
 
 ```bash
 sudo -u deploy bash -lc '
   export ENV_FILE=/etc/kapas/production.env
   export IMAGE_ENV_FILE=/etc/kapas/image.env
   export RELEASE_VERSION=<tag>
-  export SKIP_COMPOSE_PULL=true
-  bash /opt/kapas/deploy/production/scripts/release.sh
+  bash /opt/kapas/deploy/production/scripts/remote-deploy.sh
 '
 ```
 
-Use `SKIP_COMPOSE_PULL=true` when images were built locally on the server.
+Use `tooling/deploy/remote-load-release.sh` only when images were loaded offline; normal deploy pulls from GHCR via CI-written `image.env`.
 
 ### Smoke tests
 
