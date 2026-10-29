@@ -319,13 +319,12 @@ export class WorkerController {
       where: { referenceNumber },
       select: { id: true, workerProfileId: true },
     });
-    if (
-      !complaint ||
-      (session.profileId
-        ? complaint.workerProfileId !== session.profileId
-        : session.referenceNumber !== referenceNumber)
-    )
-      throw new NotFoundException("Complaint not found");
+    const authorized = session.complaintId
+      ? complaint?.id === session.complaintId
+      : session.profileId
+        ? complaint?.workerProfileId === session.profileId
+        : complaint?.referenceNumber === session.referenceNumber;
+    if (!authorized) throw new NotFoundException("Complaint not found");
     return complaint;
   }
 }
