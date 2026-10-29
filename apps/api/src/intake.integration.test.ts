@@ -602,7 +602,9 @@ integration("complaint intake and evidence pipeline", () => {
       },
     });
     if (feedbackAgain.statusCode !== 201) {
-      throw new Error(`worker feedback replay failed: ${feedbackAgain.statusCode} ${feedbackAgain.body}`);
+      throw new Error(
+        `worker feedback replay failed: ${feedbackAgain.statusCode} ${feedbackAgain.body}`,
+      );
     }
     expect(
       await client.workerFeedback.count({ where: { requestId: `feedback-${clientSubmissionId}` } }),
