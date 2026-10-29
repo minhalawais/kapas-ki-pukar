@@ -46,6 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       release_version: ${{ steps.meta.outputs.version }}
+      deploy_sha: ${{ steps.meta.outputs.full_sha }}
       image_namespace: ${{ steps.meta.outputs.namespace }}
       api_image: ${{ steps.meta.outputs.api_image }}
       worker_image: ${{ steps.meta.outputs.worker_image }}
@@ -79,6 +80,7 @@ jobs:
           SHA="${FULL_SHA:0:12}"
           echo "namespace=${NS}" >> "$GITHUB_OUTPUT"
           echo "version=${SHA}" >> "$GITHUB_OUTPUT"
+          echo "full_sha=${FULL_SHA}" >> "$GITHUB_OUTPUT"
           echo "api_image=${REGISTRY}/${NS}/kapas-api:${SHA}" >> "$GITHUB_OUTPUT"
           echo "worker_image=${REGISTRY}/${NS}/kapas-worker:${SHA}" >> "$GITHUB_OUTPUT"
           echo "portal_image=${REGISTRY}/${NS}/kapas-portal:${SHA}" >> "$GITHUB_OUTPUT"
@@ -159,12 +161,13 @@ jobs:
           MIGRATE_IMAGE: ${{ needs.build-and-push.outputs.migrate_image }}
           MINIO_IMAGE: ${{ needs.build-and-push.outputs.minio_image }}
           DEPLOY_REF: ${{ github.event.workflow_run.head_branch || github.event.inputs.ref || 'main' }}
-          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+          DEPLOY_SHA: ${{ needs.build-and-push.outputs.deploy_sha }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}.git
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          envs: RELEASE_VERSION,API_IMAGE,WORKER_IMAGE,PORTAL_IMAGE,MIGRATE_IMAGE,MINIO_IMAGE,DEPLOY_REF,DEPLOY_SHA
+          envs: RELEASE_VERSION,API_IMAGE,WORKER_IMAGE,PORTAL_IMAGE,MIGRATE_IMAGE,MINIO_IMAGE,DEPLOY_REF,DEPLOY_SHA,REPO_URL
           script: |
             set -Eeuo pipefail
             if [ -n "${{ secrets.GHCR_PULL_TOKEN }}" ]; then
@@ -183,6 +186,20 @@ jobs:
             export APP_ROOT="${{ vars.DEPLOY_APP_ROOT || '/opt/kapas' }}"
             export DEPLOY_REF="${DEPLOY_REF}"
             export DEPLOY_SHA="${DEPLOY_SHA}"
+            export REPO_URL="${REPO_URL}"
+            # Repair legacy tarball installs before invoking the repository's
+            # deploy script. This bootstrap runs on the old script too, so the
+            # first fully automated release can upgrade the VPS in-place.
+            cd "${APP_ROOT}"
+            if [ ! -d .git ]; then
+              git init
+              git remote add origin "${REPO_URL}"
+            elif ! git remote get-url origin >/dev/null 2>&1; then
+              git remote add origin "${REPO_URL}"
+            fi
+            git fetch --depth=1 origin "${DEPLOY_REF}"
+            git fetch --depth=1 origin "${DEPLOY_SHA}"
+            git checkout --detach "${DEPLOY_SHA}"
             bash "${APP_ROOT}/deploy/production/scripts/remote-deploy.sh"
 
       - name: Smoke check API

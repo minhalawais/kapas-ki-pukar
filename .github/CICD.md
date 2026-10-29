@@ -28,7 +28,7 @@ Steps:
    - Tags: `<12-char-sha>` and `latest`
 2. **SSH deploy** to VPS:
    - Write `/etc/kapas/image.env` with image digests/tags
-   - `git fetch` deploy scripts at the same SHA
+   - Initialise `/opt/kapas` as a Git checkout when an older tarball-based install has no `.git`, then `git fetch` and check out the exact SHA
    - `release.sh`: Postgres/Redis up → **migrations** → API/worker/portal/tusd up
 3. **Smoke test** HTTPS API live + ready
 
@@ -50,4 +50,4 @@ See [deploy/production/HOSTING.md](../deploy/production/HOSTING.md).
 - Uploading a tarball over SSH and building Docker on the VPS (bootstrap only; slow, not repeatable).
 - Committing `.env` or passwords to the repo.
 
-After first VPS bootstrap, **every release should go through GitHub Actions**.
+After first VPS bootstrap, **every release should go through GitHub Actions**. The deploy action also repairs the legacy tarball install automatically; it no longer silently skips source updates when `/opt/kapas/.git` is absent.

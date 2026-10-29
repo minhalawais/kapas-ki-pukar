@@ -15,8 +15,8 @@ import { EvidenceProcessor } from "./evidence-processor";
 import { EvidenceV3Processor } from "./evidence-v3-processor";
 import { MaintenanceCoordinator } from "./maintenance";
 import { ExpoPushNotificationAdapter } from "./notification";
-import { deliverComplaintPushNotifications } from "./push-delivery";
 import { OutboxDispatcher, QUEUES } from "./outbox-dispatcher";
+import { deliverComplaintPushNotifications } from "./push-delivery";
 import { classifyRetry } from "./retry";
 import { RUNTIME_CONFIG, WORKER_LOGGER } from "./worker.tokens";
 

@@ -76,6 +76,10 @@ Use a fine-scoped PAT with `read:packages`.
 | `PRODUCTION_PORTAL_HOST` | `kapaskipukar.com` (optional; public `/privacy` and `/support` smoke checks) |
 | `DEPLOY_APP_ROOT` | `/opt/kapas` (optional) |
 
+The deploy workflow supplies the repository URL automatically. If a manual
+server run is required, export `REPO_URL=https://github.com/minhalawais/kapas-ki-pukar.git`
+before running `remote-deploy.sh` on a legacy tarball installation.
+
 ### Environment
 
 Create a GitHub **environment** named `production` and optionally require manual approval before deploy jobs run.

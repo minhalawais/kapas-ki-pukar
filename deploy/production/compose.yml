@@ -75,6 +75,16 @@ services:
       TUSD_HOOK_SECRET: ${TUSD_HOOK_SECRET:?TUSD_HOOK_SECRET is required}
       TUSD_PUBLIC_URL: ${PUBLIC_API_URL:?PUBLIC_API_URL is required}/files/
       TUSD_INTERNAL_URL: http://tusd:8080/files/
+      # API-side evidence downloads and staff evidence actions use MinIO too.
+      # Keep these aligned with the worker; otherwise the config package falls
+      # back to 127.0.0.1:9000 (inside the API container) and all content reads
+      # fail with ECONNREFUSED.
+      OBJECT_STORE_ENDPOINT: http://minio:9000
+      OBJECT_STORE_ACCESS_KEY: ${MINIO_ROOT_USER:?MINIO_ROOT_USER is required}
+      OBJECT_STORE_SECRET_KEY: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
+      QUARANTINE_BUCKET: quarantine
+      PROTECTED_EVIDENCE_BUCKET: protected-evidence
+      TEMPORARY_BUCKET: temporary
       OPENAPI_ENABLED: "false"
       QUEUE_PREFIX: ${QUEUE_PREFIX:-kapas-production}
       JSON_BODY_LIMIT_BYTES: ${JSON_BODY_LIMIT_BYTES:-1048576}

@@ -57,13 +57,24 @@ export class OutboxDispatcher {
       const queue = this.queues[queueName];
       if (!queue) continue;
       try {
+        const evidenceScan =
+          event.eventType === "evidence.scan.requested.v1" ||
+          event.eventType === "evidence.scan.requested.v3";
         await queue.add(
           event.eventType,
           { eventId: event.id, aggregateId: event.aggregateId, payload: event.payload },
           {
             jobId: event.id,
-            attempts: 5,
-            backoff: { type: "exponential", delay: 1_000, jitter: 0.25 },
+            // A post-finish tus hook and the outbox transaction can become
+            // visible to the worker a few milliseconds apart. Give evidence
+            // scans enough time to observe the quarantined row before the job
+            // is dead-lettered as `evidence_not_ready_for_scan`.
+            attempts: evidenceScan ? 10 : 5,
+            backoff: {
+              type: "exponential",
+              delay: evidenceScan ? 5_000 : 1_000,
+              jitter: 0.25,
+            },
             priority: event.eventType === "retention.review-due.v1" ? 5 : 10,
           },
         );
