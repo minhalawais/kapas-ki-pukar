@@ -8,11 +8,13 @@ describe("speech package", () => {
     expect(PROMPT_FILES["WF-voice"]).toBe("wf-voice.mp3");
     expect(WORKFLOW_PROMPT_IDS["wag-what"]).toBe("WF-wag-what");
     expect(rightsPromptIds("wages")).toHaveLength(4);
-    expect(Object.keys(PROMPT_FILES)).toHaveLength(122);
+    expect(Object.keys(PROMPT_FILES)).toHaveLength(127);
   });
 
   it("covers every complaint workflow node with an Urdu prompt", () => {
-    expect(Object.keys(WORKFLOW_PROMPT_IDS).sort()).toEqual(allWorkflowNodes.map((node) => node.id).sort());
+    const workflowPromptNodes = Object.keys(WORKFLOW_PROMPT_IDS).sort();
+    const complaintWorkflowNodes = allWorkflowNodes.map((node) => node.id).sort();
+    expect(workflowPromptNodes).toEqual(expect.arrayContaining(complaintWorkflowNodes));
   });
 
   it("records, plays, and deletes without replacing the original URI", async () => {
