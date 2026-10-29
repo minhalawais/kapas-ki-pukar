@@ -157,6 +157,30 @@ export class WorkerController {
     );
   }
 
+  @Post("complaints/:referenceNumber/information-responses")
+  async informationResponse(
+    @Req() request: CookieRequest,
+    @Param("referenceNumber") referenceNumber: string,
+    @Body() body: { requestId?: string; answers?: unknown },
+  ) {
+    const session = await this.authorizedReference(request, referenceNumber);
+    if (!body.requestId || typeof body.requestId !== "string" || !body.answers)
+      throw new BadRequestException("requestId and answers are required");
+    const existing = await this.client.workerInformationResponse.findFirst({
+      where: { complaintId: session.complaintId, requestId: body.requestId },
+    });
+    if (!existing) {
+      await this.client.workerInformationResponse.create({
+        data: {
+          complaintId: session.complaintId,
+          requestId: body.requestId,
+          responseData: body.answers as object,
+        },
+      });
+    }
+    return this.complaints.getByReference(referenceNumber);
+  }
+
   @Post("complaints/:referenceNumber/push-token")
   async registerPushToken(
     @Req() request: CookieRequest,
