@@ -184,7 +184,7 @@ export async function ensurePersistenceSchema(): Promise<{ reset: boolean }> {
   await portalRepo.reset();
   const repo = getMobileRepository();
   const rows = await repo.list();
-  await Promise.all(rows.filter((row) => row.status === "Draft").map((row) => repo.remove(row.id)));
+  await Promise.all(rows.filter((row) => row.trackingId.startsWith("queued-")).map((row) => repo.remove(row.id)));
   flags = defaultFlags();
   persistenceNotice = "schema-reset";
   await demoStore.setItem(persistenceKeys.schema, String(SEED_VERSION));

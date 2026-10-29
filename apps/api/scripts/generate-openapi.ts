@@ -26,6 +26,7 @@ const config = loadRuntimeConfig({
   QUARANTINE_ROOT: "./storage/quarantine",
   ENCRYPTION_KEY_ID: "openapi-generation",
   SESSION_SECRET: "openapi-generation-session-secret-32-characters",
+  IDENTITY_LOOKUP_PEPPER: "openapi-generation-identity-pepper-32-characters",
   INTERNAL_METRICS_TOKEN: "openapi-generation-metrics-token",
   OPENAPI_ENABLED: "false",
   QUEUE_PREFIX: "kapas-openapi",

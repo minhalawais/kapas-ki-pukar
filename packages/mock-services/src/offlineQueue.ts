@@ -2,7 +2,6 @@ import type { Complaint, ComplaintDraft } from "@kapas/domain";
 import { persistenceKeys, SEED_VERSION } from "@kapas/domain";
 import { dueAtFrom } from "@kapas/mock-data";
 
-import { caseLifecycleService } from "./lifecycle/CaseLifecycleService";
 import { getDemoFlags, getDraftStore, getMobileRepository } from "./runtime";
 
 export const offlineQueueStatuses = ["queued", "sending", "submitted", "failed"] as const;
@@ -122,22 +121,12 @@ export const offlineQueueService = {
         if (!current) {
           throw new Error("Queued complaint missing.");
         }
-        if (current.status !== "Draft") {
-          item.status = "submitted";
-          processed += 1;
-          await writeQueue(file);
-          continue;
-        }
         const at = new Date().toISOString();
-        const submitted = caseLifecycleService.transition(current, "Submitted", {
-          at,
-          actorRole: "system",
-          note: "Queued send completed",
-        });
         const next: Complaint = {
-          ...submitted,
+          ...current,
           submittedAt: at,
-          dueAt: dueAtFrom(at, submitted.priority),
+          updatedAt: at,
+          dueAt: dueAtFrom(at, current.priority),
         };
         await repo.save(next);
         item.status = "submitted";

@@ -69,7 +69,7 @@ describe("mock services", () => {
     const rows = await caseManagementService.list(filters);
     const snapshot = await analyticsService.getSnapshot(filters);
     expect(snapshot.total).toBe(rows.length);
-    expect(snapshot.newCount).toBe(rows.filter((row) => row.status === "Submitted").length);
+    expect(snapshot.newCount).toBe(rows.filter((row) => row.status === "Received").length);
     expect(snapshot.criticalCount).toBe(
       rows.filter((row) => row.priority === "Emergency" || row.priority === "Critical").length,
     );
@@ -82,16 +82,25 @@ describe("mock services", () => {
     expect(totalComplaints(rows)).toBe(rows.length);
     expect(openCases(rows)).toBe(
       rows.filter((row) =>
-        ["Submitted", "Under Review", "Action in Progress", "Proposed Resolution", "Reopened"].includes(row.status),
+        [
+          "Received",
+          "Triage",
+          "Verification",
+          "Investigation",
+          "Action in Progress",
+          "Escalated",
+          "Outcome Verification",
+          "Reopened",
+        ].includes(row.status),
       ).length,
     );
-    expect(resolutionRate(rows)).toBe(((rows.filter((row) => row.status === "Resolved" || row.status === "Closed").length) / rows.length) * 100);
+    expect(resolutionRate(rows)).toBe(((rows.filter((row) => row.status === "Closed").length) / rows.length) * 100);
     expect(criticalRate(rows)).toBe(
       ((rows.filter((row) => row.priority === "Emergency" || row.priority === "Critical").length) / rows.length) * 100,
     );
     expect(reopenRate(rows)).toBe(
       (rows.filter((row) => row.status === "Reopened").length /
-        rows.filter((row) => row.status === "Resolved" || row.status === "Closed").length) *
+        rows.filter((row) => row.status === "Closed").length) *
         100,
     );
   });
@@ -155,7 +164,7 @@ describe("mock services", () => {
     expect(loaded.trackingId).toBe("KP-26-000101");
     const mobile = await getMobileRepository().get("KP-26-000101");
     expect(mobile?.trackingId).toBe("KP-26-000101");
-    expect(mobile?.status).toBe("Under Review");
+    expect(mobile?.status).toBe("Triage");
     expect(demoService.getFlags()).toMatchObject({
       activeScenarioId: "GS-01",
       portalInjected: false,
@@ -167,8 +176,8 @@ describe("mock services", () => {
     expect(injected.trackingId).toBe("KP-26-000101");
     const portal = await getPortalRepository().get("KP-26-000101");
     const mobile = await getMobileRepository().get("KP-26-000101");
-    expect(portal?.status).toBe("Under Review");
-    expect(mobile?.status).toBe("Under Review");
+    expect(portal?.status).toBe("Triage");
+    expect(mobile?.status).toBe("Triage");
     expect(demoService.getFlags().portalInjected).toBe(true);
     const mine = await complaintService.listMine();
     expect(mine.some((row) => row.trackingId === "KP-26-000101")).toBe(true);
@@ -177,12 +186,12 @@ describe("mock services", () => {
   it("advances GS-01 from Under Review to Action in Progress", async () => {
     await demoService.injectScenarioComplaint("GS-01");
     const next = await demoService.advanceScenario("GS-01", "next");
-    expect(next.status).toBe("Action in Progress");
+    expect(next.status).toBe("Investigation");
     const portal = await getPortalRepository().get("KP-26-000101");
     const mobile = await getMobileRepository().get("KP-26-000101");
-    expect(portal?.status).toBe("Action in Progress");
-    expect(mobile?.status).toBe("Action in Progress");
-    expect(demoService.getFlags().workerTrackingStep).toBe("Action in Progress");
+    expect(portal?.status).toBe("Investigation");
+    expect(mobile?.status).toBe("Investigation");
+    expect(demoService.getFlags().workerTrackingStep).toBe("Investigation");
   });
 
   it("adds extra portal complaints and reset restores the seed", async () => {
@@ -231,28 +240,28 @@ describe("mock services", () => {
   });
 
   it("blocks illegal lifecycle transitions", () => {
-    expect(caseLifecycleService.canTransition("Submitted", "Closed")).toBe(false);
+    expect(caseLifecycleService.canTransition("Received", "Closed")).toBe(false);
     expect(() =>
       caseLifecycleService.transition(
         {
-          status: "Submitted",
+          status: "Received",
           actions: [],
         } as never,
         "Closed",
         { at: DEMO_NOW_ISO, actorRole: "puwf-grievance-manager" },
       ),
     ).toThrow(InvalidTransitionError);
-    expect(caseLifecycleService.availableActions("Submitted").startReview).toBe(true);
-    expect(caseLifecycleService.availableActions("Submitted").close).toBe(false);
-    expect(caseLifecycleService.availableActions("Resolved").reopen).toBe(true);
-    expect(caseLifecycleService.availableActions("Resolved").close).toBe(true);
+    expect(caseLifecycleService.availableActions("Received").startReview).toBe(true);
+    expect(caseLifecycleService.availableActions("Received").close).toBe(false);
+    expect(caseLifecycleService.availableActions("Closed").reopen).toBe(true);
+    expect(caseLifecycleService.availableActions("Closed").close).toBe(false);
   });
 
   it("moves a case through review, action, resolution and close", async () => {
-    const rows = await caseManagementService.list({ status: ["Submitted"] });
+    const rows = await caseManagementService.list({ status: ["Received"] });
     const id = rows[0]!.id;
     const reviewed = await caseManagementService.startReview(id);
-    expect(reviewed.status).toBe("Under Review");
+    expect(reviewed.status).toBe("Triage");
     const acted = await caseManagementService.recordAction(id, {
       type: "Action Taken",
       note: "Site visit recorded",
@@ -261,11 +270,9 @@ describe("mock services", () => {
     const proposed = await caseManagementService.proposeResolution(id, {
       summary: "Pay the remaining agreed wage.",
     });
-    expect(proposed.status).toBe("Proposed Resolution");
+    expect(proposed.status).toBe("Outcome Verification");
     const resolved = await caseManagementService.resolve(id);
-    expect(resolved.status).toBe("Resolved");
-    const closed = await caseManagementService.close(id, "Worker paid remaining amount");
-    expect(closed.status).toBe("Closed");
+    expect(resolved.status).toBe("Closed");
     const reopened = await caseManagementService.reopen(id, "Worker not satisfied");
     expect(reopened.status).toBe("Reopened");
     expect(reopened.actions.some((item) => item.note === "Worker not satisfied")).toBe(true);
@@ -319,12 +326,12 @@ describe("mock services", () => {
       stepId: "review",
       category: "WAG",
       privacyMode: "CONF",
-      reporterIdentity: { mode: "cnic", cnicLast4: "4567", cnicVerified: false },
+      reporterIdentity: { mode: "cnic", cnicLast4: "4567", phoneLast4: "4567", cnicVerified: false },
       incident: {
         whenLabel: "today",
         immediateDanger: false,
         othersAffected: "individual",
-        structuredAnswers: {},
+        structuredAnswers: { contactPreference: "do-not-initiate" },
       },
       location: { province: "Punjab", district: "Multan", villageLabel: "Chak Demo 12", placeLabel: "Chak Demo 12", source: "manual" },
       evidence: [],
@@ -341,7 +348,7 @@ describe("mock services", () => {
       updatedAt: "2026-08-19T12:00:00.000Z",
     });
     expect(created.trackingId).toMatch(/^KP-26-\d{6}$/);
-    expect(created.status).toBe("Submitted");
+    expect(created.status).toBe("Received");
     expect(created.voice?.localUri).toBe("file://local/voice.m4a");
     expect(created.ai?.summaryEn).toBe("Paid less than agreed.");
     expect(created.priority).toBe("High");
@@ -395,26 +402,26 @@ describe("mock services", () => {
     expect(created.incident.structuredAnswers).not.toHaveProperty("identityValue");
   });
 
-  it("reopens a resolved case when the worker is not satisfied", async () => {
+  it("records dissatisfaction without reopening a closed case", async () => {
     const created = await complaintService.createFromDraft({
       id: "draft-3",
       stepId: "review",
       category: "SAN",
       privacyMode: "IDEN",
-      reporterIdentity: { mode: "cnic", cnicLast4: "4567", cnicVerified: false },
-      incident: { whenLabel: "today", immediateDanger: false, othersAffected: "individual", structuredAnswers: {} },
+      reporterIdentity: { mode: "cnic", cnicLast4: "4567", phoneLast4: "4567", cnicVerified: false },
+      incident: { whenLabel: "today", immediateDanger: false, othersAffected: "individual", structuredAnswers: { contactPreference: "do-not-initiate" } },
       location: { province: "Sindh", district: "Sanghar", placeLabel: "Cotton field", source: "manual" },
       evidence: [],
       voice: null,
       updatedAt: "2026-08-19T12:00:00.000Z",
     });
-    await getMobileRepository().save({ ...created, status: "Resolved" });
+    await getMobileRepository().save({ ...created, status: "Closed" });
     await complaintService.submitWorkerFeedback(created.id, {
       outcome: "unresolved",
       submittedAt: DEMO_NOW_ISO,
     });
     const after = await complaintService.getById(created.id);
-    expect(after?.status).toBe("Reopened");
+    expect(after?.status).toBe("Closed");
     expect(after?.workerFeedback?.outcome).toBe("unresolved");
   });
 
@@ -431,12 +438,12 @@ describe("mock services", () => {
       stepId: "review" as const,
       category: "WAG" as const,
       privacyMode: "CONF" as const,
-      reporterIdentity: { mode: "cnic" as const, cnicLast4: "4567", cnicVerified: false },
+      reporterIdentity: { mode: "cnic" as const, cnicLast4: "4567", phoneLast4: "4567", cnicVerified: false },
       incident: {
         whenLabel: "today",
         immediateDanger: false,
         othersAffected: "individual" as const,
-        structuredAnswers: {},
+        structuredAnswers: { contactPreference: "do-not-initiate" },
       },
       location: { province: "Punjab", district: "Multan", placeLabel: "Cotton field", source: "manual" as const },
       evidence: [],
@@ -450,8 +457,8 @@ describe("mock services", () => {
       updatedAt: "2026-08-19T12:00:00.000Z",
     };
     const saved = await complaintService.createFromDraft(draft);
-    expect(saved.status).toBe("Draft");
-    expect(workerFacingStatusKey[saved.status]).toBe("status.worker.savedOnDevice");
+    expect(saved.status).toBe("Received");
+    expect(workerFacingStatusKey[saved.status]).toBe("status.worker.received");
     expect(saved.voice?.localUri).toBe("file://local/voice.m4a");
     expect(await offlineQueueService.pendingCount()).toBe(1);
     const again = await complaintService.createFromDraft(draft);
@@ -462,7 +469,7 @@ describe("mock services", () => {
     expect(result.failed).toBe(0);
     expect(getDemoFlags().connectivity).toBe("online");
     const sent = await complaintService.getById(saved.id);
-    expect(sent?.status).toBe("Submitted");
+    expect(sent?.status).toBe("Received");
     expect(sent?.actions.some((item) => item.type === "Complaint Received")).toBe(true);
     expect(await offlineQueueService.pendingCount()).toBe(0);
     const retry = await demoService.processQueue();

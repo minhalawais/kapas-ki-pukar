@@ -103,6 +103,32 @@ jobs:
         run: docker build -f apps/api/Dockerfile -t kapas-api:ci .
       - name: Build worker image
         run: docker build -f apps/worker/Dockerfile -t kapas-worker:ci .
+      - name: Build portal image
+        run: |
+          docker build -f apps/puwf-portal/Dockerfile \
+            --build-arg NEXT_PUBLIC_API_URL=http://127.0.0.1:4000 \
+            -t kapas-portal:ci .
+      - name: Build migrate image
+        run: docker build -f packages/database/Dockerfile -t kapas-migrate:ci .
+      - name: Build pinned MinIO image from official source
+        run: docker build -f deploy/minio/Dockerfile -t kapas-minio:ci deploy/minio
+      - name: Record immutable image digests
+        run: |
+          docker image inspect kapas-api:ci --format='api={{index .RepoDigests 0}} {{.Id}}' || docker image inspect kapas-api:ci --format='api={{.Id}}'
+          docker image inspect kapas-worker:ci --format='worker={{index .RepoDigests 0}} {{.Id}}' || docker image inspect kapas-worker:ci --format='worker={{.Id}}'
+          docker image inspect kapas-portal:ci --format='portal={{index .RepoDigests 0}} {{.Id}}' || docker image inspect kapas-portal:ci --format='portal={{.Id}}'
+          docker image inspect kapas-minio:ci --format='minio={{index .RepoDigests 0}} {{.Id}}' || docker image inspect kapas-minio:ci --format='minio={{.Id}}'
+      - name: Generate source SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          artifact-name: kapas-source-sbom.spdx.json
+          output-file: kapas-source-sbom.spdx.json
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase10-sbom
+          path: kapas-source-sbom.spdx.json
       - name: Scan API image
         uses: aquasecurity/trivy-action@v0.36.0
         with:
@@ -119,3 +145,16 @@ jobs:
           exit-code: "1"
           severity: CRITICAL,HIGH
           ignore-unfixed: true
+      - name: Scan MinIO image
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: kapas-minio:ci
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+      - name: Validate production Compose definition
+        run: |
+          docker compose --env-file deploy/production/.env.example -f deploy/production/compose.yml config --quiet
+          docker compose --env-file deploy/production/.env.example \
+            -f deploy/production/compose.yml -f deploy/production/compose.nginx-edge.yml config --quiet

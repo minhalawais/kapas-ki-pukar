@@ -7,7 +7,7 @@ export function createGs05(): Complaint {
     index: 105,
     categoryCode: "FOL",
     subcategoryCode: "FOL-THR",
-    status: "Under Review",
+    status: "Triage",
     priority: "Critical",
     privacyMode: "CONF",
     reporterType: "self",

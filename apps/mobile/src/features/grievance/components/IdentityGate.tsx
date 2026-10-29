@@ -19,10 +19,15 @@ import { fontFamily, mobileType, radiusUsage, semanticColors } from "../../../th
 interface Props {
   busy?: boolean;
   error?: boolean;
-  onSubmitIdentity: (identity: { kind: "cnic" | "phone"; value: string; reveal: boolean }) => void;
+  onSubmitIdentity: (identity: {
+    phone: string;
+    cnic?: string;
+    privacyMode: "CONF" | "IDEN";
+  }) => void;
+  onSubmitAnonymous: () => void;
 }
 
-export function IdentityGate({ busy, error, onSubmitIdentity }: Props) {
+export function IdentityGate({ busy, error, onSubmitIdentity, onSubmitAnonymous }: Props) {
   const locale = useLocaleStore((state) => state.locale);
   const voiceGuidanceEnabled = useVoiceGuidanceStore((state) => state.enabled);
   const [mode, setMode] = useState<"choice" | "cnic" | "phone" | "privacy">("choice");
@@ -47,13 +52,14 @@ export function IdentityGate({ busy, error, onSubmitIdentity }: Props) {
     setIdentityKind(newMode);
     setMode(newMode);
     if (locale === "ur" && voiceGuidanceEnabled) {
-      void promptAudioService.playPrompt(newMode === "cnic" ? "WF-identity-cnic" : "WF-identity-phone");
+      void promptAudioService.playPrompt(
+        newMode === "cnic" ? "WF-identity-cnic" : "WF-identity-phone",
+      );
     }
   };
 
-  const identityValue = identityKind === "cnic" ? cnic : phone;
-  const submitWithPrivacy = (reveal: boolean) => {
-    onSubmitIdentity({ kind: identityKind, value: identityValue, reveal });
+  const submitWithPrivacy = (privacyMode: "CONF" | "IDEN") => {
+    onSubmitIdentity({ phone, ...(identityKind === "cnic" ? { cnic } : {}), privacyMode });
   };
 
   const renderHeader = (variant: "identity" | "privacy" = "identity") => (
@@ -67,7 +73,10 @@ export function IdentityGate({ busy, error, onSubmitIdentity }: Props) {
           textAlign,
         }}
       >
-        {t(locale, variant === "privacy" ? "grievance.privacy.prompt" : "grievance.identity.prompt")}
+        {t(
+          locale,
+          variant === "privacy" ? "grievance.privacy.prompt" : "grievance.identity.prompt",
+        )}
       </Text>
       <Text
         style={{
@@ -99,6 +108,13 @@ export function IdentityGate({ busy, error, onSubmitIdentity }: Props) {
           tone="secondary"
           disabled={busy}
           onPress={() => handleSelectMode("phone")}
+        />
+        <PrimaryCta
+          labelKey="grievance.identity.continueAnonymous"
+          icon="eye-off-outline"
+          tone="secondary"
+          disabled={busy}
+          onPress={onSubmitAnonymous}
         />
         {error ? (
           <Text
@@ -132,7 +148,10 @@ export function IdentityGate({ busy, error, onSubmitIdentity }: Props) {
           style={{
             minHeight: 62,
             borderWidth: 1.5,
-            borderColor: phone.length > 0 && !validPhone ? semanticColors.critical : semanticColors.borderEssential,
+            borderColor:
+              phone.length > 0 && !validPhone
+                ? semanticColors.critical
+                : semanticColors.borderEssential,
             borderRadius: radiusUsage.mobileCard,
             backgroundColor: semanticColors.surface,
             color: semanticColors.textPrimary,
@@ -181,7 +200,7 @@ export function IdentityGate({ busy, error, onSubmitIdentity }: Props) {
           icon="arrow-back-outline"
           tone="secondary"
           disabled={busy}
-          onPress={() => setMode("choice")}
+          onPress={() => setMode(identityKind === "cnic" ? "cnic" : "choice")}
         />
       </View>
     );
@@ -192,18 +211,18 @@ export function IdentityGate({ busy, error, onSubmitIdentity }: Props) {
       <View style={{ gap: 14 }}>
         {renderHeader("privacy")}
         <PrimaryCta
-          labelKey="grievance.identity.revealIdentity"
+          labelKey="grievance.identity.keepConfidential"
           icon="person-outline"
           disabled={busy}
           loading={busy}
-          onPress={() => submitWithPrivacy(true)}
+          onPress={() => submitWithPrivacy("CONF")}
         />
         <PrimaryCta
-          labelKey="grievance.identity.reportAnonymous"
-          icon="eye-off-outline"
+          labelKey="grievance.identity.allowDisclosure"
+          icon="person-outline"
           tone="secondary"
           disabled={busy}
-          onPress={() => submitWithPrivacy(false)}
+          onPress={() => submitWithPrivacy("IDEN")}
         />
         {error ? (
           <Text
@@ -236,7 +255,10 @@ export function IdentityGate({ busy, error, onSubmitIdentity }: Props) {
         style={{
           minHeight: 62,
           borderWidth: 1.5,
-          borderColor: cnic.length > 0 && !validCnic ? semanticColors.critical : semanticColors.borderEssential,
+          borderColor:
+            cnic.length > 0 && !validCnic
+              ? semanticColors.critical
+              : semanticColors.borderEssential,
           borderRadius: radiusUsage.mobileCard,
           backgroundColor: semanticColors.surface,
           color: semanticColors.textPrimary,
@@ -278,7 +300,7 @@ export function IdentityGate({ busy, error, onSubmitIdentity }: Props) {
         icon="card-outline"
         disabled={!validCnic}
         loading={busy}
-        onPress={() => setMode("privacy")}
+        onPress={() => setMode("phone")}
       />
       <PrimaryCta
         labelKey="grievance.identity.changeOption"

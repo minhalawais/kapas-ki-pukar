@@ -79,7 +79,7 @@ export const caseManagementService = {
     return getPortalRepository().get(id);
   },
   startReview(id: string): Promise<Complaint> {
-    return mutate(id, "Under Review", (c) => c);
+    return mutate(id, "Triage", (c) => c);
   },
   changePriority(id: string, priority: Priority, reason?: string): Promise<Complaint> {
     return mutate(id, null, (c) => {
@@ -92,27 +92,36 @@ export const caseManagementService = {
   },
   recordContact(id: string, data: ContactAction): Promise<Complaint> {
     return mutate(id, null, (c) =>
-      appendAction(c, "Worker Contact Attempted", data.note ?? data.channel, nowIso()),
+      appendAction(c, "Contact Attempted", data.note ?? data.channel, nowIso()),
     );
   },
-  requestInformation(id: string, note: string): Promise<Complaint> {
-    return mutate(id, null, (c) => appendAction(c, "More Information Requested", note, nowIso(), "worker-visible"));
-  },
   addFinding(id: string, finding: string): Promise<Complaint> {
-    return mutate(id, null, (c) => appendAction(c, "Investigation Finding Added", finding, nowIso()));
+    return mutate(id, null, (c) => appendAction(c, "Investigation Finding Recorded", finding, nowIso()));
   },
   recordAction(id: string, action: ActionInput): Promise<Complaint> {
     return mutate(id, null, (c) => {
       const at = nowIso();
       const note = `${action.type}: ${action.note}`;
-      if (c.status === "Under Review") {
+      if (c.status === "Triage") {
+        const investigated = caseLifecycleService.transition(c, "Investigation", {
+          at,
+          actorRole: "puwf-grievance-manager",
+          note: "Mock triage completed",
+        });
+        return caseLifecycleService.transition(investigated, "Action in Progress", {
+          at,
+          actorRole: "puwf-grievance-manager",
+          note,
+        });
+      }
+      if (c.status === "Investigation") {
         return caseLifecycleService.transition(c, "Action in Progress", {
           at,
           actorRole: "puwf-grievance-manager",
           note,
         });
       }
-      return appendAction(c, "Action Taken", note, at, "worker-visible");
+      return appendAction(c, "Action Updated", note, at, "worker-visible");
     });
   },
   escalate(id: string, reason: string): Promise<Complaint> {
@@ -122,7 +131,7 @@ export const caseManagementService = {
     const at = nowIso();
     return mutate(
       id,
-      "Proposed Resolution",
+      "Outcome Verification",
       (c) => ({
         ...c,
         resolution: { summary: resolution.summary, proposedAt: at },
@@ -134,7 +143,7 @@ export const caseManagementService = {
     const at = nowIso();
     return mutate(
       id,
-      "Resolved",
+      "Closed",
       (c) => ({
         ...c,
         resolution: {

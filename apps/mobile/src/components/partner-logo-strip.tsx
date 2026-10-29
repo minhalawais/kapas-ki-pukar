@@ -1,4 +1,4 @@
-import { Image, View, type ImageSourcePropType } from "react-native";
+import { Image, Linking, Pressable, View, type ImageSourcePropType } from "react-native";
 
 import FOS_LOGO from "../../assets/FOS_logo.png";
 import ILO_LOGO from "../../assets/ilo_logo.png";
@@ -32,8 +32,12 @@ export function PartnerLogoStrip({ compact = false }: { compact?: boolean }) {
       }}
     >
       {partnerLogos.map((item) => (
-        <View
+        <Pressable
           key={item.label}
+          accessibilityRole={item.label === "Fruit of Sustainability" ? "link" : "image"}
+          accessibilityLabel={item.label === "Fruit of Sustainability" ? "Fruit of Sustainability website" : item.label}
+          disabled={item.label !== "Fruit of Sustainability"}
+          onPress={() => void Linking.openURL("https://fruitofsustainability.com")}
           style={{
             flex: 1,
             height: compact ? 56 : 58,
@@ -53,7 +57,7 @@ export function PartnerLogoStrip({ compact = false }: { compact?: boolean }) {
             accessibilityIgnoresInvertColors
             style={{ width: "100%", height: "100%" }}
           />
-        </View>
+        </Pressable>
       ))}
     </View>
   );

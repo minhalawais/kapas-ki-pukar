@@ -4,7 +4,7 @@ export const HISTORY_KEY = "_history";
 export const INTRO_NODE_ID = "identity";
 export const REVIEW_NODE_ID = "review";
 
-export const workflowSections = ["intro", "category", "details", "facts", "safety", "ai", "review"] as const;
+export const workflowSections = ["intro", "category", "details", "facts", "safety", "review"] as const;
 export type WorkflowSection = (typeof workflowSections)[number];
 
 export type AnswerType =

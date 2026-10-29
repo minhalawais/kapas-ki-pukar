@@ -19,12 +19,13 @@ import { cn } from "@/lib/utils";
 import { useLocaleStore } from "@/stores/locale-store";
 
 const statusConfig: Record<CaseStatus, { icon: typeof Clock3; className: string }> = {
-  Draft: { icon: CircleDot, className: "bg-page text-muted" },
-  Submitted: { icon: CircleDot, className: "bg-[var(--surface-soft-blue)] text-info" },
-  "Under Review": { icon: Eye, className: "bg-[var(--surface-soft-teal)] text-[var(--brand-fos-teal-dark)]" },
+  Received: { icon: CircleDot, className: "bg-[var(--surface-soft-blue)] text-info" },
+  Triage: { icon: Eye, className: "bg-[var(--surface-soft-teal)] text-[var(--brand-fos-teal-dark)]" },
+  Verification: { icon: Clock3, className: "bg-[var(--surface-soft-gold)] text-[#81510B]" },
+  Investigation: { icon: Eye, className: "bg-[var(--surface-soft-teal)] text-[var(--brand-fos-teal-dark)]" },
   "Action in Progress": { icon: Clock3, className: "bg-[var(--surface-soft-teal)] text-[var(--brand-fos-teal-dark)]" },
-  "Proposed Resolution": { icon: CheckCircle2, className: "bg-[var(--surface-soft-teal)] text-success" },
-  Resolved: { icon: CheckCircle2, className: "bg-[#E5F4EB] text-success" },
+  Escalated: { icon: ShieldAlert, className: "bg-[var(--surface-soft-gold)] text-[#9B5B08]" },
+  "Outcome Verification": { icon: CheckCircle2, className: "bg-[var(--surface-soft-teal)] text-success" },
   Closed: { icon: CheckCircle2, className: "bg-page text-muted" },
   Reopened: { icon: RotateCcw, className: "bg-[var(--surface-soft-blue)] text-info" },
 };

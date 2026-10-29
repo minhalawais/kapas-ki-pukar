@@ -3,7 +3,8 @@
 import { t } from "@kapas/localization";
 import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { type FormEvent, useState } from "react";
 
 import { BrandMark } from "@/components/layout/BrandMark";
@@ -11,18 +12,41 @@ import { PortalFooter } from "@/components/layout/PortalFooter";
 import { Button } from "@/components/ui/button";
 import { useLocaleStore } from "@/stores/locale-store";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo") ?? "/dashboard";
   const locale = useLocaleStore((s) => s.locale);
   const setLocale = useLocaleStore((s) => s.setLocale);
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("manager@puwf.org.pk");
-  const [password, setPassword] = useState("demo-access");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const isUrdu = locale === "ur";
 
-  function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    router.replace("/dashboard");
+    setSubmitting(true);
+    setError(null);
+    try {
+      const response = await fetch(
+        "/api/v1/auth/login",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ loginIdentifier: email, password }),
+        },
+      );
+      if (!response.ok) throw new Error("Unable to sign in with those credentials.");
+      const destination = returnTo.startsWith("/") ? returnTo : "/dashboard";
+      router.replace(destination);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Unable to sign in.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -72,10 +96,14 @@ export default function LoginPage() {
               <p className="inline-flex rounded-full border border-white/25 bg-white/12 px-3 py-1 text-xs font-semibold uppercase tracking-normal text-white/90">
                 {t(locale, "portal.login.eyebrow")}
               </p>
-              <h1 className={`mt-4 max-w-lg text-3xl font-semibold leading-tight text-white sm:mt-5 sm:text-5xl ${isUrdu ? "font-urdu" : ""}`}>
+              <h1
+                className={`mt-4 max-w-lg text-3xl font-semibold leading-tight text-white sm:mt-5 sm:text-5xl ${isUrdu ? "font-urdu" : ""}`}
+              >
                 {t(locale, "portal.login.heroTitle")}
               </h1>
-              <p className={`mt-3 max-w-lg text-sm leading-6 text-white/82 sm:mt-4 sm:text-base sm:leading-7 ${isUrdu ? "font-urdu text-base sm:text-lg" : ""}`}>
+              <p
+                className={`mt-3 max-w-lg text-sm leading-6 text-white/82 sm:mt-4 sm:text-base sm:leading-7 ${isUrdu ? "font-urdu text-base sm:text-lg" : ""}`}
+              >
                 {t(locale, "portal.login.heroBody")}
               </p>
             </div>
@@ -85,10 +113,17 @@ export default function LoginPage() {
         <section className="flex flex-col justify-center rounded-card border border-border bg-surface p-5 shadow-[0_18px_48px_rgba(23,35,30,0.11)] sm:p-7 lg:min-h-[620px] xl:min-h-[680px]">
           <div>
             <div className="mb-8 flex justify-center">
-              <div className="flex items-center justify-center gap-4" aria-label={t(locale, "app.name")}>
+              <div
+                className="flex items-center justify-center gap-4"
+                aria-label={t(locale, "app.name")}
+              >
                 <picture className="block shrink-0 leading-none">
                   <source srcSet="/brand/logo-mark.webp" type="image/webp" />
-                  <img src="/brand/logo-mark.png" alt="" className="h-20 w-20 object-contain sm:h-24 sm:w-24" />
+                  <img
+                    src="/brand/logo-mark.png"
+                    alt=""
+                    className="h-20 w-20 object-contain sm:h-24 sm:w-24"
+                  />
                 </picture>
                 <div className="text-start leading-none">
                   <p className="text-[40px] font-extrabold uppercase leading-none tracking-normal text-action sm:text-[46px]">
@@ -101,14 +136,19 @@ export default function LoginPage() {
               </div>
             </div>
             <div>
-              <h2 className={`text-2xl font-semibold text-ink ${isUrdu ? "font-urdu" : ""}`}>{t(locale, "portal.login.title")}</h2>
+              <h2 className={`text-2xl font-semibold text-ink ${isUrdu ? "font-urdu" : ""}`}>
+                {t(locale, "portal.login.title")}
+              </h2>
             </div>
 
             <form className="mt-7 space-y-4" onSubmit={submit}>
               <label className="block text-xs font-semibold text-muted">
                 {t(locale, "portal.login.email")}
                 <span className="relative mt-1 block">
-                  <Mail size={17} className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-muted" />
+                  <Mail
+                    size={17}
+                    className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-muted"
+                  />
                   <input
                     type="email"
                     value={email}
@@ -124,7 +164,10 @@ export default function LoginPage() {
               <label className="block text-xs font-semibold text-muted">
                 {t(locale, "portal.login.password")}
                 <span className="relative mt-1 block">
-                  <LockKeyhole size={17} className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-muted" />
+                  <LockKeyhole
+                    size={17}
+                    className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-muted"
+                  />
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
@@ -138,7 +181,10 @@ export default function LoginPage() {
                     type="button"
                     className="absolute end-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-control text-muted hover:bg-surface hover:text-ink"
                     onClick={() => setShowPassword((current) => !current)}
-                    aria-label={t(locale, showPassword ? "portal.login.hidePassword" : "portal.login.showPassword")}
+                    aria-label={t(
+                      locale,
+                      showPassword ? "portal.login.hidePassword" : "portal.login.showPassword",
+                    )}
                   >
                     {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                   </button>
@@ -147,7 +193,11 @@ export default function LoginPage() {
 
               <div className="flex items-center justify-between gap-3 text-xs">
                 <label className="inline-flex items-center gap-2 text-muted">
-                  <input type="checkbox" className="h-4 w-4 rounded border-border accent-[var(--action-primary)]" defaultChecked />
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-border accent-[var(--action-primary)]"
+                    defaultChecked
+                  />
                   {t(locale, "portal.login.keepSignedIn")}
                 </label>
                 <button type="button" className="font-semibold text-action hover:underline">
@@ -156,9 +206,14 @@ export default function LoginPage() {
               </div>
 
               <Button type="submit" className="h-11 w-full text-sm">
-                {t(locale, "portal.login.submit")}
+                {submitting ? "Signing in…" : t(locale, "portal.login.submit")}
                 <ArrowRight size={17} className={isUrdu ? "rotate-180" : ""} />
               </Button>
+              {error ? (
+                <p role="alert" className="mt-3 text-sm text-red-700">
+                  {error}
+                </p>
+              ) : null}
             </form>
 
             <div className="mt-8 border-t border-border pt-5">
@@ -176,12 +231,18 @@ export default function LoginPage() {
                 />
               </div>
             </div>
-
           </div>
-
         </section>
       </div>
       <PortalFooter fullWidth />
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }

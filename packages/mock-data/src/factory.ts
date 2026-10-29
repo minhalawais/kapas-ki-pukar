@@ -72,34 +72,42 @@ export function timelineForStatus(status: CaseStatus, submittedAt: string): Case
     return d.toISOString();
   };
   const events: CaseAction[] = [receivedAction(submittedAt)];
-  if (status === "Submitted" || status === "Draft") {
+  if (status === "Received") {
     return events;
   }
-  events.push(action("Review Started", day(1)));
-  if (status === "Under Review") {
+  events.push(action("Triage Completed", day(1)));
+  if (status === "Triage") {
     return events;
   }
-  events.push(action("Worker Contact Attempted", day(2)));
+  if (status === "Verification") {
+    events.push(action("Contact Attempted", day(2), "PUWF attempted safe contact."));
+    return events;
+  }
+  if (status === "Escalated") {
+    events.push(action("Escalated", day(2), "Additional review requested."));
+    return events;
+  }
+  events.push(action("Contact Successful", day(2)));
+  if (status === "Investigation") {
+    events.push(action("Investigation Finding Recorded", day(3)));
+    return events;
+  }
   if (status === "Action in Progress") {
-    events.push(action("Action Taken", day(3), "Site follow-up recorded."));
+    events.push(action("Action Planned", day(3), "Site follow-up recorded."));
     return events;
   }
-  events.push(action("Investigation Finding Added", day(3)));
-  events.push(action("Action Taken", day(4)));
-  events.push(action("Proposed Resolution", day(5), "Remedy proposed."));
-  if (status === "Proposed Resolution") {
-    return events;
-  }
-  events.push(action("Resolved", day(6)));
-  if (status === "Resolved") {
+  events.push(action("Investigation Finding Recorded", day(3)));
+  events.push(action("Action Planned", day(4)));
+  events.push(action("Outcome Recorded", day(5), "Outcome recorded."));
+  if (status === "Outcome Verification") {
     return events;
   }
   if (status === "Reopened") {
-    events.push(action("Closed", day(8)));
-    events.push(action("Reopened", day(10), "Worker not satisfied."));
+    events.push(action("Complaint Closed", day(8)));
+    events.push(action("Complaint Reopened", day(10), "PUWF reopened the case."));
     return events;
   }
-  events.push(action("Closed", day(8)));
+  events.push(action("Complaint Closed", day(8)));
   return events;
 }
 

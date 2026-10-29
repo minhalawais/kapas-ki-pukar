@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import type { AIAnalysis, Evidence, VoiceEvidence } from "@kapas/domain";
+import type { Evidence, VoiceEvidence } from "@kapas/domain";
 import { t, type MessageKey } from "@kapas/localization";
 import { workflowPromptId } from "@kapas/speech";
 import { Pressable, Text, TextInput, View } from "react-native";
@@ -7,13 +7,11 @@ import { Pressable, Text, TextInput, View } from "react-native";
 import { PrimaryCta } from "../../../components/primary-cta";
 import { ScreenNotice } from "../../../components/screen-notice";
 import { useAutoPromptId } from "../../../hooks/use-prompt-playback";
-import { useReducedMotion } from "../../../hooks/use-reduced-motion";
 import { isRTL } from "../../../i18n/rtl";
+import type { SyncMediaItem } from "../../../services/productionSyncService";
 import { useLocaleStore } from "../../../stores/localeStore";
 import { fontFamily, mobileType, semanticColors } from "../../../theme/tokens";
-import { AIUnderstandingCard } from "../../voice/AIUnderstandingCard";
 import { VoiceRecorder } from "../../voice/VoiceRecorder";
-import { WaveformPlaceholder } from "../../voice/WaveformPlaceholder";
 import { asString } from "../engine";
 import type { AnswerValue, QuestionNode } from "../types";
 
@@ -40,14 +38,28 @@ const categoryIcons = {
   OTH: "ellipsis-horizontal",
 } as const;
 
+function evidenceErrorMessage(code: string): MessageKey {
+  const messages: Record<string, MessageKey> = {
+    permission_denied: "grievance.evidence.denied",
+    unsupported_type: "grievance.evidence.unsupported",
+    empty_file: "grievance.evidence.empty",
+    file_too_large: "grievance.evidence.tooLarge",
+    attachment_count_limit: "grievance.evidence.countLimit",
+    aggregate_limit: "grievance.evidence.aggregateLimit",
+    local_storage_failure: "grievance.evidence.storageFailure",
+  };
+  return messages[code] ?? "common.error";
+}
+
 interface Props {
   node: QuestionNode;
   selected?: AnswerValue;
   reviewLines?: { labelKey: MessageKey; value: string; editNodeId?: string }[];
   voice?: VoiceEvidence | null;
-  analysis?: AIAnalysis | null;
   evidence?: Evidence[];
-  evidenceError?: boolean;
+  evidenceError?: string | null;
+  evidenceBusy?: boolean;
+  mediaProgress?: SyncMediaItem[];
   identityBusy?: boolean;
   identityError?: boolean;
   locationCaptureStatus?: LocationCaptureStatus;
@@ -59,7 +71,12 @@ interface Props {
   onAddDocument?: () => void;
   onRemoveEvidence?: (id: string) => void;
   onEditSection?: (nodeId: string) => void;
-  onSubmitIdentity?: (identity: { kind: "cnic" | "phone"; value: string; reveal: boolean }) => void;
+  onSubmitIdentity?: (identity: {
+    phone: string;
+    cnic?: string;
+    privacyMode: "CONF" | "IDEN";
+  }) => void;
+  onSubmitAnonymous?: () => void;
   onRequestCurrentLocation?: () => void;
   onConfirmCurrentLocation?: () => void;
   onManualLocation?: () => void;
@@ -70,9 +87,10 @@ export function QuestionRenderer({
   selected,
   reviewLines,
   voice,
-  analysis,
   evidence,
   evidenceError,
+  evidenceBusy,
+  mediaProgress,
   identityBusy,
   identityError,
   locationCaptureStatus = "idle",
@@ -85,6 +103,7 @@ export function QuestionRenderer({
   onRemoveEvidence,
   onEditSection,
   onSubmitIdentity,
+  onSubmitAnonymous,
   onRequestCurrentLocation,
   onConfirmCurrentLocation,
   onManualLocation,
@@ -93,10 +112,13 @@ export function QuestionRenderer({
   const family = isRTL(locale) ? fontFamily.urduUi : fontFamily.ui;
   const headingFamily = isRTL(locale) ? fontFamily.urduBold : fontFamily.uiBold;
   const align = isRTL(locale) ? "right" : "left";
-  const reduceMotion = useReducedMotion();
   const audio = useAutoPromptId(workflowPromptId(node.id));
   const selectedText = asString(selected);
   const selectedList = Array.isArray(selected) ? selected : [];
+  const mediaTotal = mediaProgress?.reduce((sum, item) => sum + item.totalBytes, 0) ?? 0;
+  const mediaSent = mediaProgress?.reduce((sum, item) => sum + item.uploadedBytes, 0) ?? 0;
+  const mediaUploaded = mediaProgress?.filter((item) => item.state === "uploaded").length ?? 0;
+  const mediaFailed = mediaProgress?.filter((item) => item.state === "missing" || item.state === "rejected").length ?? 0;
 
   if (node.id === "category" && node.options) {
     return (
@@ -116,8 +138,21 @@ export function QuestionRenderer({
     <View style={{ gap: 18 }}>
       {node.id === "intro" ? (
         <View style={{ alignItems: "center", paddingVertical: 8 }}>
-          <View style={{ width: 92, height: 92, borderRadius: 46, backgroundColor: semanticColors.aiSurface, alignItems: "center", justifyContent: "center" }}>
-            <Ionicons name="chatbubble-ellipses" size={44} color={semanticColors.voiceActiveStrong} />
+          <View
+            style={{
+              width: 92,
+              height: 92,
+              borderRadius: 46,
+              backgroundColor: semanticColors.aiSurface,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Ionicons
+              name="chatbubble-ellipses"
+              size={44}
+              color={semanticColors.voiceActiveStrong}
+            />
           </View>
         </View>
       ) : null}
@@ -134,7 +169,10 @@ export function QuestionRenderer({
           {t(locale, node.promptKey as MessageKey)}
         </Text>
       ) : null}
-      {node.helperKey && node.id !== "danger-notice" && node.type !== "voice" && node.type !== "cnic" ? (
+      {node.helperKey &&
+      node.id !== "danger-notice" &&
+      node.type !== "voice" &&
+      node.type !== "cnic" ? (
         <Text
           style={{
             color: semanticColors.textPrimary,
@@ -148,10 +186,18 @@ export function QuestionRenderer({
         </Text>
       ) : null}
       {node.id === "danger-notice" ? <EmergencyNotice /> : null}
-      {node.type === "cnic" && onSubmitIdentity ? (
-        <IdentityGate busy={identityBusy} error={identityError} onSubmitIdentity={onSubmitIdentity} />
+      {node.type === "cnic" && onSubmitIdentity && onSubmitAnonymous ? (
+        <IdentityGate
+          busy={identityBusy}
+          error={identityError}
+          onSubmitIdentity={onSubmitIdentity}
+          onSubmitAnonymous={onSubmitAnonymous}
+        />
       ) : null}
-      {node.type === "current-location" && onRequestCurrentLocation && onConfirmCurrentLocation && onManualLocation ? (
+      {node.type === "current-location" &&
+      onRequestCurrentLocation &&
+      onConfirmCurrentLocation &&
+      onManualLocation ? (
         <LocationCapture
           status={locationCaptureStatus}
           address={detectedAddress}
@@ -168,31 +214,32 @@ export function QuestionRenderer({
           onBusyChange={onVoiceBusyChange}
         />
       ) : null}
-      {node.type === "ai-processing" ? (
-        <WaveformPlaceholder active reduceMotion={reduceMotion} />
-      ) : null}
-      {node.type === "ai-understanding" ? <AIUnderstandingCard analysis={analysis} /> : null}
       {node.type === "evidence" ? (
         <View style={{ gap: 12 }}>
           {(evidence ?? []).map((item) => (
             <EvidenceCard
               key={item.id}
               item={item}
+              progress={mediaProgress?.find((entry) => entry.id === item.id)}
               onRemove={() => onRemoveEvidence?.(item.id)}
             />
           ))}
-          {evidenceError ? <ScreenNotice messageKey="grievance.evidence.denied" tone="error" /> : null}
+          {evidenceError ? (
+            <ScreenNotice messageKey={evidenceErrorMessage(evidenceError)} tone="error" />
+          ) : null}
           <PrimaryCta
             labelKey="grievance.evidence.addPhoto"
             tone="secondary"
             icon="camera"
             onPress={() => onAddPhoto?.()}
+            disabled={evidenceBusy}
           />
           <PrimaryCta
             labelKey="grievance.evidence.addDocument"
             tone="secondary"
             icon="document-attach"
             onPress={() => onAddDocument?.()}
+            disabled={evidenceBusy}
           />
         </View>
       ) : null}
@@ -214,7 +261,12 @@ export function QuestionRenderer({
         <TextInput
           value={selectedText ?? ""}
           onChangeText={onSelect}
-          placeholder={t(locale, node.id === "where-city" ? "grievance.where.cityPlaceholder" : "grievance.where.placePlaceholder")}
+          placeholder={t(
+            locale,
+            node.id === "where-city"
+              ? "grievance.where.cityPlaceholder"
+              : "grievance.where.placePlaceholder",
+          )}
           placeholderTextColor={semanticColors.textSecondary}
           accessibilityLabel={t(locale, node.promptKey as MessageKey)}
           style={{
@@ -245,7 +297,9 @@ export function QuestionRenderer({
                 key={option.value}
                 labelKey={option.labelKey as MessageKey}
                 selected={isSelected}
-                tile={node.id === "category" || node.id === "category-more"}
+                tile={
+                  locale !== "ur" && (node.id === "category" || node.id === "category-more")
+                }
                 icon={categoryIcons[option.value as keyof typeof categoryIcons]}
                 onPress={() => {
                   if (node.type === "multi") {
@@ -270,8 +324,27 @@ export function QuestionRenderer({
       ) : null}
       {node.type === "review" && reviewLines ? (
         <View style={{ gap: 12 }}>
+          {mediaProgress?.length ? (
+            <View style={{ padding: 14, gap: 5, backgroundColor: semanticColors.surfaceMuted, borderRadius: 8 }} accessibilityLiveRegion="polite">
+              <Text style={{ color: semanticColors.textPrimary, fontFamily: family, textAlign: align }}>
+                {t(locale, "grievance.uploadProgress")} ({mediaUploaded}/{mediaProgress.length})
+                {mediaFailed > 0 ? ` · ${mediaFailed} ${t(locale, "sending.failed")}` : ""}
+              </Text>
+              <View style={{ height: 6, borderRadius: 3, overflow: "hidden", backgroundColor: semanticColors.border }}>
+                <View style={{ height: 6, width: `${mediaTotal ? Math.round(mediaSent / mediaTotal * 100) : 100}%`, backgroundColor: semanticColors.actionPrimary }} />
+              </View>
+            </View>
+          ) : null}
           {reviewLines.map((line, index) => (
-            <View key={line.labelKey} style={{ gap: 4, paddingVertical: 12, borderBottomWidth: index === reviewLines.length - 1 ? 0 : 1, borderBottomColor: semanticColors.border }}>
+            <View
+              key={line.labelKey}
+              style={{
+                gap: 4,
+                paddingVertical: 12,
+                borderBottomWidth: index === reviewLines.length - 1 ? 0 : 1,
+                borderBottomColor: semanticColors.border,
+              }}
+            >
               <Text
                 style={{
                   color: semanticColors.textSecondary,
@@ -299,7 +372,14 @@ export function QuestionRenderer({
                   onPress={() => onEditSection(line.editNodeId!)}
                   accessibilityRole="button"
                   accessibilityLabel={t(locale, "grievance.review.change")}
-                  style={({ pressed }) => ({ minHeight: 44, flexDirection: isRTL(locale) ? "row-reverse" : "row", alignItems: "center", alignSelf: isRTL(locale) ? "flex-end" : "flex-start", gap: 6, opacity: pressed ? 0.7 : 1 })}
+                  style={({ pressed }) => ({
+                    minHeight: 44,
+                    flexDirection: isRTL(locale) ? "row-reverse" : "row",
+                    alignItems: "center",
+                    alignSelf: isRTL(locale) ? "flex-end" : "flex-start",
+                    gap: 6,
+                    opacity: pressed ? 0.7 : 1,
+                  })}
                 >
                   <Ionicons name="pencil" size={16} color={semanticColors.actionSecondary} />
                   <Text

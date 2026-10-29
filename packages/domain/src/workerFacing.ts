@@ -3,27 +3,37 @@ import type { CaseActionType, CaseStatus } from "./status";
 
 /** Locale key ids for worker-facing status copy. Strings live in localization files. */
 export const workerFacingStatusKey: Record<CaseStatus, string> = {
-  Draft: "status.worker.savedOnDevice",
-  Submitted: "status.worker.received",
-  "Under Review": "status.worker.review",
+  Received: "status.worker.received",
+  Triage: "status.worker.review",
+  Verification: "status.worker.verification",
+  Investigation: "status.worker.verification",
   "Action in Progress": "status.worker.action",
-  "Proposed Resolution": "status.worker.proposed",
-  Resolved: "status.worker.resolved",
+  Escalated: "status.worker.escalated",
+  "Outcome Verification": "status.worker.outcomeVerification",
   Reopened: "status.worker.reopened",
   Closed: "status.worker.closed",
 };
 
 export const workerFacingActionKey: Partial<Record<CaseActionType, string>> = {
   "Complaint Received": "status.action.received",
-  "Review Started": "status.action.review",
-  "More Information Requested": "status.action.needInfo",
-  "Action Taken": "status.action.action",
+  "Triage Completed": "status.action.review",
+  "Contact Attempted": "status.action.contactAttempted",
+  "Contact Successful": "status.action.contactSuccessful",
+  "Verified Fact Recorded": "status.action.factVerified",
+  "Action Planned": "status.action.action",
+  "Action Updated": "status.action.action",
   Escalated: "status.action.escalated",
-  "Proposed Resolution": "status.action.proposed",
-  Resolved: "status.action.resolved",
+  "Outcome Recorded": "status.action.outcome",
+  "Complaint Closed": "status.action.closed",
+  "Complaint Reopened": "status.action.reopened",
+  "Worker Feedback Recorded": "status.action.feedback",
+  "Review Started": "status.action.review",
+  "More Information Requested": "status.action.update",
+  "Action Taken": "status.action.action",
+  "Proposed Resolution": "status.action.outcome",
+  Resolved: "status.action.outcome",
   Closed: "status.action.closed",
   Reopened: "status.action.reopened",
-  "Worker Feedback Recorded": "status.action.feedback",
 };
 
 export function workerFacingActionLabelKey(type: CaseActionType): string {
@@ -31,12 +41,13 @@ export function workerFacingActionLabelKey(type: CaseActionType): string {
 }
 
 export const workerNextStepKey: Record<CaseStatus, string> = {
-  Draft: "complaints.next.draft",
-  Submitted: "complaints.next.received",
-  "Under Review": "complaints.next.review",
+  Received: "complaints.next.received",
+  Triage: "complaints.next.review",
+  Verification: "complaints.next.verification",
+  Investigation: "complaints.next.verification",
   "Action in Progress": "complaints.next.action",
-  "Proposed Resolution": "complaints.next.proposed",
-  Resolved: "complaints.next.resolved",
+  Escalated: "complaints.next.escalated",
+  "Outcome Verification": "complaints.next.outcomeVerification",
   Reopened: "complaints.next.reopened",
   Closed: "complaints.next.closed",
 };
@@ -46,6 +57,12 @@ const internalActionTypes = new Set<CaseActionType>([
   "Internal Note Added",
   "Worker Contact Attempted",
   "Worker Contact Successful",
+  "Contact Attempted",
+  "Contact Successful",
+  "Emergency Contact Override",
+  "Verified Fact Recorded",
+  "Investigation Finding Recorded",
+  "External Referral Recorded",
   "Investigation Finding Added",
   "Referral Recorded",
 ]);

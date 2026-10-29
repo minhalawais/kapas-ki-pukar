@@ -9,7 +9,7 @@ export const radius = {
 
 export const radiusUsage = {
   webControl: radius.md,
-  webCard: radius.lg,
+  webCard: 14,
   webChip: radius.full,
   mobileButton: 14,
   mobileCard: radius.xl,

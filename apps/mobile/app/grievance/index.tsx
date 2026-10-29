@@ -1,30 +1,28 @@
-import { canSubmitDraft, workerCategoryCodes, type WorkerCategoryCode } from "@kapas/domain";
+import { validateComplaintDraft, workerCategoryCodes, type WorkerCategoryCode } from "@kapas/domain";
 import { t, type MessageKey } from "@kapas/localization";
-import { complaintService } from "@kapas/mock-services";
 import { workflowPromptId } from "@kapas/speech";
-import { useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
 
 import { ActionDock } from "../../src/components/action-dock";
 import { LightTopBar } from "../../src/components/navigation/light-top-bar";
 import { PrimaryCta } from "../../src/components/primary-cta";
 import { ScreenNotice } from "../../src/components/screen-notice";
 import { ScreenShell } from "../../src/components/screen-shell";
+import { ScreenLoadingState } from "../../src/components/screen-states";
+import { ProgressIndicator } from "../../src/features/grievance/components/ProgressIndicator";
 import { QuestionRenderer } from "../../src/features/grievance/components/QuestionRenderer";
+import { structuredReviewLines } from "../../src/features/grievance/structuredReviewLines";
 import { useGrievanceWizard } from "../../src/hooks/use-grievance-wizard";
 import { useAutoPromptId } from "../../src/hooks/use-prompt-playback";
-import { expoIdentityService } from "../../src/services/expoIdentityService";
 import { imagePreloadService } from "../../src/services/imagePreloadService";
+import { productionSyncService } from "../../src/services/productionSyncService";
 import { promptAudioService } from "../../src/services/promptAudioService";
 import { useConnectivityStore } from "../../src/stores/connectivityStore";
-import { useGrievanceDraftStore } from "../../src/stores/grievanceDraftStore";
+import { awaitDraftPersisted, useGrievanceDraftStore } from "../../src/stores/grievanceDraftStore";
 import { useLocaleStore } from "../../src/stores/localeStore";
 import { useVoiceGuidanceStore } from "../../src/stores/voiceGuidanceStore";
-import { semanticColors } from "../../src/theme/tokens";
-
-
 
 function othersLabel(locale: "ur" | "en", value?: string): string {
   if (value === "individual") {
@@ -48,7 +46,6 @@ function othersLabel(locale: "ur" | "en", value?: string): string {
 export default function GrievanceScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ category?: string }>();
-  const queryClient = useQueryClient();
   const locale = useLocaleStore((s) => s.locale);
   const categoryIntent = useGrievanceDraftStore((s) => s.requestedCategory);
   const setCategoryIntent = useGrievanceDraftStore((s) => s.setRequestedCategory);
@@ -56,18 +53,21 @@ export default function GrievanceScreen() {
   const node = wizard.node;
   const draft = wizard.draft;
   const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
+  const [submitError, setSubmitError] = useState<MessageKey | null>(null);
   const [manualSpeaking, setManualSpeaking] = useState(false);
   const setVoiceGuidanceEnabled = useVoiceGuidanceStore((state) => state.setEnabled);
 
   const currentPromptId = node?.id ? workflowPromptId(node.id) : undefined;
   const autoPlayback = useAutoPromptId(currentPromptId);
-  const speaking = manualSpeaking || autoPlayback.state === "loading" || autoPlayback.state === "playing";
+  const speaking =
+    manualSpeaking || autoPlayback.state === "loading" || autoPlayback.state === "playing";
   const loadingAudio = autoPlayback.state === "loading";
 
-  const routeCategory = typeof params.category === "string" && workerCategoryCodes.includes(params.category as WorkerCategoryCode)
-    ? params.category as WorkerCategoryCode
-    : undefined;
+  const routeCategory =
+    typeof params.category === "string" &&
+    workerCategoryCodes.includes(params.category as WorkerCategoryCode)
+      ? (params.category as WorkerCategoryCode)
+      : undefined;
   const requestedCategory = routeCategory ?? categoryIntent ?? undefined;
 
   useEffect(() => {
@@ -82,7 +82,12 @@ export default function GrievanceScreen() {
   }, [node?.id, requestedCategory, setCategoryIntent, wizard.select, wizard.selected]);
 
   useEffect(() => () => setCategoryIntent(null), [setCategoryIntent]);
-  useEffect(() => () => { void promptAudioService.stop(); }, []);
+  useEffect(
+    () => () => {
+      void promptAudioService.stop();
+    },
+    [],
+  );
 
   const toggleSpeech = () => {
     if (speaking) {
@@ -99,38 +104,49 @@ export default function GrievanceScreen() {
   const handleBack = () => {
     void wizard.goBack().then((result) => {
       if (result === "exit") {
-        router.replace("/home");
+        void useGrievanceDraftStore.getState().discardDraft().finally(() => router.replace("/home"));
       }
     });
   };
 
-  const reviewLines =
-    node?.type === "review" && draft
-      ? [
+  const reviewLines = useMemo(() => {
+    if (node?.type !== "review" || !draft) return undefined;
+    const categoryLines = structuredReviewLines(draft, locale);
+    return [
           {
             labelKey: "grievance.review.identity" as const,
-            value: draft.reporterIdentity?.mode === "cnic"
-              ? `${t(locale, "grievance.review.cnicEnding")} ${draft.reporterIdentity.cnicLast4 ?? ""}`
-              : draft.reporterIdentity?.mode === "phone"
-                ? `${t(locale, "grievance.review.phoneEnding")} ${draft.reporterIdentity.phoneLast4 ?? ""}`
-              : t(locale, "privacy.ANON"),
+            value:
+              draft.reporterIdentity?.mode === "cnic"
+                ? `${t(locale, "grievance.review.cnicEnding")} ${draft.reporterIdentity.cnicLast4 ?? ""}`
+                : draft.reporterIdentity?.mode === "phone"
+                  ? `${t(locale, "grievance.review.phoneEnding")} ${draft.reporterIdentity.phoneLast4 ?? ""}`
+                  : t(locale, "privacy.ANON"),
             editNodeId: "identity",
           },
           {
             labelKey: "grievance.review.category" as const,
-            value: draft.category ? t(locale, `category.${draft.category}` as MessageKey) : t(locale, "common.notSure"),
+            value: draft.category
+              ? t(locale, `category.${draft.category}` as MessageKey)
+              : t(locale, "common.notSure"),
             editNodeId: "category",
           },
           {
             labelKey: "grievance.review.when" as const,
-            value: draft.incident.whenLabel ? t(locale, `when.${draft.incident.whenLabel}` as MessageKey) : t(locale, "common.notSure"),
+            value: draft.incident.whenLabel
+              ? t(locale, `when.${draft.incident.whenLabel}` as MessageKey)
+              : t(locale, "common.notSure"),
             editNodeId: "when",
           },
           {
             labelKey: "grievance.review.where" as const,
-            value: draft.location.source === "device"
-              ? (draft.location.formattedAddress ?? draft.location.placeLabel ?? t(locale, "common.notSure"))
-              : (draft.location.placeLabel ?? draft.location.villageLabel ?? t(locale, "common.notSure")),
+            value:
+              draft.location.source === "device"
+                ? (draft.location.formattedAddress ??
+                  draft.location.placeLabel ??
+                  t(locale, "common.notSure"))
+                : (draft.location.placeLabel ??
+                  draft.location.villageLabel ??
+                  t(locale, "common.notSure")),
             editNodeId: "where-current",
           },
           {
@@ -140,7 +156,9 @@ export default function GrievanceScreen() {
           },
           {
             labelKey: "grievance.review.danger" as const,
-            value: draft.incident.immediateDanger ? t(locale, `danger.${draft.incident.immediateDanger}` as MessageKey) : t(locale, "common.notSure"),
+            value: draft.incident.immediateDanger
+              ? t(locale, `danger.${draft.incident.immediateDanger}` as MessageKey)
+              : t(locale, "common.notSure"),
             editNodeId: "danger",
           },
           {
@@ -152,7 +170,9 @@ export default function GrievanceScreen() {
           },
           {
             labelKey: "grievance.review.voice" as const,
-            value: draft.voice ? t(locale, "grievance.voice.attached") : t(locale, "grievance.voice.none"),
+            value: draft.voice
+              ? t(locale, "grievance.voice.attached")
+              : t(locale, "grievance.voice.none"),
             editNodeId: "voice",
           },
           {
@@ -163,17 +183,9 @@ export default function GrievanceScreen() {
                 : t(locale, "grievance.evidence.none"),
             editNodeId: "evidence",
           },
-          {
-            labelKey: "grievance.ai.summaryLabel" as const,
-            value:
-              draft.ai?.failed || !draft.ai
-                ? t(locale, "grievance.ai.unavailable")
-                : locale === "ur"
-                  ? (draft.ai.summaryUr ?? t(locale, "grievance.ai.unavailable"))
-                  : (draft.ai.summaryEn ?? t(locale, "grievance.ai.unavailable")),
-          },
-        ]
-      : undefined;
+          ...categoryLines,
+        ];
+  }, [draft, locale, node?.type]);
 
   const getHeaderTitle = (): string => {
     if (!node) return t(locale, "grievance.title");
@@ -192,14 +204,21 @@ export default function GrievanceScreen() {
     if (node.section === "safety") {
       return locale === "ur" ? "حفاظت اور رازداری" : "Safety & Privacy";
     }
-    if (node.section === "review") {
+    if (node.type === "review") {
       return locale === "ur" ? "شکایت کا جائزہ" : "Review Grievance";
+    }
+    if (node.id === "evidence") {
+      return locale === "ur" ? "ثبوت" : "Evidence";
+    }
+    if (node.id === "contact" || node.id.startsWith("contact-")) {
+      return locale === "ur" ? "رابطے کی ترجیح" : "Contact preferences";
     }
     return t(locale, "grievance.title");
   };
 
   return (
     <ScreenShell
+      scroll
       fullWidthHeader
       header={
         <LightTopBar
@@ -212,60 +231,85 @@ export default function GrievanceScreen() {
           onToggleSpeech={toggleSpeech}
         />
       }
-      footer={node && node.type !== "ai-processing" && node.type !== "cnic" && node.type !== "current-location" ? (
-        <ActionDock>
-          <PrimaryCta
-            labelKey={node.type === "review" ? "grievance.review.submit" : node.type === "ai-understanding" ? "grievance.ai.confirm" : "common.continue"}
-            icon={node.type === "review" ? "send" : "arrow-forward-circle"}
-            disabled={!wizard.valid || wizard.voiceBusy || submitting}
-            loading={submitting}
-            onPress={() => {
-              if (node.type === "review") {
-                const current = wizard.draft;
-                if (!current || !canSubmitDraft(current)) { setSubmitError(true); return; }
-                setSubmitError(false);
-                setSubmitting(true);
-                void (async () => {
-                  await new Promise<void>((resolve) => {
-                    setTimeout(() => resolve(), 1000);
-                  });
-                  try {
-                    const created = await complaintService.createFromDraft(current);
-                    await expoIdentityService.removeCnic(current.id);
-                    useGrievanceDraftStore.getState().resetAfterSubmit();
-                    await useConnectivityStore.getState().refreshQueue();
-                    await queryClient.invalidateQueries({ queryKey: ["my-complaints"] });
-                    await queryClient.invalidateQueries({ queryKey: ["complaint", created.trackingId] });
-                    router.replace(created.status === "Draft" ? `/grievance/offline-saved?id=${created.trackingId}` : `/grievance/success?id=${created.trackingId}`);
-                  } catch { setSubmitError(true); setSubmitting(false); }
-                })();
-                return;
-              }
-              void wizard.goNext();
-            }}
-          />
-        </ActionDock>
-      ) : undefined}
+      footer={
+        node &&
+        node.type !== "cnic" &&
+        node.type !== "current-location" ? (
+          <ActionDock>
+            <PrimaryCta
+              labelKey={node.type === "review" ? "grievance.review.submit" : "common.continue"}
+              icon={node.type === "review" ? "send" : "arrow-forward-circle"}
+              disabled={!wizard.valid || wizard.voiceBusy || wizard.evidenceBusy || submitting}
+              loading={submitting}
+              onPress={() => {
+                if (node.type === "review") {
+                  const current = wizard.draft;
+                  const validation = current ? validateComplaintDraft(current) : null;
+                  if (!current || !validation?.valid) {
+                    const missingStep = validation && !validation.valid ? validation.stepId : "identity";
+                    if (missingStep) {
+                      setSubmitError(null);
+                      void wizard.goToStep(missingStep);
+                    } else {
+                      setSubmitError("grievance.review.missing");
+                    }
+                    return;
+                  }
+                  setSubmitError(null);
+                  setSubmitting(true);
+                  void (async () => {
+                    try {
+                      await awaitDraftPersisted();
+                      const latest = useGrievanceDraftStore.getState().draft ?? current;
+                      await productionSyncService.requestSubmit(latest);
+                      void useConnectivityStore.getState().processQueue();
+                      setSubmitting(false);
+                      router.replace(`/grievance/sending?id=${latest.id}`);
+                    } catch (error) {
+                      const code = (error as Error & { code?: string }).code;
+                      setSubmitError(code === "api_configuration_invalid"
+                        ? "offline.error.configurationInvalid"
+                        : code === "network_unavailable"
+                          ? "offline.error.networkUnavailable"
+                          : code === "media_persistence_failed" || code === "media_persistence_unavailable"
+                            ? "offline.error.mediaPersistence"
+                            : "common.error");
+                    } finally {
+                      setSubmitting(false);
+                    }
+                  })();
+                  return;
+                }
+                void wizard.goNext();
+              }}
+            />
+          </ActionDock>
+        ) : undefined
+      }
     >
-      {!wizard.hydrated || !node ? (
-        <ActivityIndicator
-          color={semanticColors.actionPrimary}
-          accessibilityLabel={t(locale, "common.loading")}
-        />
-      ) : null}
+      {!wizard.hydrated || !node ? <ScreenLoadingState variant="question" /> : null}
       {wizard.error ? <ScreenNotice messageKey="common.error" tone="error" /> : null}
-      {submitError ? <ScreenNotice messageKey="grievance.review.missing" tone="error" /> : null}
+      {submitError ? <ScreenNotice messageKey={submitError} tone="error" /> : null}
       {submitting ? <ScreenNotice messageKey="grievance.submit.processing" /> : null}
-      {node ? (
-        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 16, paddingBottom: 16 }} keyboardShouldPersistTaps="handled">
+      {node && wizard.hydrated ? (
+        <View style={{ gap: 16 }}>
+          {node.type !== "review" ? (
+            <ProgressIndicator
+              ratio={wizard.progress.ratio}
+              section={node.section}
+              stepIndex={wizard.progress.index}
+              stepTotal={wizard.progress.total}
+            />
+          ) : null}
           <QuestionRenderer
             node={node}
             selected={wizard.selected}
             reviewLines={reviewLines}
             voice={draft?.voice ?? null}
-            analysis={draft?.ai}
             evidence={draft?.evidence}
             evidenceError={wizard.evidenceError}
+            evidenceBusy={wizard.evidenceBusy}
+            mediaProgress={wizard.syncItem?.media}
             identityBusy={wizard.identityBusy}
             identityError={wizard.identityError}
             locationCaptureStatus={wizard.locationCaptureStatus}
@@ -289,12 +333,23 @@ export default function GrievanceScreen() {
             onEditSection={(id) => {
               void wizard.goToStep(id);
             }}
-            onSubmitIdentity={(identity) => { void wizard.submitIdentity(identity); }}
-            onRequestCurrentLocation={() => { void wizard.requestCurrentLocation(); }}
-            onConfirmCurrentLocation={() => { void wizard.confirmCurrentLocation(); }}
-            onManualLocation={() => { void wizard.useManualLocation(); }}
+            onSubmitIdentity={(identity) => {
+              void wizard.submitIdentity(identity);
+            }}
+            onSubmitAnonymous={() => {
+              void wizard.submitAnonymous();
+            }}
+            onRequestCurrentLocation={() => {
+              void wizard.requestCurrentLocation();
+            }}
+            onConfirmCurrentLocation={() => {
+              void wizard.confirmCurrentLocation();
+            }}
+            onManualLocation={() => {
+              void wizard.useManualLocation();
+            }}
           />
-        </ScrollView>
+        </View>
       ) : null}
     </ScreenShell>
   );

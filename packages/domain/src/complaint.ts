@@ -15,10 +15,15 @@ export interface Reporter {
   type: ReporterType;
   displayName?: string;
   contactAllowed: boolean;
+  contactPreference?: "call" | "message" | "either" | "representative" | "do-not-initiate";
+  safeContactWindow?: string;
+  preferredLanguage?: "ur" | "en";
+  safeVoicemail?: boolean;
+  representativeContact?: string;
 }
 
 export type ReporterIdentity =
-  | { mode: "cnic"; cnicLast4: string; cnicVerified: boolean }
+  | { mode: "cnic"; cnicLast4: string; phoneLast4: string; cnicVerified: boolean }
   | { mode: "phone"; phoneLast4: string; cnicVerified: boolean }
   | { mode: "anonymous"; cnicVerified: false };
 
@@ -57,6 +62,7 @@ export interface Evidence {
   localUri: string;
   fileName: string;
   mimeType: string;
+  byteLength?: number;
   capturedAt: string;
 }
 
@@ -66,6 +72,7 @@ export interface VoiceEvidence {
   durationMs: number;
   recordedAt: string;
   locale: Locale;
+  byteLength?: number;
 }
 
 export interface ExtractedComplaintFacts {
@@ -99,6 +106,7 @@ export interface CaseAction {
   at: string;
   actorRole: "worker" | "puwf-grievance-manager" | "system";
   note?: string;
+  reason?: Record<string, unknown>;
   visibility?: "internal" | "worker-visible";
 }
 
@@ -130,6 +138,9 @@ export interface Complaint {
   privacyMode: PrivacyMode;
   reporterType: ReporterType;
   reporter: Reporter;
+  /** Staff portal: last four digits only; full values never exposed. */
+  phoneLast4?: string;
+  cnicLast4?: string;
   reporterIdentity?: ReporterIdentity;
   affectedWorkerType?: EmploymentType;
   gender?: Gender;
@@ -138,6 +149,7 @@ export interface Complaint {
   affectedRange?: GroupImpact;
   incident: Incident;
   evidence: Evidence[];
+  evidenceStatus?: "none" | "pending" | "processing" | "complete" | "action_required";
   voice: VoiceEvidence | null;
   ai: AIAnalysis | null;
   actions: CaseAction[];
@@ -145,6 +157,7 @@ export interface Complaint {
   workerFeedback: WorkerFeedback | null;
   overdue: boolean;
   scenarioId?: string;
+  version?: number;
 }
 
 export interface ComplaintDraft {

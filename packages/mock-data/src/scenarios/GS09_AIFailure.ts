@@ -7,7 +7,7 @@ export function createGs09(): Complaint {
     index: 109,
     categoryCode: "HSE",
     subcategoryCode: "HSE-INJ",
-    status: "Submitted",
+    status: "Received",
     priority: "High",
     privacyMode: "CONF",
     reporterType: "self",

@@ -1,5 +1,7 @@
-import type { Complaint } from "@kapas/domain";
+import type { CaseStatus } from "@kapas/domain";
 import { describe, expect, it } from "vitest";
+
+import type { TrackedComplaint } from "../../services/workerApi";
 
 import {
   complaintNeedsAttention,
@@ -8,17 +10,36 @@ import {
   isComplaintComplete,
 } from "./complaintPresentation";
 
-function complaint(status: Complaint["status"], overdue = false): Complaint {
+function complaint(status: CaseStatus, overdue = false): TrackedComplaint {
+  const timestamp = "2026-10-20T00:00:00.000Z";
   return {
+    draftId: "draft-1",
+    referenceNumber: "KP-TEST",
     status,
+    categoryCode: "WAG",
+    priority: "Standard",
+    privacyMode: "ANON",
+    submittedAt: timestamp,
+    updatedAt: timestamp,
+    dueAt: timestamp,
     overdue,
-    incident: { currentDanger: false },
-  } as Complaint;
+    version: 1,
+    location: { province: "Punjab", district: "Lahore" },
+    incident: {
+      whenLabel: "Today",
+      currentDanger: false,
+      immediateDanger: false,
+      othersAffected: "individual",
+      structuredAnswers: {},
+    },
+    evidence: [] as TrackedComplaint["evidence"],
+    actions: [],
+  };
 }
 
 describe("complaint presentation", () => {
   it("groups worker attention, active and completed cases", () => {
-    const cases = [complaint("Under Review", true), complaint("Action in Progress"), complaint("Closed")];
+    const cases = [complaint("Investigation", true), complaint("Action in Progress"), complaint("Closed")];
 
     expect(filterComplaints(cases, "attention")).toHaveLength(1);
     expect(filterComplaints(cases, "active")).toHaveLength(2);
@@ -27,10 +48,8 @@ describe("complaint presentation", () => {
     expect(isComplaintComplete(cases[2])).toBe(true);
   });
 
-  it("maps every case phase onto the four worker-facing stages", () => {
-    expect(complaintProgress("Submitted")).toBe(0);
-    expect(complaintProgress("Under Review")).toBe(1);
-    expect(complaintProgress("Action in Progress")).toBe(2);
-    expect(complaintProgress("Resolved")).toBe(3);
+  it("maps complaint history onto simplified worker stages", () => {
+    expect(complaintProgress(complaint("Received"))).toBe(0);
+    expect(complaintProgress(complaint("Closed"))).toBe(3);
   });
 });

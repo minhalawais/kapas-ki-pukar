@@ -3,26 +3,24 @@
   "locale": "ur-PK",
   "model": "gemini-2.5-flash-preview-tts",
   "voice": "Sulafat",
-  "scriptUrdu": "یاد رکھنے کی باتیں۔ عمر کے اصول صوبے کے مطابق مختلف ہیں، مگر خطرناک کام اور بال مزدوری کی بدترین شکلیں ممنوع ہیں۔ کام بچے کی تعلیم، صحت اور نشوونما کی جگہ نہیں لے سکتا۔",
-  "scriptSha256": "cad395f02b3faba0f0ee7b60ec736cd31482a6f56238d9de8f84c54da40454ad",
+  "scriptUrdu": "یاد رکھنے کی باتیں۔ عمر کے اصول صوبے کے مطابق مختلف ہیں، مگر خطرناک کام اور بچوں کی مزدوری کی بدترین شکلیں ممنوع ہیں۔ کام بچے کی تعلیم، صحت اور نشوونما کی جگہ نہیں لے سکتا۔",
+  "scriptSha256": "7c767acb9e5982162041c8c03b1c82ac409e465a45ab64d743117d130420b8dd",
   "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
   "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
-  "fileSha256": "582a78c160536fea77ddeb42a9254f8725f66b39fbe33e9486864d63b3d7627f",
-  "generatedAt": "2026-08-23T09:36:57.892Z",
-  "attempt": 1,
+  "fileSha256": "9f92b1894cede93fbb87a83d5405c463f2be07b2e6749ba8597b0b81ba21dbe6",
+  "generatedAt": "2026-10-19T13:32:47.906Z",
+  "attempt": 2,
   "projectAlias": "primary-free-project",
   "approvalStatus": "approved",
-  "reviewer": "Project Owner",
-  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "reviewer": "PUWF reviewer",
+  "reviewedAt": "2026-10-19T13:38:01.736Z",
   "audio": {
     "codec": "mp3",
     "sampleRateHertz": 24000,
     "channels": 1,
     "bitrate": 64000,
-    "durationSeconds": 16.612,
-    "integratedLufs": -18.37,
-    "truePeakDb": -5.02
-  },
-  "remasteredAt": "2026-08-24T07:48:28.591Z",
-  "remasterProfile": "mp3-24khz-mono-64k-loudnorm-i-18-tp-2-trim-start-pad-1s-v4"
+    "durationSeconds": 15.837,
+    "integratedLufs": -18.48,
+    "truePeakDb": -2.31
+  }
 }

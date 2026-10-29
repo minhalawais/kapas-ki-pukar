@@ -9,14 +9,6 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/semantic-badge";
 import { useLocaleStore } from "@/stores/locale-store";
 
-function needsWorkerInformation(complaint: Complaint): boolean {
-  return (
-    complaint.status !== "Resolved" &&
-    complaint.status !== "Closed" &&
-    complaint.actions.some((action) => action.type === "More Information Requested")
-  );
-}
-
 export function WorkerViewDrawer({
   complaint,
   open,
@@ -27,9 +19,8 @@ export function WorkerViewDrawer({
   onClose: () => void;
 }) {
   const locale = useLocaleStore((s) => s.locale);
-  const needsInfo = needsWorkerInformation(complaint);
-  const statusKey = (needsInfo ? "status.worker.needInfo" : workerFacingStatusKey[complaint.status]) as MessageKey;
-  const nextStepKey = (needsInfo ? "complaints.next.awaiting" : workerNextStepKey[complaint.status]) as MessageKey;
+  const statusKey = workerFacingStatusKey[complaint.status] as MessageKey;
+  const nextStepKey = workerNextStepKey[complaint.status] as MessageKey;
 
   useEffect(() => {
     if (!open) return;

@@ -43,7 +43,8 @@
 
   --font-ui: Inter, ui-sans-serif, system-ui, sans-serif;
   --radius-control: 8px;
-  --radius-card: 12px;
+  /* Outer portal sections use a restrained 14px radius; controls remain 8px. */
+  --radius-card: 14px;
   --motion-fast: 120ms;
   --motion-standard: 180ms;
   --motion-panel: 240ms;

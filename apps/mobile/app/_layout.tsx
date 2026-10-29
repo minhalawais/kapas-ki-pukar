@@ -13,8 +13,7 @@ import {
   NotoNaskhArabic_700Bold,
 } from "@expo-google-fonts/noto-naskh-arabic";
 import { NotoNastaliqUrdu_600SemiBold } from "@expo-google-fonts/noto-nastaliq-urdu";
-import { configureMockRuntime } from "@kapas/mock-services";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import NetInfo from "@react-native-community/netinfo";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -27,18 +26,12 @@ import { AppErrorBoundary } from "../src/providers/error-boundary";
 import { QueryProvider } from "../src/providers/query-provider";
 import { imagePreloadService } from "../src/services/imagePreloadService";
 import { promptAudioService } from "../src/services/promptAudioService";
+import { syncPushRegistrationsForRegistry } from "../src/services/pushRegistrationService";
+import { registerSyncBackgroundTask } from "../src/services/syncBackgroundTask";
 import { useConnectivityStore } from "../src/stores/connectivityStore";
 import { useLocaleStore } from "../src/stores/locale-store";
 import { useVoiceGuidanceStore } from "../src/stores/voiceGuidanceStore";
 import { semanticColors } from "../src/theme/tokens";
-
-configureMockRuntime({
-  mobileStore: {
-    getItem: (key) => AsyncStorage.getItem(key),
-    setItem: (key, value) => AsyncStorage.setItem(key, value),
-    removeItem: (key) => AsyncStorage.removeItem(key),
-  },
-});
 
 configureNativeLayoutDirection();
 
@@ -71,6 +64,16 @@ export default function RootLayout() {
   }, [hydrate, hydrateConnectivity, hydrateVoiceGuidance]);
 
   useEffect(() => {
+    void registerSyncBackgroundTask().catch(() => undefined);
+    void syncPushRegistrationsForRegistry().catch(() => undefined);
+    const unsubscribe = NetInfo.addEventListener((network) => {
+      const available = network.isConnected === true && network.isInternetReachable !== false;
+      useConnectivityStore.getState().setNetworkAvailable(available);
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
     let mounted = true;
     void imagePreloadService.preloadCritical().finally(() => {
       if (!mounted) {
@@ -86,7 +89,11 @@ export default function RootLayout() {
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (state) => {
-      if (state !== "active") void promptAudioService.stop();
+      if (state !== "active") {
+        void promptAudioService.stop();
+      } else {
+        void useConnectivityStore.getState().processQueue();
+      }
     });
     return () => subscription.remove();
   }, []);

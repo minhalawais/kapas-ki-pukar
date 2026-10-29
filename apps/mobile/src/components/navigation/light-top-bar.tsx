@@ -6,7 +6,7 @@ import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 import { isRTL } from "../../i18n/rtl";
 import { useLocaleStore } from "../../stores/localeStore";
-import { fontFamily, semanticColors } from "../../theme/tokens";
+import { fontFamily, layout, semanticColors } from "../../theme/tokens";
 import { AudioWaveVisualizer } from "../audio-wave-visualizer";
 import { KapasMark } from "../kapas-mark";
 
@@ -79,7 +79,7 @@ export function LightTopBar({
           flexDirection: rtl ? "row-reverse" : "row",
           alignItems: "center",
           justifyContent: "space-between",
-          paddingHorizontal: fullWidth ? 14 : 10,
+          paddingHorizontal: fullWidth ? layout.mobilePagePaddingX : 10,
           paddingTop: 6,
           paddingBottom: 6,
         }}
@@ -88,8 +88,8 @@ export function LightTopBar({
           pointerEvents="none"
           style={{
             position: "absolute",
-            left: 90,
-            right: 90,
+            left: 72,
+            right: 72,
             top: 0,
             bottom: 0,
             alignItems: "center",
@@ -120,7 +120,7 @@ export function LightTopBar({
               minimumFontScale={0.85}
               style={{
                 width: "100%",
-                color: "#0E6847",
+                color: semanticColors.actionPrimary,
                 fontSize: 12,
                 lineHeight: rtl ? 18 : 16,
                 fontFamily: subtitleFamily,
@@ -175,7 +175,7 @@ export function LightTopBar({
                   height: 42,
                   borderRadius: 21,
                   borderWidth: 1.5,
-                  borderColor: speaking ? "#0E6847" : "#E5E0D0",
+                  borderColor: speaking ? semanticColors.actionPrimary : semanticColors.navChevronBorder,
                   backgroundColor: speaking ? "#E8F5E9" : "#F3EFE0",
                   alignItems: "center",
                   justifyContent: "center",
@@ -183,12 +183,12 @@ export function LightTopBar({
                 })}
               >
                 {loadingAudio ? (
-                  <ActivityIndicator size="small" color="#0E6847" />
+                  <ActivityIndicator size="small" color={semanticColors.actionPrimary} />
                 ) : (
                   <Ionicons
                     name={speaking ? "stop" : "volume-high"}
                     size={22}
-                    color="#0E6847"
+                    color={semanticColors.actionPrimary}
                   />
                 )}
               </Pressable>
@@ -224,7 +224,7 @@ export function LightTopBar({
             flexDirection: rtl ? "row-reverse" : "row",
           }}
         >
-          <View style={{ width: `${progressPercent}%`, height: "100%", backgroundColor: "#0E6847", borderRadius: 1.5 }} />
+          <View style={{ width: `${progressPercent}%`, height: "100%", backgroundColor: semanticColors.actionPrimary, borderRadius: 1.5 }} />
         </View>
       ) : null}
     </View>

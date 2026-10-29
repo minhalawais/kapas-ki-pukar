@@ -149,7 +149,7 @@ function DateRangeScopeBar({
 
 export default function DashboardPage() {
   const locale = useLocaleStore((s) => s.locale);
-  const [range, setRange] = useState<DateRangeDraft>(() => presetRange("30d"));
+  const [range, setRange] = useState<DateRangeDraft>(() => presetRange("90d"));
   const [filtersReady, setFiltersReady] = useState(false);
   const filters = useMemo(() => toComplaintFilters({ ...emptyFilters(), from: range.from, to: range.to }), [range.from, range.to]);
   const query = useDashboardData(filters, filtersReady);
@@ -157,8 +157,8 @@ export default function DashboardPage() {
   useEffect(() => {
     const stored = readStoredFilters();
     setRange({
-      from: stored.from || presetRange("30d").from,
-      to: stored.to || presetRange("30d").to,
+      from: stored.from || presetRange("90d").from,
+      to: stored.to || presetRange("90d").to,
     });
     setFiltersReady(true);
   }, []);

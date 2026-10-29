@@ -30,4 +30,12 @@ export const semanticColors = {
   borderEssential: borderColors.essential,
   onPrimary: "#FFFFFF",
   onInstitutional: "#FFFFFF",
+  chipCountSurface: "#EBF5F0",
+  chipCountText: brandColors.kapasPrimary,
+  navChevronSurface: "#F3EFE0",
+  navChevronBorder: "#E5E0D0",
+  dangerBorderSoft: "#FCA5A5",
+  dangerIconSurface: "#FEE2E2",
+  referenceSurface: "#F1F5F9",
+  institutionalMutedOn: "#D8E8DF",
 } as const;

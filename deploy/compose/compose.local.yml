@@ -48,6 +48,102 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
     networks: [backend]
 
+  clamav:
+    image: clamav/clamav:1.4.3
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${CLAMAV_PORT:-3310}:3310"
+    volumes:
+      - clamav-data:/var/lib/clamav
+    healthcheck:
+      test: ["CMD-SHELL", "clamdscan --ping=1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+    networks: [backend]
+
+  minio:
+    image: kapas-minio:RELEASE.2025-10-15T17-29-55Z
+    build:
+      context: ../minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-kapas-local}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
+    ports:
+      - "127.0.0.1:${MINIO_PORT:-9000}:9000"
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes: [minio-data:/data]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9000/minio/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [backend]
+
+  minio-init:
+    image: kapas-minio:RELEASE.2025-10-15T17-29-55Z
+    restart: "no"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-kapas-local}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        mc alias set local http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD"
+        mc mb --ignore-existing local/quarantine local/protected-evidence local/temporary
+        mc anonymous set none local/quarantine
+        mc anonymous set none local/protected-evidence
+        mc anonymous set none local/temporary
+    depends_on:
+      minio: { condition: service_healthy }
+    networks: [backend]
+
+  hook-proxy:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    environment:
+      TUSD_HOOK_SECRET: ${TUSD_HOOK_SECRET:?TUSD_HOOK_SECRET is required}
+    command:
+      - caddy
+      - reverse-proxy
+      - --from
+      - :8080
+      - --to
+      - host.docker.internal:4000
+      - --header-up
+      - "X-Tusd-Hook-Secret:{env.TUSD_HOOK_SECRET}"
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    networks: [backend]
+
+  tusd:
+    image: tusproject/tusd:v2.9.1
+    restart: unless-stopped
+    command:
+      - -base-path=/files/
+      - -behind-proxy
+      - -disable-download
+      - -max-size=26214400
+      - -s3-bucket=quarantine
+      - -s3-endpoint=http://minio:9000
+      - -hooks-http=http://hook-proxy:8080/internal/tusd-hooks
+      - -hooks-enabled-events=pre-create,post-create,post-receive,post-finish,post-terminate
+      - -hooks-http-retry=5
+      - -hooks-http-backoff=2s
+      - -hooks-http-timeout=10s
+    environment:
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-kapas-local}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
+      AWS_REGION: us-east-1
+      AWS_S3_FORCE_PATH_STYLE: "true"
+    ports: ["0.0.0.0:${TUSD_PORT:-1080}:8080"]
+    depends_on:
+      minio-init: { condition: service_completed_successfully }
+      hook-proxy: { condition: service_started }
+    networks: [backend]
+
 networks:
   backend:
     driver: bridge
@@ -55,3 +151,5 @@ networks:
 volumes:
   postgres-data:
   redis-data:
+  clamav-data:
+  minio-data:

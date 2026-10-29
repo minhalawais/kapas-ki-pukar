@@ -1,6 +1,12 @@
-import "dotenv/config";
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
 
+import { config as loadDotenv } from "dotenv";
 import { defineConfig } from "prisma/config";
+
+const dotenvCandidates = [resolve(process.cwd(), ".env"), resolve(process.cwd(), "../../.env")];
+const dotenvPath = dotenvCandidates.find((candidate) => existsSync(candidate));
+if (dotenvPath) loadDotenv({ path: dotenvPath });
 
 const databaseUrl =
   process.env.PRISMA_DATABASE_URL ??

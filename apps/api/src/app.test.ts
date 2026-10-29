@@ -23,8 +23,11 @@ const config = loadRuntimeConfig({
   QUARANTINE_ROOT: "./storage/quarantine",
   ENCRYPTION_KEY_ID: "test",
   SESSION_SECRET: "test-session-secret-with-at-least-32-characters",
+  IDENTITY_LOOKUP_PEPPER: "test-identity-lookup-pepper-at-least-32-characters",
   INTERNAL_METRICS_TOKEN: "test-internal-metrics-token",
-  OPENAPI_ENABLED: "false",
+  // Exercise the documented local OpenAPI path so optional Swagger runtime peers
+  // cannot be omitted from the production image unnoticed.
+  OPENAPI_ENABLED: "true",
   JSON_BODY_LIMIT_BYTES: "1024",
   QUEUE_PREFIX: "kapas-test",
 });
@@ -84,7 +87,7 @@ describe("foundation API", () => {
 
     const response = await app.inject({ method: "GET", url: "/api/v1/health/ready" });
     expect(response.statusCode).toBe(503);
-    expect(response.json()).toMatchObject({ code: "service_unavailable" });
+    expect(response.json()).toMatchObject({ code: "dependencies_unavailable" });
     expect(JSON.stringify(response.json())).not.toContain("postgresql://");
   });
 
@@ -124,5 +127,20 @@ describe("foundation API", () => {
     expect(stableJson(createOpenApiDocument(app, config))).toBe(
       stableJson(createOpenApiDocument(app, config)),
     );
+  });
+
+  it("rejects protected case reads without an MFA-assured staff session", async () => {
+    const response = await app.inject({ method: "GET", url: "/api/v1/cases" });
+    expect(response.statusCode).toBe(401);
+    expect(response.json()).toMatchObject({ code: "unauthorized" });
+
+    const admin = await app.inject({ method: "GET", url: "/api/v1/admin/users" });
+    expect(admin.statusCode).toBe(401);
+
+    const identity = await app.inject({
+      method: "GET",
+      url: "/api/v1/cases/example/identity?purpose=review",
+    });
+    expect(identity.statusCode).toBe(401);
   });
 });

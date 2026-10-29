@@ -30,7 +30,7 @@ export function FilterBar({ value, provinces, onChange, onClear }: {
 }) {
   const locale = useLocaleStore((s) => s.locale);
   const [advanced, setAdvanced] = useState(false);
-  const statuses = caseStatuses.filter((status) => status !== "Draft");
+  const statuses = caseStatuses;
   const activeCount = Object.values(value).filter(Boolean).length;
 
   return (

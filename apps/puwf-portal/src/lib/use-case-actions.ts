@@ -1,15 +1,20 @@
 "use client";
 
 import type { ActionInput, ContactAction, Priority, ResolutionInput } from "@kapas/domain";
-import { caseLifecycleService, caseManagementService } from "@kapas/mock-services";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { productionPortalApi } from "@/lib/portal-api";
 import { useComplaint } from "@/lib/use-complaints";
+
+export type PortalCaseAction =
+  | "startReview" | "changePriority" | "addNote" | "recordContact"
+  | "addFinding" | "recordAction" | "escalate" | "proposeResolution" | "resolve" | "close" | "reopen";
 
 export function useCaseWorkspace(id: string) {
   const queryClient = useQueryClient();
   const query = useComplaint(id);
-  const available = query.data ? caseLifecycleService.availableActions(query.data.status) : null;
+  const availableQuery = useQuery({ queryKey: ["available-actions", id], queryFn: () => productionPortalApi.available(id), enabled: Boolean(query.data) });
+  const available = availableQuery.data?.actions ?? null;
 
   function invalidate() {
     void queryClient.invalidateQueries({ queryKey: ["complaints"] });
@@ -20,53 +25,53 @@ export function useCaseWorkspace(id: string) {
   const caseId = query.data?.id ?? id;
 
   const startReview = useMutation({
-    mutationFn: () => caseManagementService.startReview(caseId),
+    mutationFn: () => productionPortalApi.startReview(caseId, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
   const changePriority = useMutation({
     mutationFn: (input: { priority: Priority; reason?: string }) =>
-      caseManagementService.changePriority(caseId, input.priority, input.reason),
+      productionPortalApi.changePriority(caseId, input.priority, input.reason, query.data?.version ?? 0),
+    onSuccess: invalidate,
+  });
+  const assign = useMutation({
+    mutationFn: (assigneeId: string | null) => productionPortalApi.assign(caseId, assigneeId, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
   const addNote = useMutation({
-    mutationFn: (note: string) => caseManagementService.addNote(caseId, note),
+    mutationFn: (note: string) => productionPortalApi.addNote(caseId, note, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
   const recordContact = useMutation({
-    mutationFn: (data: ContactAction) => caseManagementService.recordContact(caseId, data),
-    onSuccess: invalidate,
-  });
-  const requestInformation = useMutation({
-    mutationFn: (note: string) => caseManagementService.requestInformation(caseId, note),
+    mutationFn: (data: ContactAction) => productionPortalApi.recordContact(caseId, data, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
   const addFinding = useMutation({
-    mutationFn: (finding: string) => caseManagementService.addFinding(caseId, finding),
+    mutationFn: (finding: string) => productionPortalApi.addFinding(caseId, finding, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
   const recordAction = useMutation({
-    mutationFn: (action: ActionInput) => caseManagementService.recordAction(caseId, action),
+    mutationFn: (action: ActionInput) => productionPortalApi.recordAction(caseId, action, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
   const escalate = useMutation({
-    mutationFn: (reason: string) => caseManagementService.escalate(caseId, reason),
+    mutationFn: (reason: string) => productionPortalApi.escalate(caseId, reason, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
   const proposeResolution = useMutation({
     mutationFn: (resolution: ResolutionInput) =>
-      caseManagementService.proposeResolution(caseId, resolution),
+      productionPortalApi.proposeResolution(caseId, resolution, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
   const resolve = useMutation({
-    mutationFn: (note?: string) => caseManagementService.resolve(caseId, note),
+    mutationFn: (note?: string) => productionPortalApi.resolve(caseId, note, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
   const close = useMutation({
-    mutationFn: (reason: string) => caseManagementService.close(caseId, reason),
+    mutationFn: (reason: string) => productionPortalApi.close(caseId, reason, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
   const reopen = useMutation({
-    mutationFn: (reason: string) => caseManagementService.reopen(caseId, reason),
+    mutationFn: (reason: string) => productionPortalApi.reopen(caseId, reason, query.data?.version ?? 0),
     onSuccess: invalidate,
   });
 
@@ -75,7 +80,6 @@ export function useCaseWorkspace(id: string) {
     changePriority.isPending ||
     addNote.isPending ||
     recordContact.isPending ||
-    requestInformation.isPending ||
     addFinding.isPending ||
     recordAction.isPending ||
     escalate.isPending ||
@@ -90,9 +94,9 @@ export function useCaseWorkspace(id: string) {
     pending,
     startReview,
     changePriority,
+    assign,
     addNote,
     recordContact,
-    requestInformation,
     addFinding,
     recordAction,
     escalate,

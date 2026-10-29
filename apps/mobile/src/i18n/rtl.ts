@@ -1,4 +1,4 @@
-import { COMPLAINT_ID_PATTERN, type Locale } from "@kapas/domain";
+import { isComplaintReference, type Locale } from "@kapas/domain";
 
 const LTR_ISOLATE_START = "\u2066";
 const LTR_ISOLATE_END = "\u2069";
@@ -43,7 +43,7 @@ export function isolateLtr(value: string): string {
 }
 
 export function isolateComplaintId(value: string): string {
-  if (!COMPLAINT_ID_PATTERN.test(value)) {
+  if (!isComplaintReference(value)) {
     return value;
   }
   return isolateLtr(value);

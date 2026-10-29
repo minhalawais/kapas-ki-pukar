@@ -2,6 +2,10 @@
 
 Kapas ki Pukaar is a voice-first grievance reporting and case management product for Pakistan's cotton sector. It is designed for cotton pickers, seasonal workers, tenant farmers, migrant labourers, and other rural workers who may have limited literacy, limited trust in formal complaint channels, or limited access to typed digital services.
 
+## Current runtime
+
+The application runtime uses the live API and PostgreSQL database. The portal and mobile complaint flows do not use seeded complaint/demo records. Local drafts and an offline outbox are device storage used only until the API is reachable.
+
 The product has two connected surfaces:
 
 - **Mobile app:** Urdu-first worker experience for reporting complaints, learning rights, and tracking complaint progress.
@@ -94,9 +98,68 @@ Install dependencies:
 corepack pnpm install
 ```
 
-## Running The Apps
+## Running the live local stack
 
-Start the web portal:
+Run each command in a separate PowerShell window. Docker Desktop must be running with the Linux engine enabled.
+
+### 1. Install dependencies
+
+```powershell
+corepack pnpm install
+```
+
+### 2. Start PostgreSQL and Redis
+
+```powershell
+docker compose --env-file deploy/compose/.env.local -f deploy/compose/compose.local.yml up -d --wait
+```
+
+The local database is exposed on port `5433` and Redis on `6380`.
+
+### 3. Configure the API environment
+
+Add the backend values from `.env.example` to `.env` without removing your existing secrets. For the local Docker services use:
+
+```text
+NODE_ENV=development
+APP_VERSION=0.1.0
+API_HOST=0.0.0.0
+API_PORT=4000
+PUBLIC_API_URL=http://192.168.1.28:4000
+PORTAL_ORIGIN=http://localhost:3000,http://192.168.1.28:3000
+DATABASE_URL=postgresql://kapas_app:local-app-password@127.0.0.1:5433/kapas_local?schema=public&connection_limit=10
+MIGRATION_DATABASE_URL=postgresql://kapas_migrator:local-migration-password@127.0.0.1:5433/kapas_local?schema=public
+REDIS_URL=redis://:local-redis-password@127.0.0.1:6380/0
+EVIDENCE_ROOT=./apps/api/storage/evidence
+QUARANTINE_ROOT=./apps/api/storage/quarantine
+ENCRYPTION_KEY_ID=local-development-key
+SESSION_SECRET=replace-with-at-least-32-characters-for-local-use
+INTERNAL_METRICS_TOKEN=local-metrics-token-change-me
+QUEUE_PREFIX=kapas-local
+```
+
+Replace `192.168.1.28` with the computer's current Wi-Fi IPv4 address (`ipconfig`). A physical phone must never use `127.0.0.1` for the API.
+
+### 4. Generate the client and apply migrations
+
+```powershell
+corepack pnpm db:generate
+corepack pnpm db:migrate:deploy
+```
+
+### 5. Start the API
+
+```powershell
+corepack pnpm dev:api
+```
+
+Verify it before opening the clients:
+
+```powershell
+Invoke-RestMethod http://localhost:4000/api/v1/health/ready
+```
+
+### 6. Start the PUWF web portal
 
 ```bash
 corepack pnpm --filter @kapas/puwf-portal dev
@@ -108,13 +171,27 @@ The portal runs on:
 http://localhost:3000
 ```
 
-Start the mobile app:
+The portal requires a staff session. For a disposable local administrator, set `BOOTSTRAP_ADMIN_LOGIN`, `BOOTSTRAP_ADMIN_NAME`, `BOOTSTRAP_ADMIN_PASSWORD`, and `BOOTSTRAP_ADMIN_CONFIRM=YES` in `.env`, then run:
 
-```bash
-corepack pnpm --filter @kapas/mobile dev
+```powershell
+corepack pnpm --filter @kapas/database db:bootstrap-admin
 ```
 
-Then open it in an emulator, simulator, or Expo development client.
+### 7. Start the mobile app
+
+```powershell
+corepack pnpm --filter @kapas/mobile exec expo start --lan --clear
+```
+
+Open the QR code in Expo Go. The phone and computer must be on the same Wi-Fi network, and Windows Firewall must allow inbound TCP `4000`. The mobile build reads `EXPO_PUBLIC_API_URL` from `.env`; rebuild/restart Expo after changing it.
+
+For an Android emulator, use `http://10.0.2.2:4000` instead of the Wi-Fi address. For iOS Simulator, `http://127.0.0.1:4000` is valid.
+
+To stop local infrastructure:
+
+```powershell
+docker compose --env-file deploy/compose/.env.local -f deploy/compose/compose.local.yml down
+```
 
 ## Quality Commands
 

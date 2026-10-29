@@ -12,7 +12,6 @@ import { KapasBrandLockup } from "../src/components/kapas-brand-lockup";
 import { PartnerLogoStrip } from "../src/components/partner-logo-strip";
 import { ScreenNotice } from "../src/components/screen-notice";
 import { ScreenShell } from "../src/components/screen-shell";
-import { demoControlsEnabled } from "../src/config/runtime";
 import { useDraftRecovery } from "../src/hooks/use-draft-recovery";
 import { useAutoScreenPrompt } from "../src/hooks/use-prompt-playback";
 import { isRTL } from "../src/i18n/rtl";
@@ -235,9 +234,9 @@ export default function HomeScreen() {
       >
         <Pressable
           delayLongPress={800}
-          onLongPress={demoControlsEnabled ? () => router.push("/demo") : undefined}
+          onLongPress={undefined}
           accessibilityRole="button"
-          accessibilityLabel={demoControlsEnabled ? t(locale, "demo.mobile.openHint") : t(locale, "app.name")}
+          accessibilityLabel={t(locale, "app.name")}
           style={({ pressed }) => ({
             flex: 1,
             alignItems: rtl ? "flex-end" : "flex-start",

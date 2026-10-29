@@ -60,19 +60,19 @@ export function locationLabel(complaint: Complaint): string {
 
 export type QueueKind = "attention" | "emergency" | "overdue" | "awaiting" | "new" | "all";
 
-const CLOSED = new Set<CaseStatus>(["Resolved", "Closed"]);
+const CLOSED = new Set<CaseStatus>(["Closed"]);
 
 export function matchesQueue(complaint: Complaint, queue: QueueKind): boolean {
   if (queue === "all") return true;
   if (queue === "emergency") return complaint.priority === "Emergency" || complaint.priority === "Critical";
   if (queue === "overdue") return complaint.overdue && !CLOSED.has(complaint.status);
-  if (queue === "awaiting") return complaint.actions.some((action) => action.type === "More Information Requested") && !CLOSED.has(complaint.status);
-  if (queue === "new") return complaint.status === "Submitted";
+  if (queue === "awaiting") return complaint.status === "Verification";
+  if (queue === "new") return complaint.status === "Received";
   return (
     complaint.overdue ||
     complaint.priority === "Emergency" ||
     complaint.priority === "Critical" ||
-    complaint.status === "Submitted" ||
+    complaint.status === "Received" ||
     complaint.status === "Reopened"
   );
 }
@@ -84,8 +84,8 @@ export function triageSort(a: Complaint, b: Complaint): number {
     if (row.priority === "Emergency") return 0;
     if (row.overdue && !CLOSED.has(row.status)) return 1;
     if (row.priority === "Critical") return 2;
-    if (row.actions.some((action) => action.type === "More Information Requested") && !CLOSED.has(row.status)) return 3;
-    if (row.status === "Submitted" || row.status === "Reopened") return 4;
+    if (row.status === "Verification") return 3;
+    if (row.status === "Received" || row.status === "Reopened") return 4;
     return 5 + priorityRank[row.priority];
   };
   return rank(a) - rank(b) || b.updatedAt.localeCompare(a.updatedAt);

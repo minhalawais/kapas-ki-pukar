@@ -1,47 +1,43 @@
-import { workerFacingStatusKey, workerNextStepKey, type CaseStatus, type Complaint } from "@kapas/domain";
+import {
+  simplifiedStageIndex,
+  workerFacingStatusKey,
+  workerNextStepKey,
+  type CaseStatus,
+} from "@kapas/domain";
+
+import type { TrackedComplaint } from "../../services/workerApi";
 
 export type ComplaintFilter = "all" | "attention" | "active" | "complete";
 
-const completedStatuses = new Set<CaseStatus>(["Resolved", "Closed"]);
-
-function hasInformationRequest(complaint: Complaint): boolean {
-  return complaint.actions?.some((action) => action.type === "More Information Requested") ?? false;
-}
-
-export function isComplaintComplete(complaint: Complaint): boolean {
+const completedStatuses = new Set<CaseStatus>(["Closed"]);
+export function isComplaintComplete(complaint: TrackedComplaint): boolean {
   return completedStatuses.has(complaint.status);
 }
 
-export function complaintNeedsAttention(complaint: Complaint): boolean {
-  return complaint.status === "Draft"
-    || complaint.status === "Proposed Resolution"
-    || hasInformationRequest(complaint)
+export function complaintNeedsAttention(complaint: TrackedComplaint): boolean {
+  return complaint.status === "Outcome Verification"
     || complaint.overdue
     || complaint.incident.currentDanger;
 }
 
-export function filterComplaints(complaints: Complaint[], filter: ComplaintFilter): Complaint[] {
+export function filterComplaints(complaints: TrackedComplaint[], filter: ComplaintFilter): TrackedComplaint[] {
   if (filter === "attention") return complaints.filter(complaintNeedsAttention);
   if (filter === "active") return complaints.filter((item) => !isComplaintComplete(item));
   if (filter === "complete") return complaints.filter(isComplaintComplete);
   return complaints;
 }
 
-export function complaintProgress(status: CaseStatus): number {
-  if (["Submitted", "Draft"].includes(status)) return 0;
-  if (status === "Under Review") return 1;
-  if (["Action in Progress", "Reopened"].includes(status)) return 2;
-  return 3;
+export function complaintProgress(complaint: TrackedComplaint): number {
+  return simplifiedStageIndex(complaint.actions ?? [], complaint.status);
 }
 
-export function complaintStatusTone(complaint: Complaint): "progress" | "success" | "offline" | "critical" {
+export function complaintStatusTone(complaint: TrackedComplaint): "progress" | "success" | "offline" | "critical" {
   if (isComplaintComplete(complaint)) return "success";
-  if (complaint.status === "Draft") return "offline";
   if (complaintNeedsAttention(complaint)) return "critical";
   return "progress";
 }
 
-export function latestComplaintDate(complaint: Complaint): string {
+export function latestComplaintDate(complaint: TrackedComplaint): string {
   return complaint.actions.at(-1)?.at ?? complaint.updatedAt;
 }
 
@@ -55,28 +51,37 @@ export function formatComplaintDate(value: string, locale: string): string {
   }).format(date);
 }
 
-export function complaintLocation(complaint: Complaint): string {
+export function complaintLocation(complaint: TrackedComplaint): string {
   const location = complaint.location;
-  return location.formattedAddress
-    ?? [location.placeLabel ?? location.villageLabel ?? location.village, location.district, location.province]
-      .filter(Boolean)
-      .join(", ");
+  return [location.villageLabel, location.district, location.province]
+    .filter(Boolean)
+    .join(", ");
 }
 
 export function complaintNextStepKey(status: CaseStatus): string {
   return workerNextStepKey[status];
 }
 
-export function complaintWorkerStatusKey(complaint: Complaint): string {
-  if (hasInformationRequest(complaint) && !isComplaintComplete(complaint)) {
-    return "status.worker.needInfo";
-  }
+export function complaintWorkerStatusKey(complaint: TrackedComplaint): string {
   return workerFacingStatusKey[complaint.status];
 }
 
-export function complaintWorkerNextStepKey(complaint: Complaint): string {
-  if (hasInformationRequest(complaint) && !isComplaintComplete(complaint)) {
-    return "complaints.next.awaiting";
-  }
+export function complaintWorkerNextStepKey(complaint: TrackedComplaint): string {
   return workerNextStepKey[complaint.status];
+}
+
+export function formatRelativeListRefresh(updatedAtMs: number, locale: "en" | "ur"): string {
+  const diffMs = Date.now() - updatedAtMs;
+  if (diffMs < 45_000) {
+    return locale === "ur" ? "ابھی تازہ" : "Updated just now";
+  }
+  const minutes = Math.floor(diffMs / 60_000);
+  if (minutes < 60) {
+    return locale === "ur" ? `${minutes} منٹ پہلے` : `Updated ${minutes} min ago`;
+  }
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) {
+    return locale === "ur" ? `${hours} گھنٹے پہلے` : `Updated ${hours} h ago`;
+  }
+  return locale === "ur" ? "تازہ ترین فہرست" : "List refreshed";
 }

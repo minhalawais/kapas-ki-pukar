@@ -1,4 +1,4 @@
-import { goldenScenarioIds } from "@kapas/domain";
+import { goldenScenarioIds, isSubcategoryOf } from "@kapas/domain";
 import { describe, expect, it } from "vitest";
 
 import { GOLDEN_AI_OUTPUTS, MockAIService, aiService, analyzeComplaint } from "./index";
@@ -25,6 +25,12 @@ describe("MockAIService", () => {
     expect(summaries.size).toBe(10);
     expect(GOLDEN_AI_OUTPUTS["GS-01"].suggestedCategory).toBe("WAG");
     expect(GOLDEN_AI_OUTPUTS["GS-08"].confidenceScore).toBe(0.55);
+    for (const id of goldenScenarioIds) {
+      const output = GOLDEN_AI_OUTPUTS[id];
+      expect(output.suggestedSubcategory === undefined || isSubcategoryOf(output.suggestedCategory, output.suggestedSubcategory)).toBe(true);
+      expect(output.confidenceScore).toBeGreaterThanOrEqual(0);
+      expect(output.confidenceScore).toBeLessThanOrEqual(1);
+    }
   });
 
   it("keeps original audio URI out of the AI payload", async () => {

@@ -10,6 +10,494 @@
   },
   "openapi": "3.0.0",
   "paths": {
+    "/api/v1/admin/users": {
+      "get": {
+        "operationId": "AdminController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      },
+      "post": {
+        "operationId": "AdminController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/users/{id}": {
+      "patch": {
+        "operationId": "AdminController_update",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/users/{id}/sessions/revoke": {
+      "post": {
+        "operationId": "AdminController_revokeSessions",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/analytics/breakdowns": {
+      "get": {
+        "operationId": "AnalyticsController_breakdowns",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Analytics"
+        ]
+      }
+    },
+    "/api/v1/analytics/summary": {
+      "get": {
+        "operationId": "AnalyticsController_summary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Analytics"
+        ]
+      }
+    },
+    "/api/v1/analytics/trends": {
+      "get": {
+        "operationId": "AnalyticsController_trends",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Analytics"
+        ]
+      }
+    },
+    "/api/v1/audit": {
+      "get": {
+        "operationId": "AuditController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Audit"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/mfa/enroll": {
+      "post": {
+        "operationId": "AuthController_enrollMfa",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/mfa/recovery-codes/rotate": {
+      "post": {
+        "operationId": "AuthController_rotateRecoveryCodes",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/mfa/verify": {
+      "post": {
+        "operationId": "AuthController_verifyMfa",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/reauthenticate": {
+      "post": {
+        "operationId": "AuthController_reauthenticate",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/cases": {
+      "get": {
+        "operationId": "CaseController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}": {
+      "get": {
+        "operationId": "CaseController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/actions": {
+      "post": {
+        "operationId": "CaseController_action",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/assignment": {
+      "patch": {
+        "operationId": "CaseController_assignment",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/available-actions": {
+      "get": {
+        "operationId": "CaseController_availableActions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/evidence": {
+      "get": {
+        "operationId": "CaseController_evidence",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/evidence/{evidenceId}/content": {
+      "get": {
+        "operationId": "CaseController_evidenceContent",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/history": {
+      "get": {
+        "operationId": "CaseController_history",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/identity": {
+      "get": {
+        "operationId": "CaseController_identity",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/priority": {
+      "patch": {
+        "operationId": "CaseController_priority",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/resolve": {
+      "patch": {
+        "operationId": "CaseController_resolve",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/{id}/status": {
+      "patch": {
+        "operationId": "CaseController_transition",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/cases/reference-data/locations": {
+      "get": {
+        "operationId": "CaseController_locations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Case"
+        ]
+      }
+    },
+    "/api/v1/complaints": {
+      "post": {
+        "operationId": "IntakeController_submitComplaint",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Intake"
+        ]
+      }
+    },
+    "/api/v1/complaints/submissions/{clientSubmissionId}": {
+      "get": {
+        "operationId": "IntakeController_submissionStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Intake"
+        ]
+      }
+    },
+    "/api/v1/exports": {
+      "post": {
+        "operationId": "ExportController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Export"
+        ]
+      }
+    },
+    "/api/v1/exports/{id}": {
+      "get": {
+        "operationId": "ExportController_status",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Export"
+        ]
+      }
+    },
+    "/api/v1/exports/{id}/content": {
+      "get": {
+        "operationId": "ExportController_content",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Export"
+        ]
+      }
+    },
+    "/api/v1/governance/legal-holds": {
+      "post": {
+        "operationId": "GovernanceController_placeHold",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Governance"
+        ]
+      }
+    },
+    "/api/v1/governance/legal-holds/{complaintId}/release": {
+      "post": {
+        "operationId": "GovernanceController_releaseHold",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Governance"
+        ]
+      }
+    },
+    "/api/v1/governance/quality": {
+      "get": {
+        "operationId": "GovernanceController_quality",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Governance"
+        ]
+      }
+    },
     "/api/v1/health/live": {
       "get": {
         "operationId": "FoundationController_live",
@@ -216,6 +704,918 @@
         "summary": "Safe build metadata",
         "tags": [
           "foundation"
+        ]
+      }
+    },
+    "/api/v1/provider-webhooks/{provider}": {
+      "post": {
+        "operationId": "ProviderWebhookController_receive",
+        "parameters": [],
+        "responses": {
+          "202": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "ProviderWebhook"
+        ]
+      }
+    },
+    "/api/v1/reference-data/locations": {
+      "get": {
+        "operationId": "ReferenceDataController_locations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "ReferenceData"
+        ]
+      }
+    },
+    "/api/v1/uploads": {
+      "options": {
+        "operationId": "IntakeController_uploadOptions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Intake"
+        ]
+      },
+      "post": {
+        "operationId": "IntakeController_createUpload",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Intake"
+        ]
+      }
+    },
+    "/api/v1/uploads/{id}": {
+      "delete": {
+        "operationId": "IntakeController_cancelUpload",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Intake"
+        ]
+      },
+      "get": {
+        "operationId": "IntakeController_uploadDetails",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Intake"
+        ]
+      },
+      "head": {
+        "operationId": "IntakeController_uploadHead",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Intake"
+        ]
+      },
+      "patch": {
+        "operationId": "IntakeController_patchUpload",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Intake"
+        ]
+      }
+    },
+    "/api/v1/uploads/{id}/status": {
+      "get": {
+        "operationId": "IntakeController_uploadStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Intake"
+        ]
+      }
+    },
+    "/api/v1/worker-history-sessions": {
+      "post": {
+        "operationId": "AuthController_workerHistorySession",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/worker-sessions": {
+      "post": {
+        "operationId": "AuthController_workerSession",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/worker-sessions/current": {
+      "delete": {
+        "operationId": "AuthController_workerLogout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/worker/complaints": {
+      "get": {
+        "operationId": "WorkerController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Worker"
+        ]
+      }
+    },
+    "/api/v1/worker/complaints/{referenceNumber}": {
+      "get": {
+        "operationId": "WorkerController_detail",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Worker"
+        ]
+      }
+    },
+    "/api/v1/worker/complaints/{referenceNumber}/claim": {
+      "post": {
+        "operationId": "WorkerController_claim",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Worker"
+        ]
+      }
+    },
+    "/api/v1/worker/complaints/{referenceNumber}/evidence/{evidenceId}/content": {
+      "get": {
+        "operationId": "WorkerController_evidenceContent",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Worker"
+        ]
+      }
+    },
+    "/api/v1/worker/complaints/{referenceNumber}/feedback": {
+      "post": {
+        "operationId": "WorkerController_feedback",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Worker"
+        ]
+      }
+    },
+    "/api/v1/worker/complaints/{referenceNumber}/information-responses": {
+      "post": {
+        "operationId": "WorkerController_informationResponse",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Worker"
+        ]
+      }
+    },
+    "/api/v3/complaints/{reference}/delivery": {
+      "get": {
+        "operationId": "EvidenceDeliveryV3Controller_delivery",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Tracking-Secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Evidence Delivery V3"
+        ]
+      }
+    },
+    "/api/v3/complaints/{reference}/evidence": {
+      "post": {
+        "operationId": "EvidenceDeliveryV3Controller_replace",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Tracking-Secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Evidence Delivery V3"
+        ]
+      }
+    },
+    "/api/v3/complaints/{reference}/evidence/{clientMediaId}/grant": {
+      "post": {
+        "operationId": "EvidenceDeliveryV3Controller_grant",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Tracking-Secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Evidence Delivery V3"
+        ]
+      }
+    },
+    "/api/v3/complaints/{reference}/evidence/{clientMediaId}/omit": {
+      "post": {
+        "operationId": "EvidenceDeliveryV3Controller_omit",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Tracking-Secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Evidence Delivery V3"
+        ]
+      }
+    },
+    "/api/v3/intake-submissions": {
+      "post": {
+        "operationId": "ComplaintIntakeV3Controller_submit",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "additionalProperties": false,
+                "definitions": {
+                  "__schema0": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "items": {
+                          "$ref": "#/definitions/__schema0"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "additionalProperties": {
+                          "$ref": "#/definitions/__schema0"
+                        },
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "type": "object"
+                      }
+                    ]
+                  }
+                },
+                "properties": {
+                  "attachments": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "capturedAt": {
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                          "type": "string"
+                        },
+                        "clientMediaId": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        "declaredMimeType": {
+                          "maxLength": 100,
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9][a-z0-9.+-]*\\/[a-z0-9][a-z0-9.+-]*$",
+                          "type": "string"
+                        },
+                        "displayName": {
+                          "maxLength": 255,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "durationMs": {
+                          "exclusiveMinimum": 0,
+                          "maximum": 86400000,
+                          "type": "integer"
+                        },
+                        "kind": {
+                          "enum": [
+                            "voice",
+                            "photo",
+                            "document"
+                          ],
+                          "type": "string"
+                        },
+                        "recordedAt": {
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                          "type": "string"
+                        },
+                        "totalBytes": {
+                          "exclusiveMinimum": 0,
+                          "maximum": 26214400,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "clientMediaId",
+                        "kind",
+                        "displayName",
+                        "declaredMimeType",
+                        "totalBytes"
+                      ],
+                      "type": "object"
+                    },
+                    "maxItems": 6,
+                    "type": "array"
+                  },
+                  "clientSubmissionId": {
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                    "type": "string"
+                  },
+                  "complaint": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "affectedWorkerType": {
+                        "enum": [
+                          "seasonal-picker",
+                          "daily-wage",
+                          "piece-rate",
+                          "migrant",
+                          "contractor",
+                          "tenant-associated",
+                          "other"
+                        ],
+                        "type": "string"
+                      },
+                      "categoryCode": {
+                        "enum": [
+                          "WAG",
+                          "PES",
+                          "HSE",
+                          "HAR",
+                          "CHL",
+                          "FOL",
+                          "CON",
+                          "HRS",
+                          "SAN",
+                          "DIS",
+                          "OTH"
+                        ],
+                        "type": "string"
+                      },
+                      "contactPreference": {
+                        "default": "do-not-initiate",
+                        "enum": [
+                          "call",
+                          "message",
+                          "either",
+                          "do-not-initiate"
+                        ],
+                        "type": "string"
+                      },
+                      "gender": {
+                        "enum": [
+                          "Female",
+                          "Male",
+                          "Other",
+                          "Not Stated"
+                        ],
+                        "type": "string"
+                      },
+                      "incident": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "currentDanger": {
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "description": {
+                            "maxLength": 4000,
+                            "type": "string"
+                          },
+                          "immediateDanger": {
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "occurredAt": {
+                            "format": "date-time",
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                            "type": "string"
+                          },
+                          "othersAffected": {
+                            "default": "individual",
+                            "enum": [
+                              "individual",
+                              "2-5",
+                              "6-20",
+                              "more-than-20",
+                              "not-sure"
+                            ],
+                            "type": "string"
+                          },
+                          "schemaVersion": {
+                            "default": 3,
+                            "exclusiveMinimum": 0,
+                            "maximum": 9007199254740991,
+                            "type": "integer"
+                          },
+                          "structuredAnswers": {
+                            "additionalProperties": {
+                              "$ref": "#/definitions/__schema0"
+                            },
+                            "default": {},
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "whenLabel": {
+                            "maxLength": 100,
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "whenLabel",
+                          "currentDanger",
+                          "immediateDanger",
+                          "othersAffected",
+                          "structuredAnswers",
+                          "schemaVersion"
+                        ],
+                        "type": "object"
+                      },
+                      "location": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "accuracyMeters": {
+                            "maximum": 100000,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "descriptivePlace": {
+                            "maxLength": 500,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "district": {
+                            "maxLength": 100,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "exactCoordinates": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "latitude": {
+                                "maximum": 90,
+                                "minimum": -90,
+                                "type": "number"
+                              },
+                              "longitude": {
+                                "maximum": 180,
+                                "minimum": -180,
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "latitude",
+                              "longitude"
+                            ],
+                            "type": "object"
+                          },
+                          "province": {
+                            "maxLength": 100,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "source": {
+                            "default": "manual",
+                            "enum": [
+                              "device",
+                              "manual"
+                            ],
+                            "type": "string"
+                          },
+                          "tehsil": {
+                            "maxLength": 100,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "villageLabel": {
+                            "maxLength": 160,
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "province",
+                          "district",
+                          "source"
+                        ],
+                        "type": "object"
+                      },
+                      "priority": {
+                        "default": "Standard",
+                        "enum": [
+                          "Emergency",
+                          "Critical",
+                          "High",
+                          "Standard"
+                        ],
+                        "type": "string"
+                      },
+                      "reporterDisplayName": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "reporterType": {
+                        "default": "self",
+                        "enum": [
+                          "self",
+                          "coworker",
+                          "family",
+                          "puwf-field",
+                          "community",
+                          "other"
+                        ],
+                        "type": "string"
+                      },
+                      "subcategoryCode": {
+                        "maxLength": 7,
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "categoryCode",
+                      "priority",
+                      "reporterType",
+                      "contactPreference",
+                      "incident",
+                      "location"
+                    ],
+                    "type": "object"
+                  },
+                  "idempotencyKey": {
+                    "maxLength": 200,
+                    "minLength": 16,
+                    "type": "string"
+                  },
+                  "privacyMode": {
+                    "enum": [
+                      "ANON",
+                      "CONF",
+                      "IDEN"
+                    ],
+                    "type": "string"
+                  },
+                  "privateReporter": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "cnic": {
+                        "maxLength": 32,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "phone": {
+                        "maxLength": 32,
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "phone"
+                    ],
+                    "type": "object"
+                  },
+                  "revision": {
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991,
+                    "type": "integer"
+                  },
+                  "schemaVersion": {
+                    "const": 3,
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "clientSubmissionId",
+                  "idempotencyKey",
+                  "schemaVersion",
+                  "revision",
+                  "privacyMode",
+                  "complaint",
+                  "attachments"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "http://json-schema.org/draft-07/schema#",
+                  "additionalProperties": false,
+                  "properties": {
+                    "acceptedAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    },
+                    "clientSubmissionId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "evidenceStatus": {
+                      "enum": [
+                        "none",
+                        "pending",
+                        "processing",
+                        "complete",
+                        "action_required"
+                      ],
+                      "type": "string"
+                    },
+                    "referenceNumber": {
+                      "maxLength": 32,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "trackingSecret": {
+                      "maxLength": 200,
+                      "minLength": 16,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "clientSubmissionId",
+                    "referenceNumber",
+                    "trackingSecret",
+                    "acceptedAt",
+                    "evidenceStatus"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Complaint Intake V3"
+        ]
+      }
+    },
+    "/api/v3/intake-submissions/{clientSubmissionId}": {
+      "get": {
+        "operationId": "ComplaintIntakeV3Controller_recover",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "clientSubmissionId",
+            "required": true,
+            "schema": {
+              "format": "uuid"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "http://json-schema.org/draft-07/schema#",
+                  "additionalProperties": false,
+                  "properties": {
+                    "acceptedAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    },
+                    "clientSubmissionId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "evidenceStatus": {
+                      "enum": [
+                        "none",
+                        "pending",
+                        "processing",
+                        "complete",
+                        "action_required"
+                      ],
+                      "type": "string"
+                    },
+                    "referenceNumber": {
+                      "maxLength": 32,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "trackingSecret": {
+                      "maxLength": 200,
+                      "minLength": 16,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "clientSubmissionId",
+                    "referenceNumber",
+                    "trackingSecret",
+                    "acceptedAt",
+                    "evidenceStatus"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Complaint Intake V3"
+        ]
+      }
+    },
+    "/internal/tusd-hooks": {
+      "post": {
+        "operationId": "TusHookController_handle",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TusHook"
         ]
       }
     }

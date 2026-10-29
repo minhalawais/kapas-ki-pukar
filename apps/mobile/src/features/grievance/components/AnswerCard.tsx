@@ -19,7 +19,6 @@ interface Props {
 
 export function AnswerCard({ labelKey, label, selected, onPress, icon, tile = false }: Props) {
   const locale = useLocaleStore((s) => s.locale);
-  const family = isRTL(locale) ? fontFamily.urduUi : fontFamily.ui;
   const resolved = label ?? (labelKey ? t(locale, labelKey) : "");
 
   return (
@@ -54,20 +53,6 @@ export function AnswerCard({ labelKey, label, selected, onPress, icon, tile = fa
       >
         {resolved}
       </Text>
-      {selected ? (
-        <Text
-          style={{
-            marginTop: 8,
-            color: semanticColors.actionPrimary,
-            fontSize: mobileType.caption.size,
-            lineHeight: mobileType.caption.line,
-            fontFamily: family,
-            textAlign: isRTL(locale) ? "right" : "left",
-          }}
-        >
-          {t(locale, "a11y.selected")}
-        </Text>
-      ) : null}
     </Pressable>
   );
 }

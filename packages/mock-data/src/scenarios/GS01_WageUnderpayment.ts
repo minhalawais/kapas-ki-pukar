@@ -15,7 +15,7 @@ export function createGs01(): Complaint {
     index: 101,
     categoryCode: "WAG",
     subcategoryCode: "WAG-UND",
-    status: "Under Review",
+    status: "Triage",
     priority: "High",
     privacyMode: "CONF",
     reporterType: "self",

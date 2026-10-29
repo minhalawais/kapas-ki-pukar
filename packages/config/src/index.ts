@@ -18,9 +18,34 @@ const environmentSchema = z
     TRUST_PROXY_COUNT: z.coerce.number().int().min(0).max(10),
     EVIDENCE_ROOT: z.string().trim().min(1),
     QUARANTINE_ROOT: z.string().trim().min(1),
+    CLAMAV_HOST: z.string().trim().min(1).default("127.0.0.1"),
+    CLAMAV_PORT: z.coerce.number().int().min(1).max(65_535).default(3310),
     ENCRYPTION_KEY_ID: z.string().trim().min(1).max(200),
     SESSION_SECRET: z.string().min(32),
+    IDENTITY_LOOKUP_PEPPER: z.string().min(32),
     INTERNAL_METRICS_TOKEN: z.string().min(24),
+    PROVIDER_WEBHOOK_SECRET: z.string().min(32).optional().default(""),
+    TUSD_HOOK_SECRET: z.string().min(32).default("development-only-tusd-hook-secret-32"),
+    TUSD_PUBLIC_URL: z.url().optional(),
+    TUSD_INTERNAL_URL: z.url().default("http://127.0.0.1:1080/files/"),
+    OBJECT_STORE_ENDPOINT: z.url().default("http://127.0.0.1:9000"),
+    OBJECT_STORE_ACCESS_KEY: z.string().min(1).default("kapas-local"),
+    OBJECT_STORE_SECRET_KEY: z.string().min(8).default("development-minio-secret"),
+    QUARANTINE_BUCKET: z
+      .string()
+      .regex(/^[a-z0-9][a-z0-9.-]{1,62}$/)
+      .default("quarantine"),
+    PROTECTED_EVIDENCE_BUCKET: z
+      .string()
+      .regex(/^[a-z0-9][a-z0-9.-]{1,62}$/)
+      .default("protected-evidence"),
+    TEMPORARY_BUCKET: z
+      .string()
+      .regex(/^[a-z0-9][a-z0-9.-]{1,62}$/)
+      .default("temporary"),
+    EVIDENCE_KEK_SECRET: z.string().min(32).default("development-only-evidence-kek-secret"),
+    EXPO_PUSH_ENABLED: booleanStringSchema.default(false),
+    EXPO_PUSH_ACCESS_TOKEN: z.string().trim().optional().default(""),
     OPENAPI_ENABLED: booleanStringSchema.default(false),
     JSON_BODY_LIMIT_BYTES: z.coerce
       .number()
@@ -31,6 +56,7 @@ const environmentSchema = z
     RATE_LIMIT_TTL_MS: z.coerce.number().int().min(1_000).max(3_600_000).default(60_000),
     RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(10_000).default(120),
     WORKER_CONCURRENCY: z.coerce.number().int().min(1).max(32).default(2),
+    WORKER_HEALTH_PORT: z.coerce.number().int().min(1).max(65_535).default(4100),
     QUEUE_PREFIX: z
       .string()
       .trim()
@@ -56,6 +82,20 @@ const environmentSchema = z
     }
 
     if (value.NODE_ENV === "production") {
+      if (value.TUSD_HOOK_SECRET === "development-only-tusd-hook-secret-32") {
+        context.addIssue({
+          code: "custom",
+          path: ["TUSD_HOOK_SECRET"],
+          message: "must be replaced in production",
+        });
+      }
+      if (value.EVIDENCE_KEK_SECRET === "development-only-evidence-kek-secret") {
+        context.addIssue({
+          code: "custom",
+          path: ["EVIDENCE_KEK_SECRET"],
+          message: "must be replaced in production",
+        });
+      }
       if (value.API_HOST !== "0.0.0.0") {
         context.addIssue({
           code: "custom",
@@ -93,14 +133,31 @@ export type RuntimeConfig = Readonly<{
   trustProxyCount: number;
   evidenceRoot: string;
   quarantineRoot: string;
+  clamavHost: string;
+  clamavPort: number;
   encryptionKeyId: string;
   sessionSecret: string;
+  identityLookupPepper: string;
   internalMetricsToken: string;
+  providerWebhookSecret: string;
+  tusdHookSecret: string;
+  tusdPublicUrl: string;
+  tusdInternalUrl: string;
+  objectStoreEndpoint: string;
+  objectStoreAccessKey: string;
+  objectStoreSecretKey: string;
+  quarantineBucket: string;
+  protectedEvidenceBucket: string;
+  temporaryBucket: string;
+  evidenceKekSecret: string;
+  expoPushEnabled: boolean;
+  expoPushAccessToken: string;
   openApiEnabled: boolean;
   jsonBodyLimitBytes: number;
   rateLimitTtlMs: number;
   rateLimitMax: number;
   workerConcurrency: number;
+  workerHealthPort: number;
   queuePrefix: string;
   shutdownTimeoutMs: number;
 }>;
@@ -139,14 +196,32 @@ export function loadRuntimeConfig(source: NodeJS.ProcessEnv): RuntimeConfig {
     trustProxyCount: parsed.data.TRUST_PROXY_COUNT,
     evidenceRoot: parsed.data.EVIDENCE_ROOT,
     quarantineRoot: parsed.data.QUARANTINE_ROOT,
+    clamavHost: parsed.data.CLAMAV_HOST,
+    clamavPort: parsed.data.CLAMAV_PORT,
     encryptionKeyId: parsed.data.ENCRYPTION_KEY_ID,
     sessionSecret: parsed.data.SESSION_SECRET,
+    identityLookupPepper: parsed.data.IDENTITY_LOOKUP_PEPPER,
     internalMetricsToken: parsed.data.INTERNAL_METRICS_TOKEN,
+    providerWebhookSecret: parsed.data.PROVIDER_WEBHOOK_SECRET,
+    tusdHookSecret: parsed.data.TUSD_HOOK_SECRET,
+    tusdPublicUrl:
+      parsed.data.TUSD_PUBLIC_URL ?? `${parsed.data.PUBLIC_API_URL.replace(/\/$/u, "")}/files/`,
+    tusdInternalUrl: parsed.data.TUSD_INTERNAL_URL,
+    objectStoreEndpoint: parsed.data.OBJECT_STORE_ENDPOINT,
+    objectStoreAccessKey: parsed.data.OBJECT_STORE_ACCESS_KEY,
+    objectStoreSecretKey: parsed.data.OBJECT_STORE_SECRET_KEY,
+    quarantineBucket: parsed.data.QUARANTINE_BUCKET,
+    protectedEvidenceBucket: parsed.data.PROTECTED_EVIDENCE_BUCKET,
+    temporaryBucket: parsed.data.TEMPORARY_BUCKET,
+    evidenceKekSecret: parsed.data.EVIDENCE_KEK_SECRET,
+    expoPushEnabled: parsed.data.EXPO_PUSH_ENABLED,
+    expoPushAccessToken: parsed.data.EXPO_PUSH_ACCESS_TOKEN,
     openApiEnabled: parsed.data.OPENAPI_ENABLED,
     jsonBodyLimitBytes: parsed.data.JSON_BODY_LIMIT_BYTES,
     rateLimitTtlMs: parsed.data.RATE_LIMIT_TTL_MS,
     rateLimitMax: parsed.data.RATE_LIMIT_MAX,
     workerConcurrency: parsed.data.WORKER_CONCURRENCY,
+    workerHealthPort: parsed.data.WORKER_HEALTH_PORT,
     queuePrefix: parsed.data.QUEUE_PREFIX,
     shutdownTimeoutMs: parsed.data.SHUTDOWN_TIMEOUT_MS,
   });
@@ -172,9 +247,20 @@ export function configDiagnostics(
     TRUST_PROXY_COUNT: config.trustProxyCount,
     EVIDENCE_ROOT: "configured",
     QUARANTINE_ROOT: "configured",
+    CLAMAV_HOST: config.clamavHost,
+    CLAMAV_PORT: config.clamavPort,
     ENCRYPTION_KEY_ID: "configured",
     SESSION_SECRET: "configured",
+    IDENTITY_LOOKUP_PEPPER: "configured",
     INTERNAL_METRICS_TOKEN: "configured",
+    TUSD_HOOK_SECRET: "configured",
+    TUSD_PUBLIC_URL: "configured",
+    TUSD_INTERNAL_URL: "configured",
+    OBJECT_STORE_ENDPOINT: "configured",
+    OBJECT_STORE_ACCESS_KEY: "configured",
+    OBJECT_STORE_SECRET_KEY: "configured",
+    EVIDENCE_KEK_SECRET: "configured",
+    EXPO_PUSH_ENABLED: config.expoPushEnabled,
     OPENAPI_ENABLED: config.openApiEnabled,
   });
 }

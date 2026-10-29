@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { ScrollView, View, type StyleProp, type ViewStyle } from "react-native";
+import { RefreshControl, ScrollView, View, type StyleProp, type ViewStyle } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { pagePadding } from "../theme/layout";
@@ -17,6 +17,8 @@ export function ScreenShell({
   contentStyle,
   backgroundColor = semanticColors.pageWorker,
   attributionMarginTop,
+  refreshing,
+  onRefresh,
 }: {
   children: ReactNode;
   header?: ReactNode;
@@ -26,6 +28,8 @@ export function ScreenShell({
   contentStyle?: StyleProp<ViewStyle>;
   backgroundColor?: string;
   attributionMarginTop?: number;
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }) {
   const content = {
     ...pagePadding(),
@@ -49,6 +53,16 @@ export function ScreenShell({
           contentContainerStyle={[content, stableLayoutDirection, contentStyle]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            onRefresh ? (
+              <RefreshControl
+                refreshing={refreshing ?? false}
+                onRefresh={onRefresh}
+                tintColor={semanticColors.actionPrimary}
+                colors={[semanticColors.actionPrimary]}
+              />
+            ) : undefined
+          }
         >
           {children}
           {footer ? null : <AppAttributionFooter marginTop={attributionMarginTop} />}

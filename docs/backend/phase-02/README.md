@@ -16,6 +16,7 @@
 - BullMQ diagnostics-only queue worker with bounded concurrency, retry classification, final-failure recording interface and graceful shutdown.
 - Local PostgreSQL 18 and Redis Compose definition with loopback-only published ports, authentication, health checks, a project-scoped bridge network and named volumes.
 - Non-root API and worker container definitions.
+- Explicit `@fastify/static` runtime dependency for the documented local Swagger/OpenAPI path; API tests exercise OpenAPI-enabled startup.
 - CI gates for formatting, secret scan, migrations, integration tests, OpenAPI drift, application builds, image builds and image scans, plus a non-blocking dependency-audit report while two upstream advisories have no patched release.
 
 ## Evidence and operation

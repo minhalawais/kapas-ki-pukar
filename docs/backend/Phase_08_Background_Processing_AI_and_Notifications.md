@@ -119,7 +119,7 @@ The original voice remains authoritative. AI failure leaves the complaint fully 
 
 ## 8. Notification service
 
-Use provider-neutral adapters for SMS and push notifications. Notification intent is stored durably before delivery.
+Use a provider-neutral push-notification adapter. Notification intent is stored durably before delivery.
 
 Store:
 
@@ -139,7 +139,7 @@ Do not treat provider acceptance as confirmed human delivery.
 - Respect `contactAllowed`, safe channel and safe time preferences.
 - Anonymous complaints without contact data receive no external notification.
 - Lock-screen/push text must not identify complaint category or sensitive allegation.
-- SMS should use neutral wording and direct the worker to secure tracking.
+- Push text must use neutral wording and direct the worker to secure tracking.
 - Opt-out/withdrawn consent stops future optional messages.
 - Contact destinations are never written to ordinary job logs.
 - Templates are reviewed in every supported locale for privacy and comprehension.
@@ -206,7 +206,7 @@ Alerts prioritize age and terminal failure, not only queue length.
 - BullMQ queue/worker modules and job catalogue.
 - AI provider interface, test provider and one approved production adapter.
 - AI provenance and human-review workflow.
-- Notification adapters, templates and webhook handling.
+- Push notification adapter, templates and webhook handling.
 - Scheduled maintenance jobs.
 - Queue/provider dashboards and runbooks.
 - Data-processing approval record for each external provider.

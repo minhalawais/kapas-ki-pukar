@@ -7,7 +7,7 @@ export function createGs03(): Complaint {
     index: 103,
     categoryCode: "HAR",
     subcategoryCode: "HAR-INT",
-    status: "Under Review",
+    status: "Triage",
     priority: "Critical",
     privacyMode: "CONF",
     reporterType: "self",

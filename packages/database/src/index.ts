@@ -1,6 +1,7 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 
 import { PrismaClient } from "./generated/prisma/client";
+export type { Prisma } from "./generated/prisma/client";
 
 export type DatabaseClient = PrismaClient;
 
@@ -34,3 +35,6 @@ export function createDatabaseClient(options: DatabaseClientOptions): DatabaseCl
 export async function checkDatabase(client: DatabaseClient): Promise<void> {
   await client.$queryRaw`SELECT 1`;
 }
+
+export * from "./repositories";
+export * from "./fixtures";

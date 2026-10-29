@@ -1,5 +1,7 @@
 # MoIP-GP — First Production Go-Live Checklist
 
+Shared VPS inventory and Kapas maintenance: [`docs/HOSTING-AND-MAINTENANCE.md`](docs/HOSTING-AND-MAINTENANCE.md).
+
 Complete these steps once, in order.
 
 ## 1. VPS bootstrap (backend repo files)

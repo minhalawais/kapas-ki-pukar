@@ -2,17 +2,16 @@
 
 import type { Priority } from "@kapas/domain";
 import { t, type MessageKey } from "@kapas/localization";
-import type { PortalCaseAction } from "@kapas/mock-services";
 import { useState } from "react";
 
 import { CaseActionModal } from "@/components/case/CaseActionModal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import type { useCaseWorkspace } from "@/lib/use-case-actions";
+import type { PortalCaseAction, useCaseWorkspace } from "@/lib/use-case-actions";
 import { useLocaleStore } from "@/stores/locale-store";
 
 const PRIMARY: PortalCaseAction[] = ["startReview", "recordAction", "proposeResolution", "resolve", "close", "reopen"];
-const COMMON: PortalCaseAction[] = ["requestInformation", "recordContact", "addNote", "escalate"];
+const COMMON: PortalCaseAction[] = ["recordContact", "addNote", "escalate"];
 
 export function ActionRail({ available, currentPriority, pending, workspace }: {
   available: Record<PortalCaseAction, boolean>;
@@ -32,7 +31,6 @@ export function ActionRail({ available, currentPriority, pending, workspace }: {
       if (action === "changePriority") await workspace.changePriority.mutateAsync({ priority: payload.priority as Priority, reason: payload.note || undefined });
       else if (action === "addNote") await workspace.addNote.mutateAsync(payload.note);
       else if (action === "recordContact") await workspace.recordContact.mutateAsync({ channel: payload.channel as "call" | "message" | "none", note: payload.note || undefined });
-      else if (action === "requestInformation") await workspace.requestInformation.mutateAsync(payload.note);
       else if (action === "addFinding") await workspace.addFinding.mutateAsync(payload.note);
       else if (action === "recordAction") await workspace.recordAction.mutateAsync({ type: "Action Taken", note: payload.note });
       else if (action === "escalate") await workspace.escalate.mutateAsync(payload.note);

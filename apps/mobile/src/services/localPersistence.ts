@@ -1,14 +1,6 @@
-import {
-  complaintService,
-  ensurePersistenceSchema,
-  getPersistenceNotice,
-  hydrateDemoRuntime,
-} from "@kapas/mock-services";
-
-export { ensurePersistenceSchema, getPersistenceNotice, hydrateDemoRuntime };
+export type PersistenceNotice = null;
+export const getPersistenceNotice = (): PersistenceNotice => null;
 
 export async function bootLocalPersistence(): Promise<void> {
-  await ensurePersistenceSchema();
-  await hydrateDemoRuntime();
-  await complaintService.getDraft();
+  return;
 }

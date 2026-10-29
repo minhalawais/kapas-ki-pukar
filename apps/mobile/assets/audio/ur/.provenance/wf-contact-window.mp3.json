@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-contact-window",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "آپ سے کس وقت رابطہ محفوظ ہے؟ مثال: کام کے دن شام چار بجے کے بعد۔",
+  "scriptSha256": "476c31a75fb4d2780f226060cd7589136d9c37b364ee84edd5316ab2f96e35bb",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "36939484a99bca6636a64d00c76be6a42f9d4cd819519f929c0a50559330d52e",
+  "generatedAt": "2026-10-28T09:44:12.997Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "pending-native-review",
+  "reviewer": null,
+  "reviewedAt": null,
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 8.193,
+    "integratedLufs": -18.1,
+    "truePeakDb": -3
+  }
+}

@@ -6,27 +6,37 @@ import type {
   Gender,
   NamedCount,
 } from "@kapas/domain";
-import { DEMO_NOW_ISO, isOverdue, priorityRank, type CaseStatus, type Priority } from "@kapas/domain";
+import {
+  DEMO_NOW_ISO,
+  isOverdue,
+  priorityRank,
+  type CaseStatus,
+  type Priority,
+} from "@kapas/domain";
 
 const inProgress: CaseStatus[] = [
-  "Submitted",
-  "Under Review",
+  "Received",
+  "Triage",
+  "Verification",
+  "Investigation",
   "Action in Progress",
-  "Proposed Resolution",
+  "Escalated",
+  "Outcome Verification",
   "Reopened",
 ];
 
 const openStatuses: CaseStatus[] = [...inProgress];
 
 const statusRank: Record<CaseStatus, number> = {
-  Draft: 0,
-  Submitted: 1,
-  "Under Review": 2,
-  "Action in Progress": 3,
-  "Proposed Resolution": 4,
-  Resolved: 5,
-  Reopened: 6,
-  Closed: 7,
+  Received: 0,
+  Triage: 1,
+  Verification: 2,
+  Investigation: 3,
+  "Action in Progress": 4,
+  "Outcome Verification": 5,
+  Escalated: 6,
+  Reopened: 7,
+  Closed: 8,
 };
 
 function countsBy(rows: Complaint[], keyOf: (row: Complaint) => string): NamedCount[] {
@@ -67,28 +77,45 @@ export function analyticsGender(row: Complaint): Gender {
 
 export function filterComplaints(rows: Complaint[], filters?: ComplaintFilters): Complaint[] {
   if (!filters) {
-    return rows.filter((row) => row.status !== "Draft");
+    return rows;
   }
   return rows.filter((row) => {
-    if (row.status === "Draft") {
-      return false;
-    }
     if (filters.status && filters.status.length > 0 && !filters.status.includes(row.status)) {
       return false;
     }
-    if (filters.priority && filters.priority.length > 0 && !filters.priority.includes(row.priority)) {
+    if (
+      filters.priority &&
+      filters.priority.length > 0 &&
+      !filters.priority.includes(row.priority)
+    ) {
       return false;
     }
-    if (filters.category && filters.category.length > 0 && !filters.category.includes(row.categoryCode)) {
+    if (
+      filters.category &&
+      filters.category.length > 0 &&
+      !filters.category.includes(row.categoryCode)
+    ) {
       return false;
     }
-    if (filters.privacyMode && filters.privacyMode.length > 0 && !filters.privacyMode.includes(row.privacyMode)) {
+    if (
+      filters.privacyMode &&
+      filters.privacyMode.length > 0 &&
+      !filters.privacyMode.includes(row.privacyMode)
+    ) {
       return false;
     }
-    if (filters.province && filters.province.length > 0 && !filters.province.includes(row.location.province)) {
+    if (
+      filters.province &&
+      filters.province.length > 0 &&
+      !filters.province.includes(row.location.province)
+    ) {
       return false;
     }
-    if (filters.gender && filters.gender.length > 0 && !filters.gender.includes(analyticsGender(row))) {
+    if (
+      filters.gender &&
+      filters.gender.length > 0 &&
+      !filters.gender.includes(analyticsGender(row))
+    ) {
       return false;
     }
     if (filters.from && row.submittedAt < filters.from) {
@@ -131,7 +158,7 @@ export function openCases(rows: Complaint[]): number {
 
 export function resolutionRate(rows: Complaint[]): number | null {
   return ratio(
-    rows.filter((row) => row.status === "Resolved" || row.status === "Closed").length,
+    rows.filter((row) => row.status === "Closed").length,
     rows.length,
   );
 }
@@ -146,13 +173,16 @@ export function criticalRate(rows: Complaint[]): number | null {
 export function reopenRate(rows: Complaint[]): number | null {
   return ratio(
     rows.filter((row) => row.status === "Reopened").length,
-    rows.filter((row) => row.status === "Resolved" || row.status === "Closed").length,
+    rows.filter((row) => row.status === "Closed").length,
   );
 }
 
 export function positiveOutcomeRate(rows: Complaint[]): number | null {
   const responses = rows.filter((row) => row.workerFeedback);
-  return ratio(responses.filter((row) => row.workerFeedback?.outcome === "satisfied").length, responses.length);
+  return ratio(
+    responses.filter((row) => row.workerFeedback?.outcome === "satisfied").length,
+    responses.length,
+  );
 }
 
 export function averageFirstActionHours(rows: Complaint[]): number | null {
@@ -171,13 +201,15 @@ export function averageResolutionHours(rows: Complaint[]): number | null {
     rows.flatMap((row) => {
       const at =
         row.resolution?.resolvedAt ??
-        row.actions.find((item) => item.type === "Resolved" || item.type === "Closed")?.at;
+        row.actions.find((item) => item.type === "Complaint Closed" || item.type === "Closed")?.at;
       return at ? [hoursBetween(row.submittedAt, at)] : [];
     }),
   );
 }
 
-export function selectKpis(rows: Complaint[]): Omit<
+export function selectKpis(
+  rows: Complaint[],
+): Omit<
   AnalyticsSnapshot,
   | "generatedAt"
   | "byCategory"
@@ -194,11 +226,13 @@ export function selectKpis(rows: Complaint[]): Omit<
   const withAi = rows.filter((row) => row.ai);
   return {
     total: totalComplaints(rows),
-    newCount: rows.filter((row) => row.status === "Submitted").length,
-    criticalCount: rows.filter((row) => row.priority === "Emergency" || row.priority === "Critical").length,
+    newCount: rows.filter((row) => row.status === "Received").length,
+    criticalCount: rows.filter((row) => row.priority === "Emergency" || row.priority === "Critical")
+      .length,
     inProgressCount: rows.filter((row) => inProgress.includes(row.status)).length,
     overdueCount: rows.filter((row) => isOverdue(row)).length,
-    resolvedCount: rows.filter((row) => row.status === "Resolved" || row.status === "Closed").length,
+    resolvedCount: rows.filter((row) => row.status === "Closed")
+      .length,
     openCount: openCases(rows),
     resolutionRate: resolutionRate(rows),
     criticalRate: criticalRate(rows),
@@ -210,7 +244,10 @@ export function selectKpis(rows: Complaint[]): Omit<
       withAi.filter((row) => row.ai?.failed || row.ai?.confidence === "low").length,
       withAi.length,
     ),
-    aiHumanReviewShare: ratio(withAi.filter((row) => row.ai?.humanReviewRequired).length, withAi.length),
+    aiHumanReviewShare: ratio(
+      withAi.filter((row) => row.ai?.humanReviewRequired).length,
+      withAi.length,
+    ),
   };
 }
 
@@ -278,7 +315,9 @@ export function selectMonthlyTrend(rows: Complaint[]): NamedCount[] {
     return result;
   }
 
-  return countsBy(rows, (row) => row.submittedAt.slice(0, 7)).sort((a, b) => a.key.localeCompare(b.key));
+  return countsBy(rows, (row) => row.submittedAt.slice(0, 7)).sort((a, b) =>
+    a.key.localeCompare(b.key),
+  );
 }
 
 export function snapshotFrom(rows: Complaint[], filters?: AnalyticsFilters): AnalyticsSnapshot {

@@ -1,0 +1,2 @@
+ALTER TABLE "case_history" DROP CONSTRAINT "case_history_action_type_check";
+ALTER TABLE "case_history" ADD CONSTRAINT "case_history_action_type_check" CHECK ("action_type" IN ('Review Started','Priority Changed','Internal Note Added','Worker Contact Attempted','Worker Contact Successful','More Information Requested','Evidence Added','Investigation Finding Added','Action Taken','Referral Recorded','Escalated','Proposed Resolution','Resolved','Closed','Reopened','Worker Feedback Recorded','Complaint Received','Assignment Changed'));

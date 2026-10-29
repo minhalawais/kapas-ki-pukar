@@ -27,4 +27,5 @@ COPY --from=build --chown=node:node /runtime/package.json ./package.json
 COPY --from=build --chown=node:node /runtime/node_modules ./node_modules
 COPY --from=build --chown=node:node /runtime/dist ./dist
 USER node
+EXPOSE 4100
 CMD ["node", "dist/main.js"]

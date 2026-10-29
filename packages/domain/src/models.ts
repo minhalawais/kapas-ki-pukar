@@ -126,7 +126,7 @@ export interface ComplaintFilters {
 export type AnalyticsFilters = ComplaintFilters;
 
 export interface ContactAction {
-  channel: "call" | "message" | "none";
+  channel: "call" | "message" | "representative" | "none";
   note?: string;
 }
 

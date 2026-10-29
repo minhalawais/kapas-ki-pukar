@@ -1,6 +1,6 @@
 import {
   caseStatuses,
-  COMPLAINT_ID_PATTERN,
+  COMPLAINT_REFERENCE_PATTERN,
   employmentTypes,
   genders,
   groupImpact,
@@ -9,6 +9,7 @@ import {
   privacyModes,
   reporterTypes,
   subcategoryCodes,
+  isSubcategoryOf,
   workerCategoryCodes,
 } from "@kapas/domain";
 import { z } from "zod";
@@ -19,8 +20,19 @@ export const prioritySchema = z.enum(priorities);
 export const caseStatusSchema = z.enum(caseStatuses);
 export const categorySchema = z.enum(workerCategoryCodes);
 export const subcategorySchema = z.enum(subcategoryCodes);
+export const taxonomySelectionSchema = z
+  .object({ categoryCode: categorySchema, subcategoryCode: subcategorySchema.optional() })
+  .superRefine((value, context) => {
+    if (value.subcategoryCode && !isSubcategoryOf(value.categoryCode, value.subcategoryCode)) {
+      context.addIssue({
+        code: "custom",
+        path: ["subcategoryCode"],
+        message: "subcategory does not belong to category",
+      });
+    }
+  });
 export const reporterTypeSchema = z.enum(reporterTypes);
-export const trackingIdSchema = z.string().regex(COMPLAINT_ID_PATTERN);
+export const trackingIdSchema = z.string().regex(COMPLAINT_REFERENCE_PATTERN);
 
 export const locationSchema = z.object({
   province: z.string().min(1),
@@ -68,7 +80,7 @@ export const complaintSchema = z.object({
     contactAllowed: z.boolean(),
   }),
   reporterIdentity: z.discriminatedUnion("mode", [
-    z.object({ mode: z.literal("cnic"), cnicLast4: z.string().length(4), cnicVerified: z.boolean() }),
+    z.object({ mode: z.literal("cnic"), cnicLast4: z.string().length(4), phoneLast4: z.string().length(4), cnicVerified: z.boolean() }),
     z.object({ mode: z.literal("phone"), phoneLast4: z.string().length(4), cnicVerified: z.boolean() }),
     z.object({ mode: z.literal("anonymous"), cnicVerified: z.literal(false) }),
   ]).optional(),
@@ -150,7 +162,7 @@ export const complaintDraftSchema = z.object({
   stepId: z.string().min(1),
   privacyMode: privacyModeSchema.optional(),
   reporterIdentity: z.discriminatedUnion("mode", [
-    z.object({ mode: z.literal("cnic"), cnicLast4: z.string().length(4), cnicVerified: z.boolean() }),
+    z.object({ mode: z.literal("cnic"), cnicLast4: z.string().length(4), phoneLast4: z.string().length(4), cnicVerified: z.boolean() }),
     z.object({ mode: z.literal("phone"), phoneLast4: z.string().length(4), cnicVerified: z.boolean() }),
     z.object({ mode: z.literal("anonymous"), cnicVerified: z.literal(false) }),
   ]).optional(),

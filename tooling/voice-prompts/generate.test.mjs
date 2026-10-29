@@ -15,12 +15,12 @@ function run(...args) {
 }
 
 test("catalog is pinned to the expected model, voice, and prompt counts", () => {
-  assert.match(run("validate"), /122 prompts/);
+  assert.match(run("validate"), /127 prompts/);
   const status = JSON.parse(run("status"));
   assert.equal(status.model, "gemini-2.5-flash-preview-tts");
   assert.equal(status.voice, "Sulafat");
-  assert.equal(status.total, 122);
-  assert.equal(status.approved + status.generated + status.provisional + status.stale + status.missing, 122);
+  assert.equal(status.total, 127);
+  assert.equal(status.approved + status.generated + status.provisional + status.stale + status.missing, 127);
 });
 
 test("generation requires an API key", () => {

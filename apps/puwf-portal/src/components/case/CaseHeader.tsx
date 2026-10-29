@@ -1,6 +1,6 @@
 "use client";
 
-import type { Complaint } from "@kapas/domain";
+import { formatComplaintReferenceDisplay, type Complaint } from "@kapas/domain";
 import { t, type MessageKey } from "@kapas/localization";
 import { ChevronLeft, ChevronRight, Clock3 } from "lucide-react";
 import Link from "next/link";
@@ -24,7 +24,7 @@ export function CaseHeader({ complaint }: { complaint: Complaint }) {
               {t(locale, "portal.case.breadcrumb")}
             </Link>
             <span aria-hidden> / </span>
-            <span dir="ltr">{complaint.trackingId}</span>
+            <span dir="ltr">{formatComplaintReferenceDisplay(complaint.trackingId)}</span>
           </nav>
 
           <div className="space-y-2">
@@ -43,7 +43,7 @@ export function CaseHeader({ complaint }: { complaint: Complaint }) {
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
               <span className="font-mono font-semibold text-ink" dir="ltr">
-                {complaint.trackingId}
+                {formatComplaintReferenceDisplay(complaint.trackingId)}
               </span>
               <span>
                 {t(locale, "portal.case.submitted")} {formatPortalDate(complaint.submittedAt, locale)}

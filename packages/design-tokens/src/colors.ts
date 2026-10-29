@@ -18,10 +18,10 @@ export const feedbackColors = {
 
 export const textColors = {
   primary: "#17231E",
-  secondary: "#55645D",
+  secondary: "#66736D",
 } as const;
 
 export const borderColors = {
-  default: "#C8D5CF",
+  default: "#DCE5E0",
   essential: "#789388",
 } as const;

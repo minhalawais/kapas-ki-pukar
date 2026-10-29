@@ -21,3 +21,4 @@ export const demoScenarioConfigSchema = z.object({
 export * from "./complaint.schema";
 export * from "./action.schema";
 export * from "./resolution.schema";
+export * from "./case-workflow.schema";

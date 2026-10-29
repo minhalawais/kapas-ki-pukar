@@ -1,22 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Naskh_Arabic } from "next/font/google";
 import type { ReactNode } from "react";
 
 import { AppProviders } from "@/providers/app-providers";
 
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const naskh = Noto_Naskh_Arabic({
-  subsets: ["arabic"],
-  variable: "--font-naskh",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
@@ -35,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${naskh.variable}`}>
+    <html lang="en">
       <body className="font-ui antialiased">
         <AppProviders>{children}</AppProviders>
       </body>

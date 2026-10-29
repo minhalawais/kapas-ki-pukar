@@ -1,0 +1,26 @@
+{
+  "promptId": "WF-contact-voicemail",
+  "locale": "ur-PK",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sulafat",
+  "scriptUrdu": "کیا وائس میل یا عام پیغام محفوظ ہے؟ جواب کے لیے ہاں، نہیں میں سے انتخاب کریں۔",
+  "scriptSha256": "dc49ccddcea7ed6f1695f6cbc197606cc940e82b60bfc9b7f8663d1494664338",
+  "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
+  "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
+  "fileSha256": "73b0c2beaac8a05104ce8cd57b59aa918def36b2d55488a2df5cab390e6b95de",
+  "generatedAt": "2026-10-28T09:44:25.657Z",
+  "attempt": 1,
+  "projectAlias": "primary-free-project",
+  "approvalStatus": "pending-native-review",
+  "reviewer": null,
+  "reviewedAt": null,
+  "audio": {
+    "codec": "mp3",
+    "sampleRateHertz": 24000,
+    "channels": 1,
+    "bitrate": 64000,
+    "durationSeconds": 8.52,
+    "integratedLufs": -18.4,
+    "truePeakDb": -4.97
+  }
+}

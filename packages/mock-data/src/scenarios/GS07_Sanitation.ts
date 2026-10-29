@@ -7,7 +7,7 @@ export function createGs07(): Complaint {
     index: 107,
     categoryCode: "SAN",
     subcategoryCode: "SAN-WAT",
-    status: "Submitted",
+    status: "Received",
     priority: "Standard",
     privacyMode: "IDEN",
     reporterType: "self",

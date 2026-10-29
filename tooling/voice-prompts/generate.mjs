@@ -586,9 +586,9 @@ function inspectAudio(file, prompt) {
 
 function validateCatalog(prompts) {
   const errors = [];
-  if (prompts.length !== 122) errors.push(`Expected 122 prompts, found ${prompts.length}`);
+  if (prompts.length !== 127) errors.push(`Expected 127 prompts, found ${prompts.length}`);
   const counts = prompts.reduce((result, prompt) => ({ ...result, [prompt.scope]: (result[prompt.scope] || 0) + 1 }), {});
-  if (counts.screen !== 8 || counts.workflow !== 62 || counts.rights !== 52) errors.push(`Unexpected scope counts: ${JSON.stringify(counts)}`);
+  if (counts.screen !== 8 || counts.workflow !== 67 || counts.rights !== 52) errors.push(`Unexpected scope counts: ${JSON.stringify(counts)}`);
   for (const prompt of prompts) {
     if (!/[\u0600-\u06ff]/.test(prompt.scriptUrdu)) errors.push(`${prompt.id} has no Urdu text`);
     if (prompt.scriptUrdu.includes("، اور میں سے انتخاب کریں")) errors.push(`${prompt.id} contains an ambiguous generic other option`);

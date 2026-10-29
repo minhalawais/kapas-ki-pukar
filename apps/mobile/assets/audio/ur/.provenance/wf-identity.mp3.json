@@ -7,20 +7,20 @@
   "scriptSha256": "290721e65b9d0eaad19baa66b02a4a933541b7c5c6388ebd31264795b8b8e664",
   "directionSha256": "d3c3ed66ecd023a0804756055bad287e81801e8b6575ae0213a4e640854dbb4d",
   "masteringSha256": "959d1af78dbbd8d5b59de1879f3e5e1d4dc22d3e56f346d6a11484ce0ed71470",
-  "fileSha256": "6e68811195f2443bd88226f3cf5071f2ccac37d6e765f8b40b4dfee4d5f49dc4",
-  "generatedAt": "2026-08-27T12:55:14.233Z",
-  "attempt": 4,
+  "fileSha256": "b042a2b37b11b35b93be3ce363f2af4c8d02eb51e8733ee804d3a815ddaaca64",
+  "generatedAt": "2026-10-19T13:32:28.192Z",
+  "attempt": 5,
   "projectAlias": "primary-free-project",
   "approvalStatus": "approved",
-  "reviewer": "Project Owner",
-  "reviewedAt": "2026-08-27T18:47:36.805Z",
+  "reviewer": "PUWF reviewer",
+  "reviewedAt": "2026-10-19T13:38:01.736Z",
   "audio": {
     "codec": "mp3",
     "sampleRateHertz": 24000,
     "channels": 1,
     "bitrate": 64000,
-    "durationSeconds": 11.589,
-    "integratedLufs": -19.15,
-    "truePeakDb": -4.4
+    "durationSeconds": 12.133,
+    "integratedLufs": -18.71,
+    "truePeakDb": -2.17
   }
 }

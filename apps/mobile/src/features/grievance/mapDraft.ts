@@ -8,11 +8,18 @@ import {
 } from "@kapas/domain";
 
 import { asString, asStringList } from "./engine";
-import { HISTORY_KEY, INTRO_NODE_ID, type AnswerMap, type AnswerValue, type QuestionNode } from "./types";
+import {
+  HISTORY_KEY,
+  INTRO_NODE_ID,
+  type AnswerMap,
+  type AnswerValue,
+  type QuestionNode,
+} from "./types";
 
 export function emptyDraft(now: string): ComplaintDraft {
   return {
-    id: `draft-${now}`,
+    // V3 intake uses this value as clientSubmissionId and requires an RFC 4122 UUID.
+    id: createClientSubmissionId(),
     stepId: INTRO_NODE_ID,
     incident: {
       structuredAnswers: { [HISTORY_KEY]: [] },
@@ -23,6 +30,15 @@ export function emptyDraft(now: string): ComplaintDraft {
     ai: null,
     updatedAt: now,
   };
+}
+
+function createClientSubmissionId(): string {
+  const nativeUuid = (globalThis as { crypto?: { randomUUID?: () => string } }).crypto?.randomUUID?.();
+  if (nativeUuid) return nativeUuid;
+  // The identifier is not a secret; this fallback keeps Expo Go compatible
+  // runtimes valid while the server remains authoritative for all security data.
+  const seed = `${Date.now().toString(16)}${Math.random().toString(16).slice(2)}`.padEnd(32, "0").slice(0, 32);
+  return `${seed.slice(0, 8)}-${seed.slice(8, 12)}-4${seed.slice(13, 16)}-${((8 + (Number.parseInt(seed[16]!, 16) % 4)).toString(16))}${seed.slice(17, 20)}-${seed.slice(20)}`;
 }
 
 export function answersFromDraft(draft: ComplaintDraft): AnswerMap {
@@ -66,14 +82,11 @@ export function applyAnswer(
   const answers = { ...answersFromDraft(draft), [node.id]: value };
   const history = historyFromDraft(draft);
   let next = withAnswers(draft, answers, history);
-  const selected = typeof value === "string" ? node.options?.find((option) => option.value === value) : undefined;
+  const selected =
+    typeof value === "string" ? node.options?.find((option) => option.value === value) : undefined;
   const subcategory = selected?.subcategory;
   if (subcategory) {
-    next = withAnswers(
-      next,
-      { ...answersFromDraft(next), subcategory },
-      historyFromDraft(next),
-    );
+    next = withAnswers(next, { ...answersFromDraft(next), subcategory }, historyFromDraft(next));
   }
 
   if (node.storeAs === "category" && typeof value === "string" && value !== "more") {
@@ -130,7 +143,6 @@ export function applyAnswer(
           ...answersFromDraft(next),
           [HISTORY_KEY]: historyFromDraft(next),
           contactPreference: value,
-          alternateContact: value === "alternate" ? "Demo contact A" : undefined,
         },
       },
     };
@@ -204,7 +216,10 @@ export function pushHistory(draft: ComplaintDraft, nodeId: string): ComplaintDra
   return withAnswers(draft, answersFromDraft(draft), history);
 }
 
-export function popHistory(draft: ComplaintDraft): { draft: ComplaintDraft; previousId: string | null } {
+export function popHistory(draft: ComplaintDraft): {
+  draft: ComplaintDraft;
+  previousId: string | null;
+} {
   const history = historyFromDraft(draft);
   const previousId = history.pop() ?? null;
   return { draft: withAnswers(draft, answersFromDraft(draft), history), previousId };

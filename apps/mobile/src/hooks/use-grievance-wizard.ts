@@ -1,21 +1,56 @@
-import type { Evidence, PrivacyMode, VoiceEvidence } from "@kapas/domain";
-import { useCallback, useEffect, useState } from "react";
+import type { Evidence, VoiceEvidence } from "@kapas/domain";
+import {
+  fastForwardToReview,
+  RETURN_TO_REVIEW_KEY,
+  REVIEW_NODE_ID,
+  workflowPathProgress,
+} from "@kapas/domain";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { LocationCaptureStatus } from "../features/grievance/components/LocationCapture";
-import { asString, asStringList, isAnswerValid, resolveNext, sectionProgress } from "../features/grievance/engine";
+import {
+  asString,
+  asStringList,
+  isAnswerValid,
+  resolveNext,
+} from "../features/grievance/engine";
 import {
   applyAnswer,
   answersFromDraft,
+  historyFromDraft,
   popHistory,
   pushHistory,
 } from "../features/grievance/mapDraft";
+import { HISTORY_KEY, INTRO_NODE_ID } from "../features/grievance/types";
 import type { AnswerValue } from "../features/grievance/types";
 import { getWorkflowNode } from "../features/grievance/workflows";
-import { aiAnalysisService } from "../services/aiAnalysisService";
 import { expoEvidenceService } from "../services/expoEvidenceService";
 import { expoIdentityService } from "../services/expoIdentityService";
 import { expoLocationService } from "../services/expoLocationService";
+import { productionSyncService, type SyncQueueItem } from "../services/productionSyncService";
 import { useGrievanceDraftStore } from "../stores/grievanceDraftStore";
+
+function mergedAnswers(draft: NonNullable<ReturnType<typeof useGrievanceDraftStore.getState>["draft"]>) {
+  const answers = answersFromDraft(draft);
+  if (draft.category && !answers.category) {
+    answers.category = draft.category;
+  }
+  if (draft.privacyMode && !answers.privacy) {
+    answers.privacy = draft.privacyMode;
+  }
+  return answers;
+}
+
+function clearReturnToReview<T extends { incident: { structuredAnswers?: Record<string, unknown> } }>(
+  draft: T,
+): T {
+  const raw = { ...(draft.incident.structuredAnswers ?? {}) };
+  delete raw[RETURN_TO_REVIEW_KEY];
+  return {
+    ...draft,
+    incident: { ...draft.incident, structuredAnswers: raw },
+  };
+}
 
 export function useGrievanceWizard() {
   const draft = useGrievanceDraftStore((s) => s.draft);
@@ -70,7 +105,8 @@ export function useGrievanceWizard() {
     if (!isAnswerValid(currentNode, answersFromDraft(current))) {
       return "blocked";
     }
-    const nextId = resolveNext(currentNode, answersFromDraft(current));
+    const answers = mergedAnswers(current);
+    const nextId = resolveNext(currentNode, answers);
     if (!nextId) {
       return "complete";
     }
@@ -78,9 +114,17 @@ export function useGrievanceWizard() {
     let targetId = nextId;
     if (targetId === "privacy" && advanced.privacyMode) {
       advanced = pushHistory(advanced, "privacy");
-      targetId = advanced.privacyMode === "ANON" ? "evidence" : "contact";
+      targetId = "evidence";
     }
-    await setDraft({ ...advanced, stepId: targetId });
+    let nextDraft = { ...advanced, stepId: targetId };
+    if (answers[RETURN_TO_REVIEW_KEY] === "true") {
+      nextDraft = fastForwardToReview(nextDraft, mergedAnswers(nextDraft), pushHistory);
+      nextDraft = clearReturnToReview(nextDraft);
+    }
+    if (nextDraft.stepId === REVIEW_NODE_ID) {
+      nextDraft = clearReturnToReview(nextDraft);
+    }
+    await setDraft(nextDraft);
     return "step";
   }, [setDraft]);
 
@@ -99,49 +143,100 @@ export function useGrievanceWizard() {
 
   const selected = node ? answers[node.id] : undefined;
   const [voiceBusy, setVoiceBusy] = useState(false);
-  const [evidenceError, setEvidenceError] = useState(false);
+  const [evidenceError, setEvidenceError] = useState<string | null>(null);
+  const [evidenceBusy, setEvidenceBusy] = useState(false);
   const [identityBusy, setIdentityBusy] = useState(false);
   const [identityError, setIdentityError] = useState(false);
   const [locationCaptureStatus, setLocationCaptureStatus] = useState<LocationCaptureStatus>("idle");
+  const [syncItem, setSyncItem] = useState<SyncQueueItem | null>(null);
 
   useEffect(() => {
-    if (node?.id === "where-current" && draft?.location.source === "device" && draft.location.exactCoordinates) {
+    if (!draft?.id) return;
+    const refresh = () => {
+      void productionSyncService.get(draft.id).then(setSyncItem);
+    };
+    refresh();
+    return productionSyncService.subscribe(refresh);
+  }, [draft?.id]);
+
+  useEffect(() => {
+    if (
+      node?.id === "where-current" &&
+      draft?.location.source === "device" &&
+      draft.location.exactCoordinates
+    ) {
       setLocationCaptureStatus("detected");
     }
   }, [draft?.location.exactCoordinates, draft?.location.source, node?.id]);
 
-  const submitIdentity = useCallback(async ({
-    kind,
-    value,
-    reveal,
-  }: {
-    kind: "cnic" | "phone";
-    value: string;
-    reveal: boolean;
-  }) => {
+  const submitIdentity = useCallback(
+    async ({
+      phone,
+      cnic,
+      privacyMode,
+    }: {
+      phone: string;
+      cnic?: string;
+      privacyMode: "CONF" | "IDEN";
+    }) => {
+      const current = useGrievanceDraftStore.getState().draft;
+      const currentNode = current ? getWorkflowNode(current.stepId) : undefined;
+      if (!current || currentNode?.id !== "identity") return;
+      setIdentityBusy(true);
+      setIdentityError(false);
+      try {
+        const protectedIdentity = await expoIdentityService.saveIdentity(current.id, {
+          phone,
+          cnic,
+        });
+        let next = applyAnswer(current, currentNode, "provided");
+        next = {
+          ...next,
+          reporterIdentity: cnic
+            ? {
+                mode: "cnic",
+                cnicLast4: protectedIdentity.cnicLast4!,
+                phoneLast4: protectedIdentity.phoneLast4,
+                cnicVerified: false,
+              }
+            : { mode: "phone", phoneLast4: protectedIdentity.phoneLast4, cnicVerified: false },
+          privacyMode,
+        };
+        next = pushHistory(next, currentNode.id);
+        const nextStep = resolveNext(currentNode, answersFromDraft(next)) ?? "category";
+        await setDraft({ ...next, stepId: nextStep });
+      } catch {
+        setIdentityError(true);
+      } finally {
+        setIdentityBusy(false);
+      }
+    },
+    [setDraft],
+  );
+
+  const submitAnonymous = useCallback(async () => {
     const current = useGrievanceDraftStore.getState().draft;
     const currentNode = current ? getWorkflowNode(current.stepId) : undefined;
     if (!current || currentNode?.id !== "identity") return;
     setIdentityBusy(true);
     setIdentityError(false);
     try {
-      const identityValue = reveal ? "provided" : "anonymous";
-      const last4 = reveal ? await expoIdentityService.saveCnic(current.id, value) : undefined;
-      if (!reveal) await expoIdentityService.removeCnic(current.id);
-      const privacyMode: PrivacyMode = reveal ? "IDEN" : "ANON";
-      let next = applyAnswer(current, currentNode, identityValue);
-      next = {
+      await expoIdentityService.removeIdentity(current.id);
+      let next = applyAnswer(current, currentNode, "anonymous");
+      next = pushHistory({
         ...next,
-        reporterIdentity: reveal
-          ? kind === "cnic"
-            ? { mode: "cnic", cnicLast4: last4!, cnicVerified: false }
-            : { mode: "phone", phoneLast4: last4!, cnicVerified: false }
-          : { mode: "anonymous", cnicVerified: false },
-        privacyMode,
-      };
-      next = pushHistory(next, currentNode.id);
-      const nextStep = resolveNext(currentNode, answersFromDraft(next)) ?? "category";
-      await setDraft({ ...next, stepId: nextStep });
+        privacyMode: "ANON",
+        reporterIdentity: { mode: "anonymous", cnicVerified: false },
+        incident: {
+          ...next.incident,
+          structuredAnswers: {
+            ...next.incident.structuredAnswers,
+            identity: "anonymous",
+            contactPreference: undefined,
+          },
+        },
+      }, currentNode.id);
+      await setDraft({ ...next, stepId: "category" });
     } catch {
       setIdentityError(true);
     } finally {
@@ -165,7 +260,8 @@ export function useGrievanceWizard() {
   const confirmCurrentLocation = useCallback(async () => {
     const current = useGrievanceDraftStore.getState().draft;
     const currentNode = current ? getWorkflowNode(current.stepId) : undefined;
-    if (!current || currentNode?.id !== "where-current" || !current.location.exactCoordinates) return;
+    if (!current || currentNode?.id !== "where-current" || !current.location.exactCoordinates)
+      return;
     let next = applyAnswer(current, currentNode, "confirmed");
     next = pushHistory(next, currentNode.id);
     await setDraft({ ...next, stepId: "others" });
@@ -179,60 +275,14 @@ export function useGrievanceWizard() {
     await setDraft({ ...next, stepId: "where-province" });
   }, [setDraft]);
 
-  useEffect(() => {
-    const currentStep = useGrievanceDraftStore.getState().draft?.stepId;
-    if (currentStep !== "ai-processing") {
-      return;
-    }
-    let cancelled = false;
-    void (async () => {
-      const snapshot = useGrievanceDraftStore.getState().draft;
-      if (!snapshot || snapshot.stepId !== "ai-processing") {
-        return;
-      }
-      try {
-        const analysis = await aiAnalysisService.analyzeDraft(snapshot);
-        if (cancelled) {
-          return;
-        }
-        const current = useGrievanceDraftStore.getState().draft;
-        if (!current || current.stepId !== "ai-processing") {
-          return;
-        }
-        await setDraft({ ...current, ai: analysis, voice: current.voice, stepId: "ai-understanding" });
-      } catch {
-        if (cancelled) {
-          return;
-        }
-        const current = useGrievanceDraftStore.getState().draft;
-        if (!current || current.stepId !== "ai-processing") {
-          return;
-        }
-        await setDraft({
-          ...current,
-          voice: current.voice,
-          ai: {
-            confidenceScore: 0,
-            confidence: "low",
-            failed: true,
-            humanReviewRequired: true,
-          },
-          stepId: "ai-understanding",
-        });
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [draft?.stepId, setDraft]);
-
   const setVoice = useCallback(
     async (voice: VoiceEvidence | null) => {
       const current = useGrievanceDraftStore.getState().draft;
       if (!current) {
         return;
       }
-      await setDraft({ ...current, voice });
+      const next = { ...current, voice };
+      await setDraft(next);
     },
     [setDraft],
   );
@@ -243,16 +293,28 @@ export function useGrievanceWizard() {
       if (!current) {
         return;
       }
-      setEvidenceError(false);
+      if (current.evidence.length >= 5) {
+        setEvidenceError("attachment_count_limit");
+        return;
+      }
+      setEvidenceError(null);
+      setEvidenceBusy(true);
       try {
-        const item = kind === "photo" ? await expoEvidenceService.pickPhoto() : await expoEvidenceService.pickDocument();
+        const item =
+          kind === "photo"
+            ? await expoEvidenceService.pickPhoto()
+            : await expoEvidenceService.pickDocument();
         const latest = useGrievanceDraftStore.getState().draft;
         if (!item || !latest) {
           return;
         }
-        await setDraft({ ...latest, evidence: [...latest.evidence, item] });
-      } catch {
-        setEvidenceError(true);
+        if (latest.evidence.length >= 5) throw Object.assign(new Error("attachment_count_limit"), { code: "attachment_count_limit" });
+        const next = { ...latest, evidence: [...latest.evidence, item] };
+        await setDraft(next);
+      } catch (error) {
+        setEvidenceError((error as Error & { code?: string }).code ?? "local_storage_failure");
+      } finally {
+        setEvidenceBusy(false);
       }
     },
     [setDraft],
@@ -264,7 +326,11 @@ export function useGrievanceWizard() {
       if (!current) {
         return;
       }
-      await setDraft({ ...current, evidence: current.evidence.filter((item: Evidence) => item.id !== id) });
+      const next = {
+        ...current,
+        evidence: current.evidence.filter((item: Evidence) => item.id !== id),
+      };
+      await setDraft(next);
     },
     [setDraft],
   );
@@ -275,10 +341,27 @@ export function useGrievanceWizard() {
       if (!current) {
         return;
       }
-      await setDraft({ ...current, stepId });
+      const fromReview = current.stepId === REVIEW_NODE_ID;
+      const structuredAnswers = {
+        ...answersFromDraft(current),
+        [HISTORY_KEY]: historyFromDraft(current),
+        ...(fromReview ? { [RETURN_TO_REVIEW_KEY]: "true" } : {}),
+      };
+      await setDraft({
+        ...current,
+        stepId,
+        incident: { ...current.incident, structuredAnswers },
+      });
     },
     [setDraft],
   );
+
+  const progress = useMemo(() => {
+    if (!draft || !node) {
+      return workflowPathProgress(INTRO_NODE_ID, {});
+    }
+    return workflowPathProgress(node.id, mergedAnswers(draft));
+  }, [draft, node]);
 
   return {
     draft,
@@ -290,9 +373,11 @@ export function useGrievanceWizard() {
     hydrated,
     error,
     valid: node ? isAnswerValid(node, answers) : false,
-    progress: node ? sectionProgress(node.section) : sectionProgress("intro"),
+    progress,
     voiceBusy,
     evidenceError,
+    evidenceBusy,
+    syncItem,
     identityBusy,
     identityError,
     locationCaptureStatus,
@@ -306,6 +391,7 @@ export function useGrievanceWizard() {
     addEvidence,
     removeEvidence,
     submitIdentity,
+    submitAnonymous,
     requestCurrentLocation,
     confirmCurrentLocation,
     useManualLocation,

@@ -1,6 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 
-const keyFor = (draftId: string) => `kapas-cnic-${draftId.replace(/[^A-Za-z0-9._-]/g, "-")}`;
+const keyFor = (draftId: string, kind: "cnic" | "phone") =>
+  `kapas-identity-${kind}-${draftId.replace(/[^A-Za-z0-9._-]/g, "-")}`;
 
 export function normalizeCnic(value: string): string {
   return value.replace(/\D/g, "").slice(0, 13);
@@ -18,12 +19,21 @@ export function formatCnic(value: string): string {
 }
 
 export function normalizePhone(value: string): string {
-  return value.replace(/\D/g, "").slice(0, 11);
+  const digits = value.replace(/\D/g, "");
+  if (digits.startsWith("0092")) return `0${digits.slice(4)}`.slice(0, 11);
+  if (digits.startsWith("92")) return `0${digits.slice(2)}`.slice(0, 11);
+  return digits.slice(0, 11);
 }
 
 export function isValidPhone(value: string): boolean {
   const digits = normalizePhone(value);
-  return digits.length === 11;
+  return /^03\d{9}$/.test(digits);
+}
+
+export function canonicalizePhone(value: string): string {
+  const digits = normalizePhone(value);
+  if (!isValidPhone(digits)) throw new Error("invalid-phone");
+  return `+92${digits.slice(1)}`;
 }
 
 export function formatPhone(value: string): string {
@@ -33,19 +43,38 @@ export function formatPhone(value: string): string {
 }
 
 export const expoIdentityService = {
-  async saveCnic(draftId: string, value: string): Promise<string> {
-    const isPhone = value.replace(/\D/g, "").length <= 11;
-    const normalized = isPhone ? normalizePhone(value) : normalizeCnic(value);
-    const valid = isPhone ? isValidPhone(normalized) : isValidCnic(normalized);
-    if (!valid) {
-      throw new Error("invalid-identity");
-    }
-    await SecureStore.setItemAsync(keyFor(draftId), normalized, {
+  async saveIdentity(
+    draftId: string,
+    input: { phone: string; cnic?: string },
+  ): Promise<{ phoneLast4: string; cnicLast4?: string }> {
+    const phone = canonicalizePhone(input.phone);
+    const cnic = input.cnic ? normalizeCnic(input.cnic) : undefined;
+    if (cnic && !isValidCnic(cnic)) throw new Error("invalid-cnic");
+    const options = {
       keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-    });
-    return normalized.slice(-4);
+    } as const;
+    await SecureStore.setItemAsync(keyFor(draftId, "phone"), phone, options);
+    if (cnic) await SecureStore.setItemAsync(keyFor(draftId, "cnic"), cnic, options);
+    else await SecureStore.deleteItemAsync(keyFor(draftId, "cnic"));
+    return { phoneLast4: phone.slice(-4), cnicLast4: cnic?.slice(-4) };
   },
   async removeCnic(draftId: string): Promise<void> {
-    await SecureStore.deleteItemAsync(keyFor(draftId));
+    await Promise.all([
+      SecureStore.deleteItemAsync(keyFor(draftId, "cnic")),
+      SecureStore.deleteItemAsync(keyFor(draftId, "phone")),
+    ]);
+  },
+  async removeIdentity(draftId: string): Promise<void> {
+    await Promise.all([
+      SecureStore.deleteItemAsync(keyFor(draftId, "cnic")),
+      SecureStore.deleteItemAsync(keyFor(draftId, "phone")),
+    ]);
+  },
+  async getIdentity(draftId: string): Promise<{ phone: string; cnic?: string } | null> {
+    const [phone, cnic] = await Promise.all([
+      SecureStore.getItemAsync(keyFor(draftId, "phone")),
+      SecureStore.getItemAsync(keyFor(draftId, "cnic")),
+    ]);
+    return phone ? { phone, ...(cnic ? { cnic } : {}) } : null;
   },
 };

@@ -17,6 +17,7 @@ const validEnvironment: NodeJS.ProcessEnv = {
   QUARANTINE_ROOT: "./storage/quarantine",
   ENCRYPTION_KEY_ID: "test-key",
   SESSION_SECRET: "test-session-secret-with-at-least-32-characters",
+  IDENTITY_LOOKUP_PEPPER: "test-identity-lookup-pepper-at-least-32-characters",
   INTERNAL_METRICS_TOKEN: "test-internal-metrics-token",
   OPENAPI_ENABLED: "true",
   QUEUE_PREFIX: "kapas-test",

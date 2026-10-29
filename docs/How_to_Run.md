@@ -12,6 +12,7 @@ Related files:
 
 - `docs/demo/Demo_Reset_Checklist.md`
 - `docs/demo/ILO_PUWF_Demo_Script.md`
+- `docs/HOSTING-AND-MAINTENANCE.md` — production VPS, DNS, deploy, and maintenance (not local demo)
 
 ---
 

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createDatabaseClient, type DatabaseClient } from "./index";
+import { assertSyntheticSeedAllowed, createDatabaseClient, type DatabaseClient } from "./index";
 
 describe("database client factory", () => {
   let client: DatabaseClient | undefined;
@@ -19,5 +19,11 @@ describe("database client factory", () => {
 
     expect(client).toBeDefined();
     expect(typeof client.$transaction).toBe("function");
+  });
+
+  it("hard-fails synthetic seed policy in staging and production", () => {
+    expect(() => assertSyntheticSeedAllowed("staging")).toThrow("prohibited");
+    expect(() => assertSyntheticSeedAllowed("production")).toThrow("prohibited");
+    expect(() => assertSyntheticSeedAllowed("test")).not.toThrow();
   });
 });

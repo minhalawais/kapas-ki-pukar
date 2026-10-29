@@ -9,7 +9,6 @@ import {
 } from "@kapas/domain";
 import { dueAtFrom, receivedAction } from "@kapas/mock-data";
 
-import { caseLifecycleService } from "./lifecycle/CaseLifecycleService";
 import { offlineQueueService } from "./offlineQueue";
 import { getDemoFlags, getDraftStore, getMobileRepository, setPersistenceNotice } from "./runtime";
 
@@ -40,7 +39,7 @@ function buildComplaintFromDraft(
   draft: ComplaintDraft,
   trackingId: string,
   at: string,
-  status: "Draft" | "Submitted",
+  status: "Received",
 ): Complaint {
   const subcategory = asSubcategory(draft.incident.structuredAnswers?.subcategory);
   const floor = getMinimumPriority({
@@ -101,7 +100,7 @@ function buildComplaintFromDraft(
     evidence: draft.evidence,
     voice: draft.voice,
     ai: draft.ai ?? null,
-    actions: status === "Submitted" ? [receivedAction(at)] : [],
+    actions: [receivedAction(at)],
     resolution: null,
     workerFeedback: null,
     overdue: false,
@@ -133,7 +132,7 @@ export const complaintService = {
     const trackingId = nextComplaintTrackingId(existing.map((row) => row.trackingId));
     const at = new Date().toISOString();
     const offline = getDemoFlags().offline;
-    const complaint = buildComplaintFromDraft(draft, trackingId, at, offline ? "Draft" : "Submitted");
+    const complaint = buildComplaintFromDraft(draft, trackingId, at, "Received");
     await repo.save(complaint);
     if (offline) {
       await offlineQueueService.enqueueSavedComplaint(complaint, draft);
@@ -170,7 +169,7 @@ export const complaintService = {
     if (!current) {
       return;
     }
-    let next: Complaint = {
+    const next: Complaint = {
       ...current,
       workerFeedback: feedback,
       updatedAt: feedback.submittedAt,
@@ -185,17 +184,6 @@ export const complaintService = {
         },
       ],
     };
-    if (
-      feedback.outcome === "unresolved" &&
-      (current.status === "Resolved" || current.status === "Closed") &&
-      caseLifecycleService.canTransition(current.status, "Reopened")
-    ) {
-      next = caseLifecycleService.transition(next, "Reopened", {
-        at: feedback.submittedAt,
-        actorRole: "worker",
-        note: "Worker not satisfied",
-      });
-    }
     await repo.save(next);
   },
 };

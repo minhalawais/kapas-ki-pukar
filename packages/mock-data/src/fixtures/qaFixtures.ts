@@ -9,9 +9,7 @@ export function qaFixtures(): Complaint[] {
   const byCategory = workerCategoryCodes.map(
     (code) => seed.find((row) => row.categoryCode === code) ?? seed[0]!,
   );
-  const byStatus = caseStatuses
-    .filter((status) => status !== "Draft" && status !== "Submitted")
-    .map((status) => seed.find((row) => row.status === status) ?? seed[0]!);
+  const byStatus = caseStatuses.map((status) => seed.find((row) => row.status === status) ?? seed[0]!);
   const byPriority = priorities.map((priority) => seed.find((row) => row.priority === priority) ?? seed[0]!);
   const byPrivacy = privacyModes.map((mode) => seed.find((row) => row.privacyMode === mode) ?? seed[0]!);
   return [

@@ -7,7 +7,7 @@ export function createGs02(): Complaint {
     index: 102,
     categoryCode: "PES",
     subcategoryCode: "PES-SYM",
-    status: "Submitted",
+    status: "Received",
     priority: "Emergency",
     privacyMode: "CONF",
     reporterType: "self",

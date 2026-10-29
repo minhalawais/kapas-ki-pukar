@@ -10,7 +10,7 @@ describe("promptAudioService catalog", () => {
   it("maps generated prompt IDs to bundled Urdu filenames", () => {
     expect(PROMPT_FILES["WF-voice"]).toBe("wf-voice.mp3");
     expect(promptAudioService.resolveFileName("SC-success")).toBe("sc-success.mp3");
-    expect(Object.keys(PROMPT_FILES)).toHaveLength(122);
+    expect(Object.keys(PROMPT_FILES)).toHaveLength(127);
   });
 
   it("maps foundation screens to approved prompt IDs", () => {

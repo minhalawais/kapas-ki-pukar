@@ -19,5 +19,6 @@ export const fontFamily = {
   urduBold: "NotoNaskhArabic_700Bold",
   urduHeading: "NotoNastaliqUrdu_600SemiBold",
   urduBrand: "Gulzar_400Regular",
-  mono: "monospace",
+  mono: "Inter_600SemiBold",
+  reference: "Inter_600SemiBold",
 } as const;

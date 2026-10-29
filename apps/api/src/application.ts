@@ -1,12 +1,14 @@
 import { randomUUID } from "node:crypto";
 import type { IncomingMessage } from "node:http";
 
+import cookie from "@fastify/cookie";
 import helmet from "@fastify/helmet";
 import rateLimit from "@fastify/rate-limit";
 import { requestIdSchema } from "@kapas/api-contracts";
 import type { RuntimeConfig } from "@kapas/config";
 import { buildLoggerOptions } from "@kapas/observability";
 import type { ServiceMetrics } from "@kapas/observability";
+import { constantTimeEqual, createCsrfToken } from "@kapas/security";
 import { NestFactory } from "@nestjs/core";
 import { FastifyAdapter, type NestFastifyApplication } from "@nestjs/platform-fastify";
 import { SwaggerModule } from "@nestjs/swagger";
@@ -15,6 +17,7 @@ import { AppModule } from "./app.module";
 import type { DependencyHealth } from "./dependency-health";
 import { ErrorEnvelopeFilter } from "./error-envelope.filter";
 import { createOpenApiDocument } from "./openapi";
+import { registerTusdProxy } from "./tusd-proxy";
 import { SERVICE_METRICS } from "./tokens";
 
 function requestId(request: IncomingMessage): string {
@@ -51,11 +54,23 @@ export async function createApplication(
   app.enableShutdownHooks();
   app.useGlobalFilters(new ErrorEnvelopeFilter());
   await app.register(helmet, { contentSecurityPolicy: false });
+  await app.register(cookie);
+  const fastify = app.getHttpAdapter().getInstance();
+  await fastify.register(import("@fastify/multipart"), {
+    limits: { fileSize: 15 * 1024 * 1024, files: 1 },
+  });
+  fastify.addContentTypeParser(
+    "application/offset+octet-stream",
+    { parseAs: "buffer", bodyLimit: 1024 * 1024 },
+    (_request, body, done) => done(null, body),
+  );
+  await registerTusdProxy(fastify as unknown as Parameters<typeof registerTusdProxy>[0], config);
   await app.register(rateLimit, {
     global: true,
     max: config.rateLimitMax,
     timeWindow: config.rateLimitTtlMs,
     hook: "onRequest",
+    allowList: (request) => request.url.startsWith("/files"),
     errorResponseBuilder(request) {
       return {
         code: "rate_limited",
@@ -64,16 +79,62 @@ export async function createApplication(
       };
     },
   });
+  fastify.addHook("onRequest", async (request, reply) => {
+    if (!["POST", "PATCH", "DELETE"].includes(request.method)) return;
+    if (request.url.startsWith("/files")) return;
+    if (
+      request.url.endsWith("/auth/login") ||
+      request.url.endsWith("/worker-sessions") ||
+      request.url.endsWith("/worker-history-sessions")
+    )
+      return;
+    const cookies = (request as typeof request & { cookies?: Record<string, string | undefined> })
+      .cookies;
+    const session = cookies?.kapas_staff_session;
+    if (!session) return;
+    const expected = createCsrfToken(session, config.sessionSecret);
+    const supplied = request.headers["x-csrf-token"];
+    if (typeof supplied !== "string" || !constantTimeEqual(expected, supplied)) {
+      await reply
+        .code(403)
+        .send({ code: "csrf_failed", message: "CSRF validation failed", requestId: request.id });
+    }
+  });
   app.enableCors({
     origin: [...config.portalOrigins],
     credentials: true,
-    methods: ["GET", "HEAD", "OPTIONS"],
-    allowedHeaders: ["content-type", "x-request-id", "x-internal-metrics-token"],
+    methods: ["GET", "HEAD", "OPTIONS", "POST", "PATCH", "DELETE"],
+    allowedHeaders: [
+      "content-type",
+      "x-request-id",
+      "x-internal-metrics-token",
+      "x-csrf-token",
+      "x-upload-token",
+      "upload-token",
+      "tus-resumable",
+      "upload-length",
+      "upload-offset",
+      "upload-metadata",
+      "idempotency-key",
+      "x-tracking-secret",
+      "x-replacement-for",
+    ],
+    exposedHeaders: [
+      "location",
+      "upload-token",
+      "upload-expires",
+      "upload-offset",
+      "upload-length",
+      "upload-status",
+      "tus-resumable",
+      "tus-version",
+      "tus-extension",
+      "tus-max-size",
+    ],
     maxAge: 600,
   });
 
   const metrics = app.get<ServiceMetrics>(SERVICE_METRICS);
-  const fastify = app.getHttpAdapter().getInstance();
   fastify.addHook("onSend", async (request, reply, payload) => {
     reply.header("x-request-id", request.id);
     reply.header("cache-control", "no-store");

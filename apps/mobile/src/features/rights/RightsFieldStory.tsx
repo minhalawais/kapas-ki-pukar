@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import type { RightsTopic } from "@kapas/domain";
 import { t, type MessageKey } from "@kapas/localization";
-import { Image, Text, View, type ImageSourcePropType } from "react-native";
+import { ImageBackground, Text, View, type ImageSourcePropType } from "react-native";
 
 import CHILD_STORY from "../../../assets/field-guide/child-labour-rights-story.png";
 import COMPENSATION_STORY from "../../../assets/field-guide/compensation-rights-story.png";
@@ -92,25 +92,21 @@ export function RightsFieldStory({ topic }: { topic: RightsTopic }) {
         </Text>
       </View>
 
-      <Image source={source} resizeMode="contain" accessible={false} style={{ width: "100%", aspectRatio: 2 / 3 }} />
-
-      <View style={{ marginHorizontal: 20, marginTop: 12, gap: 10 }}>
+      <ImageBackground source={source} resizeMode="contain" accessible={false} style={{ width: "100%", aspectRatio: 2 / 3 }} imageStyle={{ width: "100%", height: "100%" }}>
         {[1, 2, 3].map((step, index) => (
-          <View key={step} style={{ minHeight: 96, flexDirection: rtl ? "row-reverse" : "row", alignItems: "flex-start", gap: 12, padding: 12, borderRadius: 8, borderWidth: 1, borderColor: "#D7D1BF", backgroundColor: semanticColors.surface }}>
-            <View style={{ width: 30, height: 30, borderRadius: 5, backgroundColor: index === 0 ? semanticColors.actionPrimary : semanticColors.voiceActiveStrong, alignItems: "center", justifyContent: "center", marginTop: 2 }}>
-              <Text style={{ color: semanticColors.onPrimary, fontSize: 17, lineHeight: 22, fontFamily: fontFamily.uiBold }}>{step}</Text>
+          <View key={step} style={{ position: "absolute", left: "2.5%", top: `${index * 33.333 + 4}%`, width: "42%", minHeight: "25%" }}>
+            <View style={{ width: 34, height: 34, borderRadius: 6, backgroundColor: index === 0 ? semanticColors.actionPrimary : semanticColors.voiceActiveStrong, alignItems: "center", justifyContent: "center", marginBottom: 8 }}>
+              <Text style={{ color: semanticColors.onPrimary, fontSize: 18, lineHeight: 23, fontFamily: fontFamily.uiBold }}>{step}</Text>
             </View>
-            <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
-              <Text style={{ color: semanticColors.actionPrimary, fontSize: 17, lineHeight: rtl ? 31 : 22, fontFamily: headingFamily, textAlign: align }}>
-                {t(locale, `rights.${prefix}.story.${step}.title` as MessageKey)}
-              </Text>
-              <Text style={{ color: semanticColors.textSecondary, fontSize: 13, lineHeight: rtl ? 23 : 18, fontFamily: family, textAlign: align }}>
-                {t(locale, `rights.${prefix}.story.${step}.body` as MessageKey)}
-              </Text>
-            </View>
+            <Text style={{ color: semanticColors.actionPrimary, fontSize: 17, lineHeight: rtl ? 29 : 22, fontFamily: headingFamily, textAlign: "left", textShadowColor: "rgba(255,255,255,0.45)", textShadowRadius: 2 }}>
+              {t(locale, `rights.${prefix}.story.${step}.title` as MessageKey)}
+            </Text>
+            <Text style={{ color: semanticColors.textSecondary, marginTop: 4, fontSize: 13, lineHeight: rtl ? 23 : 18, fontFamily: family, textAlign: "left", textShadowColor: "rgba(255,255,255,0.45)", textShadowRadius: 2 }}>
+              {t(locale, `rights.${prefix}.story.${step}.body` as MessageKey)}
+            </Text>
           </View>
         ))}
-      </View>
+      </ImageBackground>
 
       <View style={{ marginHorizontal: 20, marginTop: 14, padding: 14, minHeight: 70, flexDirection: rtl ? "row-reverse" : "row", alignItems: "center", gap: 10, borderWidth: 1, borderColor: "#BDD2C4", borderRadius: 8, backgroundColor: "#F3F7EF" }}>
         <View style={{ width: 36, height: 36, borderRadius: 8, backgroundColor: semanticColors.actionPrimary, alignItems: "center", justifyContent: "center" }}>

@@ -1,6 +1,7 @@
 # Kapas ki Pukaar — Product Phase 1 frontend only. No production secrets.
 
 node_modules
+node_modules.broken-*
 .pnpm-store
 .turbo
 .deploy-test-worker
@@ -14,13 +15,29 @@ out
 coverage
 playwright-report
 test-results
+apps/puwf-portal/e2e/.auth
 .env
 .env.local
+apps/mobile/google-play-service-account.json
+google-play-service-account.json
+**/google-play-service-account.json
+!apps/mobile/.env.example
 *.log
 .DS_Store
 Thumbs.db
 apps/mobile/ios
 apps/mobile/android
 packages/database/src/generated
+**/.agents/
+**/.claude/
+**/.windsurf/
+**/skills-lock.json
 deploy/compose/.env.local
 /storage/
+.device*.png
+.device*.xml
+.device.db
+.audit-*.png
+.qa-*.png
+.qa-*.pdf
+.qa-*.db

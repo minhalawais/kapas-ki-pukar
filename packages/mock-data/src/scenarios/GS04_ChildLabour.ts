@@ -7,7 +7,7 @@ export function createGs04(): Complaint {
     index: 104,
     categoryCode: "CHL",
     subcategoryCode: "CHL-HAZ",
-    status: "Submitted",
+    status: "Received",
     priority: "Critical",
     privacyMode: "ANON",
     reporterType: "coworker",

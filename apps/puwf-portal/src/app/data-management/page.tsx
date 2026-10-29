@@ -1,7 +1,6 @@
 "use client";
 
 import { t } from "@kapas/localization";
-import { analyticsService } from "@kapas/mock-services";
 import { Download, Files } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -13,6 +12,7 @@ import { ErrorState } from "@/components/states/error-state";
 import { LoadingState } from "@/components/states/loading-state";
 import { Button } from "@/components/ui/button";
 import { emptyFilters, hasActiveFilters, readStoredFilters, toComplaintFilters, writeStoredFilters } from "@/lib/dashboard";
+import { productionPortalApi } from "@/lib/portal-api";
 import { useDashboardData, useProvinces } from "@/lib/use-complaints";
 import { useLocaleStore } from "@/stores/locale-store";
 
@@ -44,7 +44,10 @@ export default function DataManagementPage() {
     }
     setExporting(true);
     try {
-      const blob = await analyticsService.exportCsv(filters);
+      let blob: Blob;
+      const job = await productionPortalApi.createExport(filters, "portal data management export");
+      for (let attempt = 0; attempt < 30; attempt += 1) { const state = await productionPortalApi.exportStatus(job.id); if (state.status === "ready") { blob = await productionPortalApi.exportContent(job.id); break; } if (state.status === "failed" || state.status === "expired") throw new Error("Export failed"); await new Promise((resolve) => setTimeout(resolve, 500)); }
+      if (!blob!) throw new Error("Export is still processing");
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;

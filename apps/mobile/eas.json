@@ -1,6 +1,6 @@
 {
   "cli": {
-    "version": ">= 16.0.0",
+    "version": ">= 27.1.0",
     "appVersionSource": "remote"
   },
   "build": {
@@ -9,7 +9,8 @@
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_APP_MODE": "development",
-        "EXPO_PUBLIC_ENABLE_DEMO_CONTROLS": "false"
+        "EXPO_PUBLIC_ENABLE_DEMO_CONTROLS": "false",
+        "EXPO_PUBLIC_COMPLAINT_PIPELINE_V3_ENABLED": "true"
       },
       "android": {
         "buildType": "apk"
@@ -17,26 +18,44 @@
     },
     "preview": {
       "distribution": "internal",
+      "node": "22.14.0",
       "env": {
         "EXPO_USE_FAST_RESOLVER": "1",
-        "EXPO_PUBLIC_APP_MODE": "demo",
-        "EXPO_PUBLIC_ENABLE_DEMO_CONTROLS": "true"
+        "EXPO_PUBLIC_API_URL": "https://api.kapaskipukar.com",
+        "EXPO_PUBLIC_TUSD_URL": "https://api.kapaskipukar.com/files/",
+        "EXPO_PUBLIC_BACKEND_ENABLED": "true",
+        "EXPO_PUBLIC_APP_MODE": "production",
+        "EXPO_PUBLIC_ENABLE_DEMO_CONTROLS": "false",
+        "EXPO_PUBLIC_COMPLAINT_PIPELINE_V3_ENABLED": "true"
       },
       "android": {
         "buildType": "apk"
       }
     },
     "production": {
+      "distribution": "store",
+      "node": "22.14.0",
+      "autoIncrement": true,
       "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.kapaskipukar.com",
+        "EXPO_PUBLIC_TUSD_URL": "https://api.kapaskipukar.com/files/",
+        "EXPO_PUBLIC_BACKEND_ENABLED": "true",
         "EXPO_PUBLIC_APP_MODE": "production",
-        "EXPO_PUBLIC_ENABLE_DEMO_CONTROLS": "false"
+        "EXPO_PUBLIC_ENABLE_DEMO_CONTROLS": "false",
+        "EXPO_PUBLIC_COMPLAINT_PIPELINE_V3_ENABLED": "true"
       },
       "android": {
-        "buildType": "apk"
+        "buildType": "app-bundle"
       }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./google-play-service-account.json",
+        "track": "internal",
+        "releaseStatus": "draft"
+      }
+    }
   }
 }

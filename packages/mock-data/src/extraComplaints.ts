@@ -7,7 +7,7 @@ import { createRng } from "./rng";
 export function extraDemoComplaints(count: number, startIndex: number): Complaint[] {
   const rng = createRng(20260819 + startIndex);
   const categories = ["WAG", "PES", "HSE", "HAR", "CHL", "FOL", "CON", "HRS"] as const;
-  const statuses = ["Submitted", "Under Review", "Action in Progress", "Proposed Resolution", "Resolved", "Closed"] as const;
+  const statuses = ["Received", "Triage", "Investigation", "Action in Progress", "Outcome Verification", "Closed"] as const;
 
   return Array.from({ length: count }, (_, offset) => {
     const location = rng.pick(DEMO_LOCATIONS);

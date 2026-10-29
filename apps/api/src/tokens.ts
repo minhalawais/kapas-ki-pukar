@@ -1,3 +1,5 @@
 export const RUNTIME_CONFIG = Symbol("RUNTIME_CONFIG");
 export const DEPENDENCY_HEALTH = Symbol("DEPENDENCY_HEALTH");
 export const SERVICE_METRICS = Symbol("SERVICE_METRICS");
+export const IDENTITY_REPOSITORY = Symbol("IDENTITY_REPOSITORY");
+export const DATABASE_CLIENT = Symbol("DATABASE_CLIENT");

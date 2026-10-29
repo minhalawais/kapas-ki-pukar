@@ -29,18 +29,18 @@ function normalizeLegacyComplaint(row: Complaint): Complaint {
   const actions = [...row.actions];
 
   if (legacyStatus === "New") {
-    status = "Submitted";
+    status = "Received";
   }
 
   if (legacyStatus === "Awaiting Worker") {
-    status = "Under Review";
+    status = "Verification";
     if (!actions.some((action) => action.type === "More Information Requested")) {
       actions.push(legacyAction(row, "More Information Requested", "More information requested from worker."));
     }
   }
 
   if (legacyStatus === "Escalated") {
-    status = "Under Review";
+    status = "Escalated";
     if (!actions.some((action) => action.type === "Escalated")) {
       actions.push(legacyAction(row, "Escalated", "Case escalated for urgent handling."));
     }

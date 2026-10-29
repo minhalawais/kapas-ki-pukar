@@ -3,13 +3,13 @@
 import type { Priority } from "@kapas/domain";
 import { priorities } from "@kapas/domain";
 import { t, type MessageKey } from "@kapas/localization";
-import type { PortalCaseAction } from "@kapas/mock-services";
 import { closeCaseSchema, resolutionInputSchema } from "@kapas/validation";
 import { Eye, LockKeyhole, Mail, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
+import type { PortalCaseAction } from "@/lib/use-case-actions";
 import { useLocaleStore } from "@/stores/locale-store";
 
 const inputClass =
@@ -104,7 +104,7 @@ export function CaseActionModal({
         : t(locale, "portal.case.note");
   const showNote = kind !== "changePriority";
   const primaryLabel = confirmCopy ? t(locale, "common.confirm") : t(locale, "common.save");
-  const workerVisible = ["requestInformation", "recordAction", "escalate", "proposeResolution", "resolve", "close", "reopen"].includes(kind);
+  const workerVisible = ["recordAction", "escalate", "proposeResolution", "resolve", "close", "reopen"].includes(kind);
 
   return (
     <Dialog

@@ -1,5 +1,4 @@
-import { persistenceKeys } from "@kapas/domain";
-import { complaintService } from "@kapas/mock-services";
+import { persistenceKeys, type ComplaintDraft } from "@kapas/domain";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -8,12 +7,16 @@ import { useGrievanceDraftStore } from "../stores/grievanceDraftStore";
 
 const DRAFT_QUERY_KEY = ["complaint-draft"] as const;
 const DRAFT_DISMISSAL_QUERY_KEY = ["draft-recovery-dismissal"] as const;
+const DRAFT_KEY = "kapas.worker.draft.v1";
 
 export function useDraftRecovery() {
   const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: DRAFT_QUERY_KEY,
-    queryFn: () => complaintService.getDraft(),
+    queryFn: async () => {
+      const raw = await AsyncStorage.getItem(DRAFT_KEY);
+      return raw ? (JSON.parse(raw) as ComplaintDraft) : null;
+    },
   });
   const dismissalQuery = useQuery({
     queryKey: DRAFT_DISMISSAL_QUERY_KEY,
@@ -22,7 +25,7 @@ export function useDraftRecovery() {
   });
 
   const discard = useMutation({
-    mutationFn: () => complaintService.discardDraft(),
+    mutationFn: () => AsyncStorage.removeItem(DRAFT_KEY),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: DRAFT_QUERY_KEY });
       queryClient.setQueryData(DRAFT_QUERY_KEY, null);

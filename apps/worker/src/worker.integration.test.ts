@@ -28,6 +28,7 @@ integration("worker Redis integration", () => {
       QUARANTINE_ROOT: "./storage/quarantine",
       ENCRYPTION_KEY_ID: "integration",
       SESSION_SECRET: "integration-test-session-secret-32-characters",
+      IDENTITY_LOOKUP_PEPPER: "integration-identity-lookup-pepper-32-characters",
       INTERNAL_METRICS_TOKEN: "integration-test-metrics-token",
       OPENAPI_ENABLED: "false",
       QUEUE_PREFIX: `kapas-test-${Date.now()}`,

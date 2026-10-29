@@ -34,7 +34,7 @@ export function AnalyticsFilterBar({
   onClear: () => void;
 }) {
   const locale = useLocaleStore((s) => s.locale);
-  const statuses = caseStatuses.filter((status) => status !== "Draft");
+  const statuses = caseStatuses;
   const activeCount = Object.values(value).filter(Boolean).length;
 
   return (

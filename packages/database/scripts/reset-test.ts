@@ -9,8 +9,12 @@ if (!testDatabaseUrl) {
 
 assertSafeDestructiveEnvironment(process.env.NODE_ENV ?? "development", testDatabaseUrl);
 
-const pnpmCommand = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
-execFileSync(pnpmCommand, ["exec", "prisma", "migrate", "reset", "--force"], {
+const pnpmScript = process.env.npm_execpath;
+if (!pnpmScript) {
+  throw new Error("npm_execpath is required to run Prisma through the workspace package manager");
+}
+
+execFileSync(process.execPath, [pnpmScript, "exec", "prisma", "migrate", "reset", "--force"], {
   cwd: new URL("..", import.meta.url),
   env: { ...process.env, PRISMA_DATABASE_URL: testDatabaseUrl },
   stdio: "inherit",

@@ -36,13 +36,15 @@ const CATEGORY_COUNTS: ReadonlyArray<readonly [WorkerCategoryCode, number]> = [
 ];
 
 const STATUS_COUNTS: ReadonlyArray<readonly [CaseStatus, number]> = [
-  ["Submitted", 36],
-  ["Under Review", 50],
+  ["Received", 38],
+  ["Triage", 24],
+  ["Verification", 22],
+  ["Investigation", 2],
   ["Action in Progress", 50],
-  ["Proposed Resolution", 14],
-  ["Resolved", 28],
+  ["Escalated", 2],
+  ["Outcome Verification", 14],
   ["Reopened", 4],
-  ["Closed", 18],
+  ["Closed", 44],
 ];
 
 const PRIORITY_COUNTS: ReadonlyArray<readonly [Priority, number]> = [

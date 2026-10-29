@@ -6,7 +6,7 @@ export function createGs08(): Complaint {
   return buildComplaint({
     index: 108,
     categoryCode: "OTH",
-    status: "Submitted",
+    status: "Received",
     priority: "Standard",
     privacyMode: "CONF",
     reporterType: "self",

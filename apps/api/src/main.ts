@@ -1,6 +1,14 @@
 import "reflect-metadata";
 
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { configDiagnostics, loadRuntimeConfigFromProcess } from "@kapas/config";
+import { config as loadDotenv } from "dotenv";
+
+const dotenvCandidates = [resolve(process.cwd(), ".env"), resolve(process.cwd(), "../../.env")];
+const dotenvPath = dotenvCandidates.find((candidate) => existsSync(candidate));
+if (dotenvPath) loadDotenv({ path: dotenvPath });
 
 import { createApplication } from "./application";
 

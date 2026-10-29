@@ -1,12 +1,59 @@
+import type { CaseAction } from "@kapas/domain";
 import { describe, expect, it } from "vitest";
 
-import { demoAudioSrc, eventLabelKey, formatDuration, impactLabelKey } from "./case-workspace";
+
+import {
+  protectedAudioSrc,
+  eventLabelKey,
+  formatDuration,
+  impactLabelKey,
+  sortedTimeline,
+  timelineAttachmentsForAction,
+  whenLabelMessageKey,
+} from "./case-workspace";
 
 describe("case workspace helpers", () => {
-  it("maps bundled demo audio URIs to the portal worker audio", () => {
-    expect(demoAudioSrc("asset://demo-audio/KP-26-000101.m4a")).toBe("/demo-audio/worker-statement.mp3");
-    expect(demoAudioSrc("/local.wav")).toBe("/local.wav");
-    expect(demoAudioSrc(undefined)).toBe("/demo-audio/worker-statement.mp3");
+  it("only accepts protected or explicit media URLs", () => {
+    expect(protectedAudioSrc("asset://demo-audio/KP-26-000101.m4a")).toBeUndefined();
+    expect(protectedAudioSrc("/api/v1/evidence/1")).toBe("/api/v1/evidence/1");
+    expect(protectedAudioSrc(undefined)).toBeUndefined();
+  });
+
+  it("hides corrective attachment evidence rows from the timeline", () => {
+    const actions = [
+      { id: "1", type: "Action Taken", at: "2026-10-28T10:00:00.000Z", actorRole: "puwf-grievance-manager" },
+      {
+        id: "2",
+        type: "Evidence Added",
+        at: "2026-10-28T10:00:01.000Z",
+        actorRole: "puwf-grievance-manager",
+        reason: { source: "staff-corrective-upload" },
+      },
+      {
+        id: "3",
+        type: "Evidence Added",
+        at: "2026-10-28T10:00:02.000Z",
+        actorRole: "puwf-grievance-manager",
+        reason: { targetType: "corrective-action" },
+      },
+    ] as CaseAction[];
+    expect(sortedTimeline(actions).map((row) => row.id)).toEqual(["1"]);
+  });
+
+  it("resolves corrective attachments for timeline modal", () => {
+    const action = {
+      id: "a1",
+      type: "Action Taken",
+      at: "2026-10-28T10:00:00.000Z",
+      actorRole: "puwf-grievance-manager",
+      reason: { attachedEvidenceIds: ["ev-1"], attachedDocuments: ["letter.pdf"] },
+    } as CaseAction;
+    const files = timelineAttachmentsForAction(
+      action,
+      [{ id: "ev-1", fileName: "letter.pdf", localUri: "/content/1", kind: "document" }],
+      "KP-TEST",
+    );
+    expect(files).toEqual([{ id: "ev-1", label: "letter.pdf", href: "/content/1", kind: "document" }]);
   });
 
   it("formats duration and maps event and impact keys", () => {
@@ -14,5 +61,10 @@ describe("case workspace helpers", () => {
     expect(eventLabelKey("Review Started")).toBe("portal.case.event.reviewStarted");
     expect(impactLabelKey("2-5")).toBe("range.2-5");
     expect(impactLabelKey(undefined)).toBeNull();
+  });
+
+  it("maps canonical when labels to locale keys", () => {
+    expect(whenLabelMessageKey("older")).toBe("when.older");
+    expect(whenLabelMessageKey("2026-01-01")).toBeNull();
   });
 });

@@ -65,12 +65,12 @@ function queueOneDraft() {
     stepId: "review" as const,
     category: "WAG" as const,
     privacyMode: "CONF" as const,
-    reporterIdentity: { mode: "cnic" as const, cnicLast4: "4567", cnicVerified: false },
+    reporterIdentity: { mode: "cnic" as const, cnicLast4: "4567", phoneLast4: "4567", cnicVerified: false },
     incident: {
       whenLabel: "today",
       immediateDanger: false,
       othersAffected: "individual" as const,
-      structuredAnswers: {},
+      structuredAnswers: { contactPreference: "do-not-initiate" },
     },
     location: { province: "Punjab", district: "Multan", villageLabel: "Chak 12/BC", placeLabel: "Chak 12/BC", source: "manual" as const },
     evidence: [],
@@ -86,19 +86,19 @@ function queueOneDraft() {
 }
 
 function nextDemoStatus(status: CaseStatus): CaseStatus | null {
-  if (status === "Submitted" || status === "Reopened") {
-    return "Under Review";
+  if (status === "Received" || status === "Reopened") {
+    return "Triage";
   }
-  if (status === "Under Review") {
+  if (status === "Triage" || status === "Verification") {
+    return "Investigation";
+  }
+  if (status === "Investigation") {
     return "Action in Progress";
   }
   if (status === "Action in Progress") {
-    return "Proposed Resolution";
+    return "Outcome Verification";
   }
-  if (status === "Proposed Resolution") {
-    return "Resolved";
-  }
-  if (status === "Resolved") {
+  if (status === "Outcome Verification") {
     return "Closed";
   }
   if (status === "Closed") {
@@ -112,16 +112,16 @@ function statusForStep(status: CaseStatus, step: DemoAdvanceStep): CaseStatus | 
     return nextDemoStatus(status);
   }
   if (step === "review") {
-    return "Under Review";
+    return "Triage";
   }
   if (step === "action") {
     return "Action in Progress";
   }
   if (step === "propose") {
-    return "Proposed Resolution";
+    return "Outcome Verification";
   }
   if (step === "resolve") {
-    return "Resolved";
+    return "Closed";
   }
   if (step === "close") {
     return "Closed";
@@ -157,10 +157,10 @@ function applyAdvance(complaint: Complaint, step: DemoAdvanceStep): Complaint {
     actorRole: "puwf-grievance-manager",
     note: "Demo advance",
   });
-  if (to === "Proposed Resolution") {
+  if (to === "Outcome Verification") {
     next = { ...next, resolution: { summary: "Demo proposed remedy.", proposedAt: at } };
   }
-  if (to === "Resolved") {
+  if (to === "Closed") {
     next = {
       ...next,
       resolution: {

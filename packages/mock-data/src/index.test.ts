@@ -2,6 +2,7 @@ import { caseStatuses, privacyModes, workerCategoryCodes } from "@kapas/domain";
 import { complaintSchema } from "@kapas/validation";
 import { describe, expect, it } from "vitest";
 
+import { qaFixtures } from "./fixtures/qaFixtures";
 import { generateComplaints, SEED_SIZE } from "./generateComplaints";
 import { getGoldenComplaint } from "./scenarios";
 
@@ -27,7 +28,7 @@ describe("dummy data engine", () => {
     for (const code of workerCategoryCodes) {
       expect(rows.some((row) => row.categoryCode === code)).toBe(true);
     }
-    for (const status of caseStatuses.filter((s) => s !== "Draft")) {
+    for (const status of caseStatuses) {
       expect(rows.some((row) => row.status === status)).toBe(true);
     }
     for (const mode of privacyModes) {
@@ -49,5 +50,18 @@ describe("dummy data engine", () => {
     expect(getGoldenComplaint("GS-02").priority).toBe("Emergency");
     expect(getGoldenComplaint("GS-09").ai?.failed).toBe(true);
     expect(getGoldenComplaint("GS-10").status).toBe("Reopened");
+  });
+
+  it("provides deterministic QA fixtures for every required coverage axis", () => {
+    const fixtures = qaFixtures();
+    expect(fixtures.length).toBeGreaterThanOrEqual(11 + 9 + 4 + 3 + 4);
+    expect(new Set(fixtures.map((row) => row.categoryCode)).size).toBe(11);
+    expect(new Set(fixtures.map((row) => row.status)).size).toBeGreaterThanOrEqual(8);
+    expect(new Set(fixtures.map((row) => row.priority)).size).toBe(4);
+    expect(new Set(fixtures.map((row) => row.privacyMode)).size).toBe(3);
+    expect(fixtures.some((row) => row.voice === null)).toBe(true);
+    expect(fixtures.some((row) => row.evidence.length === 0)).toBe(true);
+    expect(fixtures.some((row) => row.ai?.failed)).toBe(true);
+    expect(fixtures.some((row) => row.status === "Reopened")).toBe(true);
   });
 });

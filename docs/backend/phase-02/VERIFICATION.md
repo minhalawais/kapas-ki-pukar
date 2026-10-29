@@ -3,6 +3,31 @@
 **Evidence date:** 2026-10-17  
 **Overall status:** Complete
 
+## Current checkout re-verification
+
+**Re-verification date:** 2026-10-19
+
+The Phase 02 gates were rerun against the current working tree after later-phase
+changes. Compose configuration validated; PostgreSQL migration status reported
+five migrations up to date; the integration suite passed 15 database tests, one
+worker test, and one API test; config/API/worker/observability typechecks and
+lint passed; both API and worker images rebuilt successfully and report the
+unprivileged `node` user. The API image was started against the local
+PostgreSQL/Redis services and returned HTTP 200 for liveness, readiness (both
+dependencies `up`), and metadata, then exited cleanly with `docker stop`.
+
+This rerun found and fixed one foundation defect: the documented local
+`OPENAPI_ENABLED=true` path could terminate the API because Nest Swagger's
+optional `@fastify/static` peer was absent from the API runtime image. The
+dependency is now declared explicitly and the API test suite enables OpenAPI
+to guard the startup path.
+
+The repository-wide formatting command still reports four pre-existing
+formatting violations in files owned by earlier phases
+(`apps/api/src/case.controller.ts`, `packages/domain/src/caseLifecycle.ts`, and
+`packages/domain/src/index.test.ts`); no Phase 02-owned file was changed by that
+failure.
+
 ## Environment
 
 - Windows development host with Docker Desktop 4.83 and Linux Engine 29.6.2.

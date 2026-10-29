@@ -1,0 +1,18 @@
+# Runtime-only image: build the portal locally (pnpm --filter @kapas/puwf-portal build),
+# then pack .next/standalone, .next/static, and public into the build context.
+FROM node:24.12.0-bookworm-slim AS runtime
+ENV NODE_ENV=production
+WORKDIR /app
+RUN apt-get update \
+  && apt-get upgrade --no-install-recommends -y \
+  && rm -rf /var/lib/apt/lists/* \
+    /usr/local/lib/node_modules/npm \
+    /usr/local/lib/node_modules/corepack \
+  && rm -f /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack \
+    /usr/local/bin/pnpm /usr/local/bin/pnpx /usr/local/bin/yarn /usr/local/bin/yarnpkg
+COPY standalone/ .
+COPY static ./apps/puwf-portal/.next/static
+COPY public ./apps/puwf-portal/public
+USER node
+EXPOSE 3000
+CMD ["node", "apps/puwf-portal/server.js"]

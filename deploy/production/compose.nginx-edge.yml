@@ -1,0 +1,10 @@
+# Use with host nginx/certbot on the VPS (ports 80/443 already taken).
+# docker compose -f compose.yml -f compose.nginx-edge.yml ...
+
+services:
+  portal:
+    ports: ["127.0.0.1:3002:3000"]
+  api:
+    ports: ["127.0.0.1:4002:4000"]
+  tusd:
+    ports: ["127.0.0.1:8082:8080"]
