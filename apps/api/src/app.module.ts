@@ -9,8 +9,8 @@ import { AnalyticsController, ExportController } from "./analytics.controller";
 import { AuditController } from "./audit.controller";
 import { AuthController } from "./auth";
 import { StaffAuthorizationGuard } from "./authorization";
-import { CaseController } from "./case.controller";
 import { CaseWorkflowController } from "./case-workflow.controller";
+import { CaseController } from "./case.controller";
 import { ComplaintIntakeV3Controller } from "./complaint-intake-v3.controller";
 import { ComplaintIntakeV3Service } from "./complaint-intake-v3.service";
 import { type DependencyHealth, InfrastructureDependencyHealth } from "./dependency-health";
@@ -22,6 +22,7 @@ import { IntakeController } from "./intake.controller";
 import { MetricsController } from "./metrics.controller";
 import { ProviderWebhookController } from "./provider-webhook.controller";
 import { ReferenceDataController } from "./reference-data.controller";
+import { StaffCaseEvidenceService } from "./staff-case-evidence.service";
 import {
   DATABASE_CLIENT,
   DEPENDENCY_HEALTH,
@@ -29,7 +30,6 @@ import {
   RUNTIME_CONFIG,
   SERVICE_METRICS,
 } from "./tokens";
-import { StaffCaseEvidenceService } from "./staff-case-evidence.service";
 import { TusHookController } from "./tus-hook.controller";
 import { WorkerController } from "./worker.controller";
 

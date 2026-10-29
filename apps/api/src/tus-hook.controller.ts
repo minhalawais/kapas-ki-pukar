@@ -3,8 +3,8 @@ import type { DatabaseClient } from "@kapas/database";
 import { constantTimeEqual, hashOpaqueToken } from "@kapas/security";
 import { Body, Controller, Headers, Inject, Post, UnauthorizedException } from "@nestjs/common";
 
-import { postFinishLengthMatches, postReceiveUpdateWhere } from "./tus-hook-evidence";
 import { DATABASE_CLIENT, RUNTIME_CONFIG } from "./tokens";
+import { postFinishLengthMatches, postReceiveUpdateWhere } from "./tus-hook-evidence";
 
 type TusHook = {
   Type?: string;

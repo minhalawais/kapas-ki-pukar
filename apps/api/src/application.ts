@@ -17,8 +17,8 @@ import { AppModule } from "./app.module";
 import type { DependencyHealth } from "./dependency-health";
 import { ErrorEnvelopeFilter } from "./error-envelope.filter";
 import { createOpenApiDocument } from "./openapi";
-import { registerTusdProxy } from "./tusd-proxy";
 import { SERVICE_METRICS } from "./tokens";
+import { registerTusdProxy } from "./tusd-proxy";
 
 function requestId(request: IncomingMessage): string {
   const supplied = request.headers["x-request-id"];

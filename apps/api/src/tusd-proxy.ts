@@ -1,5 +1,5 @@
-import type { RuntimeConfig } from "@kapas/config";
 import fastifyHttpProxy from "@fastify/http-proxy";
+import type { RuntimeConfig } from "@kapas/config";
 
 type FastifyRegisterHost = {
   register: (plugin: unknown, opts?: unknown) => Promise<unknown>;
