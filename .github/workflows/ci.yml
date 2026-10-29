@@ -11,11 +11,7 @@ jobs:
     timeout-minutes: 30
     services:
       postgres:
-        # Keep CI on the same stable PostgreSQL major supported by Prisma and
-        # the production migration test matrix. PostgreSQL 18 is still a
-        # development target for this repository and has caused intermittent
-        # integration-test failures on the hosted runner.
-        image: postgres:16.6-bookworm
+        image: postgres:18.0-bookworm
         env:
           POSTGRES_DB: kapas_test
           POSTGRES_USER: postgres
@@ -28,7 +24,7 @@ jobs:
           --health-timeout 3s
           --health-retries 20
       redis:
-        image: redis:7.4.2-alpine
+        image: redis:8.2.2-alpine
         ports:
           - 6379:6379
         options: >-
